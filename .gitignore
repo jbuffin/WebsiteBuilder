@@ -1,0 +1,28 @@
+<<<<<<< HEAD
+logs
+project/project
+project/target
+target
+tmp
+.history
+dist
+=======
+# Extracted from https://github.com/ulrich/macaron-factory/blob/master/.gitignore
+# Ignore all dotfiles...
+.*
+# except for .gitignore
+!.gitignore
+
+# Ignore Play! working directory #
+db
+eclipse
+log
+logs
+precompiled
+tmp
+test-result
+eclipse
+server.pid
+RUNNING_PID
+bin
+>>>>>>> 410900013d7eb0cb7bef511b6087784c7428e84a
