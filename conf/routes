@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index
+GET		/:site						controllers.Sites.index(site: String)
 
 # Javascript routes - Define the list of these
 GET		/javascriptroutes			controllers.Application.javascriptRoutes
