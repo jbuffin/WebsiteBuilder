@@ -3,11 +3,22 @@ package controllers
 import play.api._
 import play.api.mvc._
 
+import models._
+
 object Application extends Controller {
 
 	def index = Action { implicit request =>
-		
-		Ok(views.html.index(request.domain))
+		try {
+			Ok(views.html.sites.index(Site.getSiteByHostName(request.domain).get))
+		}
+		catch {
+			case nse: NoSuchElementException =>
+				Redirect(routes.Application.indexWithNoSiteFound)
+		}
+	}
+	
+	def indexWithNoSiteFound = Action {
+		Ok(views.html.index("No Site Found"))
 	}
 	
 	def javascriptRoutes = Action { implicit request =>

@@ -4,10 +4,14 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET		/:site						controllers.Sites.index(site: String)
+GET		/nosite						controllers.Application.indexWithNoSiteFound
 
-# Javascript routes - Define the list of these
+# Map the javascript routes
 GET		/javascriptroutes			controllers.Application.javascriptRoutes
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# Map the hosted sites
+GET		/:site						controllers.Sites.index(site: Long)
+
