@@ -13,7 +13,7 @@ object Application extends Controller {
 		}
 		catch {
 			case nse: NoSuchElementException =>
-				Redirect(routes.Application.indexWithNoSiteFound)
+				Ok(views.html.index("index"))
 		}
 	}
 	

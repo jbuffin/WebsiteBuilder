@@ -4,7 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET		/nosite						controllers.Application.indexWithNoSiteFound
+GET		/notfound					controllers.Application.indexWithNoSiteFound
 
 # Map the javascript routes
 GET		/javascriptroutes			controllers.Application.javascriptRoutes
