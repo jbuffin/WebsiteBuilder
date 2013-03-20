@@ -1,13 +1,13 @@
 @(carousel: List[CarouselImage])
 <div id="myCarousel" class="carousel slide">
 	<ol class="carousel-indicators">
-	@carousel.view.zipWithIndex foreach { case(el, index) =>
-		<li data-target="#myCarousel" data-slide-to="@index" class="@if(index == 0){prntln("active")}"></li>
+	@carousel.zipWithIndex.map { case (el, index) =>
+		<li data-target="#myCarousel" data-slide-to="@index" class="@(if(index==0){"active"})"></li>
 	}
 	</ol>
 	<div class="carousel-inner">
-		@carousel.map { image =>
-		<div class="item">
+		@carousel.zipWithIndex.map { case (image, index) =>
+		<div class="item @(if(index==0){"active"})">
 			<img src="@image.image" alt="">
 			<div class="carousel-caption">
 				<h4>@image.title</h4>
