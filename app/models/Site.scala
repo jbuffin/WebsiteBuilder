@@ -7,9 +7,12 @@ import play.api.libs._
 import anorm._
 import anorm.SqlParser._
 
+import models._
+
 case class Site(
 	siteName: String,
 	hostName: String,
+	siteOptions: Long,
 	siteId: Long = -1
 )
 
@@ -18,8 +21,9 @@ object Site {
 	val simple = {
 		get[String] ("sites.site_name") ~
 		get[String] ("sites.hostname") ~
-		get[Long]("sites.site_id") map {
-			case site_name ~ hostname ~ site_id => Site(site_name, hostname, site_id)
+		get[Long]("sites.site_id") ~
+		get[Long]("sites.site_options") map {
+			case site_name ~ hostname ~ site_id ~ site_options => Site(site_name, hostname, site_options, site_id)
 		}
 	}
 	
@@ -33,7 +37,7 @@ object Site {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-					select site_name, hostname, site_id from sites
+					select * from sites
 						where hostname = {hostname}
 				"""
 			).on(
@@ -59,12 +63,13 @@ object Site {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-				insert into sites (site_name, hostname) values (
-					{site_name}, {hostname}
+				insert into sites (site_name, hostname, site_options) values (
+					{site_name}, {hostname}, {site_options}
 				)
 				""").on(
 					'site_name -> site.siteName,
-					'hostname -> site.hostName).executeInsert()
+					'hostname -> site.hostName,
+					'site_options -> site.siteOptions).executeInsert()
 		} match {
 			case Some(long) => long
 			case None => -1

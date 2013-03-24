@@ -1,4 +1,4 @@
-@(carousel: List[CarouselImage])
+@(carousel: List[models.widgets.CarouselImage])
 <div id="myCarousel" class="carousel slide">
 	<ol class="carousel-indicators">
 	@carousel.zipWithIndex.map { case (el, index) =>
@@ -6,12 +6,12 @@
 	}
 	</ol>
 	<div class="carousel-inner">
-		@carousel.zipWithIndex.map { case (image, index) =>
+		@carousel.zipWithIndex.map { case (carouselImage, index) =>
 		<div class="item @(if(index==0){"active"})">
-			<img src="@image.image" alt="">
+			<img src="@carouselImage.image" alt="">
 			<div class="carousel-caption">
-				<h4>@image.title</h4>
-				<p>@image.text</p>
+				<h4>@carouselImage.title</h4>
+				<p>@carouselImage.text</p>
 			</div>
 		</div>
 		}

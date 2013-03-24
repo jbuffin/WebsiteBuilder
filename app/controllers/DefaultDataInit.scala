@@ -10,7 +10,7 @@ object DefaultDataInit {
 		Logger.info("DefaultDataInit: inserting data")
 		if (Site.getAll.isEmpty) {
 			Seq(
-				Site("stumpsoft", "stumpsoft.net")
+				Site("stumpsoft", "stumpsoft.net", 1)
 			).foreach(Site.create)
 		}
 		Logger.info("DefaultDataInit: done")
