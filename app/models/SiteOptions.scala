@@ -1,6 +1,8 @@
 package models
 
-case class SiteOptions(siteOptionsId: Long)
+case class SiteOptions(
+	siteOptionsId: Long
+	)
 
 object SiteOptions {
 
