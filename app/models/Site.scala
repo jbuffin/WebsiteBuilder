@@ -13,26 +13,25 @@ case class Site(
 	siteName: String,
 	hostName: String,
 	siteOptions: Long,
-	siteId: Long = -1
-)
+	siteId: Long = -1)
 
 object Site {
-	
+
 	val simple = {
-		get[String] ("sites.site_name") ~
-		get[String] ("sites.hostname") ~
-		get[Long]("sites.site_id") ~
-		get[Long]("sites.site_options") map {
-			case site_name ~ hostname ~ site_id ~ site_options => Site(site_name, hostname, site_options, site_id)
-		}
+		get[String]("sites.site_name") ~
+			get[String]("sites.hostname") ~
+			get[Long]("sites.site_id") ~
+			get[Long]("sites.site_options") map {
+				case site_name ~ hostname ~ site_id ~ site_options => Site(site_name, hostname, site_options, site_id)
+			}
 	}
-	
+
 	def getAll: Seq[Site] = {
 		DB.withConnection { implicit connection =>
 			SQL("select * from sites").as(Site.simple *)
 		}
 	}
-	
+
 	def getSiteByHostName(hostName: String): Option[Site] = {
 		DB.withConnection { implicit connection =>
 			SQL(
@@ -41,11 +40,11 @@ object Site {
 						where hostname = {hostname}
 				"""
 			).on(
-				'hostname -> hostName
-			).as(Site.simple.singleOpt)
+					'hostname -> hostName
+				).as(Site.simple.singleOpt)
 		}
 	}
-	
+
 	def getSiteById(siteId: Long): Option[Site] = {
 		DB.withConnection { implicit connection =>
 			SQL(
@@ -54,11 +53,11 @@ object Site {
 						where site_id = {site_id}
 				"""
 			).on(
-				'site_id -> siteId
-			).as(Site.simple.singleOpt)
+					'site_id -> siteId
+				).as(Site.simple.singleOpt)
 		}
 	}
-	
+
 	def create(site: Site): Long = {
 		DB.withConnection { implicit connection =>
 			SQL(
@@ -75,5 +74,5 @@ object Site {
 			case None => -1
 		}
 	}
-	
+
 }
