@@ -22,3 +22,4 @@ CREATE TABLE pages(
 # --- !Downs
 
 DROP TABLE sites;
+DROP TABLE pages;
