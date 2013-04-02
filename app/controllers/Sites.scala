@@ -16,5 +16,9 @@ object Sites extends Controller {
 				Ok(views.html.index("index"))
 		}
 	}
+	
+	def getPageFromUri(page: String) = Action {
+		Ok(views.html.sites.index(Site.getSiteById(1).get))
+	}
 
 }

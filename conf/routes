@@ -5,6 +5,7 @@
 # Home page
 GET     /                           controllers.Application.index
 GET		/notfound					controllers.Application.indexWithNoSiteFound
+GET		/:page						controllers.Sites.getPageFromUri(page: String)
 
 # Map the javascript routes
 GET		/javascriptroutes			controllers.Application.javascriptRoutes
@@ -14,4 +15,3 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 # Map the hosted sites
 GET		/:site						controllers.Sites.index(site: Long)
-

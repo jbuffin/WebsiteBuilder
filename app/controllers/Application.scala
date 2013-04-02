@@ -9,7 +9,6 @@ object Application extends Controller {
 
 	def index = Action { implicit request =>
 		try {
-//			Ok(views.html.sites.index(Site.getSiteByHostName(request.domain).get))
 			Sites.index(Site.getSiteByHostName(request.domain).get.siteId).apply(request)
 		}
 		catch {
