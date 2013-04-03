@@ -10,9 +10,7 @@ object ApplicationBuild extends Build {
 	val appDependencies = Seq(
 		jdbc,
 		anorm,
-		"postgresql" % "postgresql" % "9.1-901-1.jdbc4",
-		"org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final",
-		"mysql" % "mysql-connector-java" % "5.1.21"
+		"postgresql" % "postgresql" % "9.1-901-1.jdbc4"
 	)
 
 	val main = play.Project(appName, appVersion, appDependencies).settings()
