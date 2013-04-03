@@ -1,20 +1,24 @@
 # db schema
  
 # --- !Ups
-CREATE TABLE sites (
-	site_id bigserial PRIMARY KEY,
-	hostname varchar(255) NOT NULL,
-	site_name varchar(255) NOT NULL,
-	site_options bigint(20) NOT NULL,
-	UNIQUE KEY site_name,
-	UNIQUE KEY hostname
+CREATE TABLE public.sites
+(
+   site_id bigserial NOT NULL, 
+   hostname text NOT NULL, 
+   site_name text NOT NULL, 
+   site_options bigint NOT NULL, 
+   CONSTRAINT site_id PRIMARY KEY (site_id), 
+   CONSTRAINT site_name UNIQUE (site_name), 
+   CONSTRAINT hostname UNIQUE (hostname)
 );
 
+
 CREATE TABLE pages(
-	page_id bigserial PRIMARY KEY AUTO_INCREMENT,
-	uri varchar(255) NOT NULL,
-	title varchar(255) NOT NULL,
-	site_id bigint(20) NOT NULL
+	page_id bigserial NOT NULL,
+	uri text NOT NULL,
+	title text NOT NULL,
+	site_id bigint NOT NULL,
+	CONSTRAINT page_id PRIMARY KEY (page_id)
 );
 
 # --- !Downs
