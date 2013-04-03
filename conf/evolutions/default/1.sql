@@ -1,8 +1,7 @@
 # db schema
  
 # --- !Ups
-CREATE TABLE public.sites
-(
+CREATE TABLE sites (
    site_id bigserial NOT NULL, 
    hostname text NOT NULL, 
    site_name text NOT NULL, 
@@ -13,7 +12,7 @@ CREATE TABLE public.sites
 );
 
 
-CREATE TABLE pages(
+CREATE TABLE pages (
 	page_id bigserial NOT NULL,
 	uri text NOT NULL,
 	title text NOT NULL,
