@@ -1,7 +1,6 @@
 # public schema
  
 # --- !Ups
-
   
 CREATE TABLE sites
 (
@@ -25,8 +24,5 @@ CREATE TABLE pages
 );
 
 # --- !Downs
-
-
-DROP TABLE churchsite.sites;
-DROP TABLE churchsite.pages;
-DROP SCHEMA churchsite;
+DROP TABLE sites;
+DROP TABLE pages;
