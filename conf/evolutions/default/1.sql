@@ -1,10 +1,9 @@
-# -- churchsite schema
+# public schema
  
 # --- !Ups
 
-CREATE SCHEMA churchsite;
   
-CREATE TABLE churchsite.sites
+CREATE TABLE sites
 (
    site_id bigserial NOT NULL, 
    hostname text NOT NULL, 
@@ -16,7 +15,7 @@ CREATE TABLE churchsite.sites
 );
 
 
-CREATE TABLE churchsite.pages
+CREATE TABLE pages
 (
 	page_id bigserial NOT NULL,
 	uri text NOT NULL,

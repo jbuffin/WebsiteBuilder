@@ -28,7 +28,7 @@ object Site {
 
 	def getAll: Seq[Site] = {
 		DB.withConnection { implicit connection =>
-			SQL("select * from churchsite.sites").as(Site.simple *)
+			SQL("select * from sites").as(Site.simple *)
 		}
 	}
 
@@ -36,7 +36,7 @@ object Site {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-					select * from churchsite.sites
+					select * from sites
 						where hostname = {hostname}
 				"""
 			).on(
@@ -49,7 +49,7 @@ object Site {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-					select * from churchsite.sites
+					select * from sites
 						where site_id = {site_id}
 				"""
 			).on(
@@ -62,7 +62,7 @@ object Site {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-				insert into churchsite.sites (site_name, hostname, site_options) values (
+				insert into sites (site_name, hostname, site_options) values (
 					{site_name}, {hostname}, {site_options}
 				)
 				""").on(
