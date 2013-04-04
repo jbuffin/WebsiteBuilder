@@ -1,7 +1,10 @@
-# db schema
+# -- churchsite schema
  
 # --- !Ups
-CREATE TABLE sites
+
+CREATE SCHEMA churchsite;
+  
+CREATE TABLE churchsite.sites
 (
    site_id bigserial NOT NULL, 
    hostname text NOT NULL, 
@@ -13,7 +16,7 @@ CREATE TABLE sites
 );
 
 
-CREATE TABLE pages
+CREATE TABLE churchsite.pages
 (
 	page_id bigserial NOT NULL,
 	uri text NOT NULL,
@@ -24,5 +27,7 @@ CREATE TABLE pages
 
 # --- !Downs
 
-DROP TABLE sites;
-DROP TABLE pages;
+
+DROP TABLE churchsite.sites;
+DROP TABLE churchsite.pages;
+DROP SCHEMA churchsite;
