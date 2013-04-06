@@ -7,13 +7,13 @@ import models._
 
 object Sites extends Controller {
 
-	def index(siteId: Long) = Action {
+	def index = Action { implicit request =>
 		try {
-			Ok(views.html.sites.index(Site.getSiteById(siteId).get))
+			Ok(views.html.sites.index(Site.getSiteByHostName(request.domain).get))
 		}
 		catch {
 			case nse: NoSuchElementException =>
-				Ok(views.html.index("index"))
+				Redirect(routes.Application.indexWithNoSiteFound)
 		}
 	}
 	
