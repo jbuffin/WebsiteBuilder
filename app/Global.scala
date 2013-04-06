@@ -7,8 +7,8 @@ import play.api.Play._
 import play.api._
 import play.api.mvc._
 import play.api.mvc.Results._
-
 import play.api.Application
+import controllers.DefaultDataInit
 
 object Global extends GlobalSettings {
 

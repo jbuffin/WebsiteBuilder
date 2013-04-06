@@ -7,16 +7,6 @@ import models._
 
 object Application extends Controller {
 
-/*	def index = Action { implicit request =>
-		try {
-			Ok(Site.getSiteByHostName(request.domain).get.siteId).apply(request)
-		}
-		catch {
-			case nse: NoSuchElementException =>
-				Ok(views.html.index("index"))
-		}
-	}*/
-	
 	def indexWithNoSiteFound = Action {
 		Ok(views.html.index("No Site Found"))
 	}
