@@ -1,4 +1,9 @@
 body {
+	padding-top: 20px;
+	padding-bottom: 40px;
+}
+
+.roomForHeader {
 	padding-top: 60px;
 	padding-bottom: 40px;
 }
