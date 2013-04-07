@@ -10,7 +10,6 @@ case class Page(uri: String,
 	pageType: Long,
 	parent: Long,
 	siteId: Long,
-	/*children: List[Long],*/
 	pageId: Long = -1)
 
 object Page {
@@ -55,6 +54,19 @@ object Page {
 		} match {
 			case Some(long) => long
 			case None => -1
+		}
+	}
+	
+	def getWidgetsByPageId(pageId: Long): List[Long] = {
+		DB.withConnection { implicit connection =>
+			SQL(
+				"""
+					select * from page_widgets
+						where page_id = {page_id}
+				"""
+			).on(
+					'page_id -> pageId
+				).as(get[Long]("widget_id")*)
 		}
 	}
 

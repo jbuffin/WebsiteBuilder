@@ -9,7 +9,7 @@ object Sites extends Controller {
 
 	def index = Action { implicit request =>
 		try {
-			Ok(views.html.sites.index(Site.getSiteByHostName(request.domain).get))
+			Ok(views.html.sites.index()
 		}
 		catch {
 			case nse: NoSuchElementException =>
@@ -20,5 +20,7 @@ object Sites extends Controller {
 	def getPageFromUri(page: String) = Action {
 		Ok(views.html.sites.index(Site.getSiteById(1).get))
 	}
+	
+	def getTheWidget()
 
 }

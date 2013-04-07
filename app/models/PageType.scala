@@ -16,7 +16,7 @@ object PageType {
 		}
 	}
 	
-	def getAll: Seq[PageType] = {
+	def getAll: List[PageType] = {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
