@@ -1,5 +1,5 @@
-@(site: Site) 
+@(widgets: List[Long]) 
 @import views.html.sites.templates.gracechurch._
 @main("no welcome") {
-	@views.html.sites.templates.gracechurch.index(site)
+	@views.html.sites.templates.gracechurch.index(widgets)
 }

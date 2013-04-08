@@ -4,9 +4,9 @@
   
 CREATE TABLE widget_types
 (
-   type_id bigserial NOT NULL,
+   widget_type_id bigserial NOT NULL,
    type_name varchar(255) NOT NULL,
-   CONSTRAINT type_id PRIMARY KEY (type_id)
+   CONSTRAINT widget_type_id PRIMARY KEY (widget_type_id)
 );
 
 INSERT INTO widget_types (type_name) VALUES ('TEXT');
