@@ -3,14 +3,14 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Sites.index
-GET		/notfound					controllers.Application.indexWithNoSiteFound
+GET   /                   controllers.Sites.index
+GET   /notfound           controllers.Application.indexWithNoSiteFound
 
 # Map the javascript routes
-GET		/javascriptroutes			controllers.Application.javascriptRoutes
+GET   /javascriptroutes   controllers.Application.javascriptRoutes
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET   /assets/*file       controllers.Assets.at(path="/public", file)
 
 # Map the hosted sites
-GET		/:page						controllers.Sites.getPageFromUri(page: String)
+GET   /:page              controllers.Sites.getPageFromUri(page: String)
