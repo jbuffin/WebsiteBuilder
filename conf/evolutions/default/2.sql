@@ -16,10 +16,22 @@ CREATE TABLE page_widgets
 (
 	page_widget_id bigserial NOT NULL,
 	page_id bigint NOT NULL,
-	widget_id bigint NOT NULL
+	widget_id bigint NOT NULL,
 	CONSTRAINT page_widget_id PRIMARY KEY (page_widget_id)
 );
+
+CREATE TABLE text_widget
+(
+   text_widget_id bigserial NOT NULL,
+   title varchar(255) NOT NULL,
+   text varchar(255) NOT NULL,
+   CONSTRAINT text_widget_id PRIMARY KEY (text_widget_id)
+);
+
+INSERT INTO text_widget (title, text) VALUES ('Test Widget', 'This is a text widget');
+INSERT INTO text_widget (title, text) VALUES ('A Text Widget', 'Here you''ll find a lot of text in a text widget. We can put whatever we want here and it will hold it.');
 
 # --- !Downs
 DROP TABLE IF EXISTS widget_types;
 DROP TABLE IF EXISTS page_widgets;
+DROP TABLE IF EXISTS text_widget;
