@@ -10,8 +10,7 @@ CREATE TABLE text_widget
    CONSTRAINT text_widget_id PRIMARY KEY (text_widget_id)
 );
 
-INSERT INTO text_widget (title, text) VALUES ('Test Widget', 'This is a text widget');
-INSERT INTO text_widget (title, text) VALUES ('A Text Widget', 'Here you''ll find a lot of text in a text widget. We can put whatever we want here and it will hold it.');
+
 
 # --- !Downs
 DROP TABLE IF EXISTS text_widget;
