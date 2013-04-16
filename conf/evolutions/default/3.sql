@@ -10,7 +10,5 @@ CREATE TABLE text_widget
    CONSTRAINT text_widget_id PRIMARY KEY (text_widget_id)
 );
 
-
-
 # --- !Downs
 DROP TABLE IF EXISTS text_widget;
