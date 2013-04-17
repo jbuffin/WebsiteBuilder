@@ -8,8 +8,9 @@ import play.api.templates.Html
 object Sites extends Controller {
 
 	def index = Action { implicit request =>
+		Logger.info(request.domain)
 		try {
-			Ok(views.html.sites.index(List()))
+			Ok(views.html.sites.index(Site.getSiteByHostName(request.domain).get.siteId))
 		}
 		catch {
 			case nse: NoSuchElementException =>
@@ -17,8 +18,8 @@ object Sites extends Controller {
 		}
 	}
 	
-	def getPageFromUri(page: String) = Action {
-		Ok(views.html.sites.index(Page.getWidgetsByPageId(Page.getPageByUri("").get.pageId)))
+	def getPageFromUri(page: String) = Action { implicit request =>
+		Ok(views.html.sites.index(Site.getSiteByHostName(request.domain).get.siteId))
 	}
 	
 	def getTheWidget(widgetId: Long): Html = {

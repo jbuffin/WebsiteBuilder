@@ -7,8 +7,8 @@ import models._
 
 object Application extends Controller {
 
-	def indexWithNoSiteFound = Action {
-		Ok(views.html.index("No Site Found"))
+	def indexWithNoSiteFound = Action { implicit request =>
+		Ok(views.html.index(request.domain))
 	}
 	
 	def javascriptRoutes = Action { implicit request =>
