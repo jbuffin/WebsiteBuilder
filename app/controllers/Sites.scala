@@ -8,7 +8,7 @@ import play.api.templates.Html
 object Sites extends Controller {
 
 	def index = Action { implicit request =>
-		Logger.info(request.domain)
+		Logger.info("[Sites.index]: request.domain: \""+request.domain+"\"")
 		try {
 			Ok(views.html.sites.index(Site.getSiteByHostName(request.domain).get.siteId))
 		}
@@ -22,13 +22,17 @@ object Sites extends Controller {
 		Ok(views.html.sites.index(Site.getSiteByHostName(request.domain).get.siteId))
 	}
 	
+	def getWidgetList(siteId: Long): List[Long] = {
+		Page.getWidgetsByPageId(1)
+	}
+	
 	def getTheWidget(widgetId: Long): Html = {
 		try {
 			views.html.sites.widgets.textWidget(models.widgets.Text.getById(widgetId).get)
 		}
 		catch {
 			case nse: NoSuchElementException =>
-				views.html.sites.widgets.textWidget(models.widgets.Text("An error occurred", "There was an error retreiving the widget"))
+				views.html.sites.widgets.textWidget(models.widgets.Text("An error occurred", "There was an error retreiving the widget", -1))
 		}
 	}
 

@@ -30,6 +30,11 @@ CREATE TABLE text_widget
 
 INSERT INTO text_widget (title, text) VALUES ('Test Widget', 'This is a text widget');
 INSERT INTO text_widget (title, text) VALUES ('A Text Widget', 'Here you''ll find a lot of text in a text widget. We can put whatever we want here and it will hold it.');
+INSERT INTO text_widget (title, text) VALUES ('A Third Widget', 'Here you''ll find a lot of text in a text widget. We can put whatever we want here and it will hold it.');
+
+INSERT INTO page_widgets (page_id, widget_id) VALUES (1, 1);
+INSERT INTO page_widgets (page_id, widget_id) VALUES (1, 2);
+INSERT INTO page_widgets (page_id, widget_id) VALUES (1, 3);
 
 # --- !Downs
 DROP TABLE IF EXISTS widget_types;

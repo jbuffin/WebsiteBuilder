@@ -33,4 +33,20 @@ object Text {
 		}
 	}
 	
+	def create(textWidget: Text): Long = {
+		DB.withConnection { implicit connection =>
+			SQL(
+				"""
+				insert into text_widget (title, text) values (
+					{title}, {text}
+				)
+				""").on(
+					'title -> textWidget.title,
+					'text -> textWidget.text).executeInsert()
+		} match {
+			case Some(textWidgetId) => textWidgetId
+			case None => -1
+		}
+	}
+	
 }
