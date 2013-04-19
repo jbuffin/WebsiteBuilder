@@ -13,14 +13,14 @@ import controllers.DefaultDataInit
 object Global extends GlobalSettings {
 
 	override def onStart(app: Application) {
-		Logger.info("Initializing default data...")
+		Logger.debug("Initializing default data...")
 		DefaultDataInit.insert()
-		Logger.info("...done")
+		Logger.debug("...done")
 		Logger.info("ChurchSite has started")
 	}
 
 	override def onStop(app: Application) {
-		Logger.info("ChurchSite has shut down")
+		Logger.error("ChurchSite has shut down")
 	}
 
 /*	override def onHandlerNotFound(request: RequestHeader): Result = {
