@@ -1,5 +1,5 @@
-@(siteId: Long) 
+@(widgets: List[Long]) 
 @import views.html.sites.templates.gracechurch._
 @main("no welcome") {
-	@views.html.sites.templates.gracechurch.index(Widgets.getWidgetList(siteId))
+	@views.html.sites.templates.gracechurch.index(widgets)
 }

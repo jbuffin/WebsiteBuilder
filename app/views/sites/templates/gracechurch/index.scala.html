@@ -1,4 +1,4 @@
-@(widgets: List[Long])
+@(widgetIdsList: List[Long])
 @import views.html.sites.widgets._
 @import models.widgets._
 @import controllers._
@@ -18,39 +18,27 @@
 						<li><a href="#">Directions</a></li>
 					</ul>
 				</div>
-				<!--/.well -->
 			</div>
-			<!--/span-->
 			<div class="span10">
 				@(carouselWidget(List(CarouselImage("assets/images/visit-grace.png","Visit Grace",""),CarouselImage("assets/images/titus-building-healthy-churches.png","Titus: Building Healthy Churches","Sunday morning sermon series by Pastor Rhett Dodson"))))
 				<div class="row-fluid">
 					<div class="span12">
-					@Widgets.getTheWidget(widgets(0))
+					@Widgets.getTheWidget(widgetIdsList(0))
 					</div>
-					<!--/span-->
 				</div>
-				<!--/row-->
 				<div class="row-fluid">
 					<div class="span6">
-					@Widgets.getTheWidget(widgets(1))
+					@Widgets.getTheWidget(widgetIdsList(1))
 					</div>
-					<!--/span-->
 					<div class="span6">
-					@Widgets.getTheWidget(widgets(2))
+					@Widgets.getTheWidget(widgetIdsList(2))
 					</div>
-					<!--/span-->
 				</div>
-				<!--/row-->
 			</div>
-			<!--/span-->
 		</div>
-		<!--/row-->
 		<hr>
 		<footer>
 			<p>&copy; site.siteName 2013</p>
 		</footer>
 	</div>
-	<!--/.fluid-container-->
 </div>
-<!-- content -->
-<!-- footer -->

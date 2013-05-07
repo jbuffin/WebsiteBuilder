@@ -12,12 +12,13 @@ object Widgets extends Controller {
 	}
 	
 	def getTheWidget(widgetId: Long): Html = {
+		val widgetType = "Text";
 		try {
 			views.html.sites.widgets.textWidget(models.widgets.Text.getById(widgetId).get)
 		}
 		catch {
 			case nse: NoSuchElementException =>
-				views.html.sites.widgets.textWidget(models.widgets.Text("An error occurred", "There was an error retreiving the widget"))
+				views.html.sites.widgets.textWidget(models.widgets.Text("", ""))
 		}
 	}
 	
