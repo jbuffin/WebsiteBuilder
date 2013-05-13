@@ -7,8 +7,8 @@ import play.api.templates.Html
 
 object Widgets extends Controller {
 	
-	def getWidgetList(siteId: Long): List[Long] = {
-		Page.getWidgetsByPageId(1)
+	def getWidgetList(pageId: Long): List[Long] = {
+		Page.getWidgetsByPageId(pageId)
 	}
 	
 	def getTheWidget(widgetId: Long): Html = {

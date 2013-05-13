@@ -25,7 +25,7 @@ object Page {
 			}
 	}
 
-	def getPageByUri(uri: String): Option[Page] = {
+	def getPageByUri(uri: String = ""): Option[Page] = {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
