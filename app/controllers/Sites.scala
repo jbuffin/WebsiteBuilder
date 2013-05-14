@@ -11,7 +11,7 @@ object Sites extends Controller {
 		Logger.debug("[Sites.index]: request.domain: '"+request.domain+"'")
 		try {
 			val site = Site.getSiteByHostName(request.domain).get
-			val listOfWidgets: List[Long] = List(1,2,5)//Widgets.getWidgetList(Page.getPageByUri().get.pageId)
+			val listOfWidgets: List[Long] = Widgets.getWidgetList(Page.getPageByUri().get.pageId)
 			if (listOfWidgets.length != 3) {
 				throw new NoSuchElementException
 			}
