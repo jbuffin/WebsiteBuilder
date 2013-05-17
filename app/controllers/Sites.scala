@@ -15,7 +15,7 @@ object Sites extends Controller {
 			if (listOfWidgets.length != 3) {
 				throw new NoSuchElementException
 			}
-			Ok(views.html.sites.index(listOfWidgets))
+			Ok(views.html.sites.templates.gracechurch.index(listOfWidgets))
 		}
 		catch {
 			case nse: NoSuchElementException =>
