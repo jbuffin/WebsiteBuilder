@@ -25,14 +25,16 @@ object Page {
 			}
 	}
 
-	def getPageByUri(uri: String = ""): Option[Page] = {
+	def getPageByUri(siteId: Long, uri: String = ""): Option[Page] = {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
 					select * from pages
-						where uri = {uri}
+						where page_id = {site_id}
+							and uri = {uri}
 				"""
 			).on(
+					'site_id -> siteId,
 					'uri -> uri
 				).as(Page.simple.singleOpt)
 		}
