@@ -4,6 +4,7 @@ import anorm._
 import anorm.SqlParser._
 import play.api.db._
 import play.api.Play.current
+import play.api.Logger
 
 case class Page(uri: String,
 	title: String,
@@ -26,11 +27,12 @@ object Page {
 	}
 
 	def getPageByUri(siteId: Long, uri: String = ""): Option[Page] = {
+		Logger.debug("[Page.getPageByUri]: siteId: "+siteId+", uri: '"+uri+"'")
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
 					select * from pages
-						where page_id = {site_id}
+						where site_id = {site_id}
 							and uri = {uri}
 				"""
 			).on(
