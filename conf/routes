@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET   /                   controllers.Sites.index
+GET   /                   controllers.Sites.getPageFromUri(uri = "")
 GET   /notfound           controllers.Application.indexWithNoSiteFound
 
 # Map the javascript routes
@@ -14,3 +14,4 @@ GET   /assets/*file       controllers.Assets.at(path="/public", file)
 
 # Map the hosted sites
 GET   /:page              controllers.Sites.getPageFromUri(page: String)
+GET   /*page              controllers.Sites.getChildPage(page: String)
