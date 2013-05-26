@@ -32,7 +32,11 @@ object Sites extends Controller {
 		val parsedPages = page.split("/").toList
 		try {
 			val site = Site.getSiteByHostName(request.domain).get
-
+			val page = Page.getPageByUriList(site.siteId, parsedPages).get
+			val listOfWidgets = Widgets.getWidgetList(page.pageId)
+			if (listOfWidgets.length != 3) {
+				throw new NoSuchElementException
+			}
 			Ok(parsedPages.last)
 		}
 		catch {

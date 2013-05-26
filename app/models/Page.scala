@@ -41,6 +41,10 @@ object Page {
 				).as(Page.simple.singleOpt)
 		}
 	}
+	
+	def getPageByUriList(siteId: Long, uriList: List[String]): Option[Page] = {
+		getPageByUri(siteId, uriList.last)
+	}
 
 	def create(page: Page): Long = {
 		DB.withConnection { implicit connection =>
