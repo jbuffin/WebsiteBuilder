@@ -9,7 +9,7 @@ object Application extends Controller {
 
 	def indexWithNoSiteFound = Action { implicit request =>
 		Logger.error("[Application.indexWithNoSite]: request.domain: '"+request.domain+"'")
-		Ok(views.html.index(request.domain))
+		Ok(views.html.notFound(request.domain))
 	}
 	
 	def javascriptRoutes = Action { implicit request =>

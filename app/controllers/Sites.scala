@@ -15,29 +15,10 @@ object Sites extends Controller {
 			val page = Page.getPageByUri(site.siteId, uri).get
 			val listOfWidgets: List[Long] = Widgets.getWidgetList(page.pageId)
 			if (listOfWidgets.length != 3) {
+				Logger.error("Not enough widgets: "+listOfWidgets.length)
 				throw new NoSuchElementException
 			}
 			Ok(views.html.sites.templates.gracechurch.index(page.title, listOfWidgets))
-		}
-		catch {
-			case nse: NoSuchElementException => {
-				Logger.error(nse.getMessage())
-				nse.printStackTrace()
-				Redirect(routes.Application.indexWithNoSiteFound)
-			}
-		}
-	}
-
-	def getChildPage(page: String) = Action { implicit request =>
-		val parsedPages = page.split("/").toList
-		try {
-			val site = Site.getSiteByHostName(request.domain).get
-			val page = Page.getPageByUriList(site.siteId, parsedPages).get
-			val listOfWidgets = Widgets.getWidgetList(page.pageId)
-			if (listOfWidgets.length != 3) {
-				throw new NoSuchElementException
-			}
-			Ok(parsedPages.last)
 		}
 		catch {
 			case nse: NoSuchElementException => {

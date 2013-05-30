@@ -14,4 +14,4 @@ GET   /assets/*file       controllers.Assets.at(path="/public", file)
 
 # Map the hosted sites
 GET   /:page              controllers.Sites.getPageFromUri(page: String)
-GET   /*page              controllers.Sites.getChildPage(page: String)
+GET   /*page              controllers.Sites.getPageFromUri(page: String)

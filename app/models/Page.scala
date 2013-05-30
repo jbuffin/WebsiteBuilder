@@ -26,7 +26,7 @@ object Page {
 			}
 	}
 
-	def getPageByUri(siteId: Long, uri: String = ""): Option[Page] = {
+	def getPageByUri(siteId: Long, uri: String): Option[Page] = {
 		Logger.debug("[Page.getPageByUri]: siteId: "+siteId+", uri: '"+uri+"'")
 		DB.withConnection { implicit connection =>
 			SQL(
