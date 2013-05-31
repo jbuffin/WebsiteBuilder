@@ -4,6 +4,7 @@ import play.api.db._
 import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
+import play.api.Logger
 
 case class WidgetType(widgetType: String,
 	typeId: Long)
@@ -38,6 +39,23 @@ object WidgetType {
 					'type_name -> typeName
 				).as(WidgetType.simple.singleOpt)
 		}
+	}
+	
+	def getWidgetTypeById(widgetId: Long): Option[WidgetType] = {
+		Logger.debug(widgetId.toString)
+		DB.withConnection { implicit connection =>
+			SQL(
+				"""
+					select widget_type from widget
+						where widget_id = {widget_id}
+				"""
+			).on(
+					'widget_id -> widgetId
+				).as(get[Long]("widget_type").singleOpt map {
+					case widget_type => WidgetType.getById(widget_type.get)
+				})
+			}
+		
 	}
 
 	def getById(typeId: Long): Option[WidgetType] = {

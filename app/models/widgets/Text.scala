@@ -20,7 +20,7 @@ object Text {
 		}
 	}
 	
-	def getById(widgetId: Long): Option[Text] = {
+	def getById(textWidgetId: Long): Option[Text] = {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
@@ -28,7 +28,20 @@ object Text {
 						where text_widget_id = {text_widget_id}
 				"""
 			).on(
-				'text_widget_id -> widgetId
+				'text_widget_id -> textWidgetId
+			).as(Text.simple.singleOpt)
+		}
+	}
+	
+	def getByWidgetId(widgetId: Long): Option[Text] = {
+		DB.withConnection { implicit connection =>
+			SQL(
+				"""
+					select * from text_widget
+						where widget_id = {widget_id}
+				"""
+			).on(
+				'widget_id -> widgetId
 			).as(Text.simple.singleOpt)
 		}
 	}

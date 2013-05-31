@@ -42,10 +42,6 @@ object Page {
 		}
 	}
 	
-	def getPageByUriList(siteId: Long, uriList: List[String]): Option[Page] = {
-		getPageByUri(siteId, uriList.last)
-	}
-
 	def create(page: Page): Long = {
 		DB.withConnection { implicit connection =>
 			SQL(
@@ -66,10 +62,11 @@ object Page {
 	}
 	
 	def getWidgetsByPageId(pageId: Long): List[Long] = {
+		Logger.debug(pageId.toString)
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-					select * from page_widgets
+					select widget_id from page_widgets
 						where page_id = {page_id}
 				"""
 			).on(

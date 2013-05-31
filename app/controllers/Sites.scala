@@ -14,6 +14,7 @@ object Sites extends Controller {
 			val site = Site.getSiteByHostName(request.domain).get
 			val page = Page.getPageByUri(site.siteId, uri).get
 			val listOfWidgets: List[Long] = Widgets.getWidgetList(page.pageId)
+			Logger.debug(listOfWidgets.toString)
 			if (listOfWidgets.length != 3) {
 				Logger.error("Not enough widgets: "+listOfWidgets.length)
 				throw new NoSuchElementException

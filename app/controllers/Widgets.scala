@@ -10,15 +10,15 @@ import models.widgets.WidgetTypeEnum._
 object Widgets extends Controller {
 	
 	def getWidgetList(pageId: Long): List[Long] = {
-		Page.getWidgetsByPageId(pageId)
+		val widgets = Page.getWidgetsByPageId(pageId)
+		Logger.debug(widgets.toString)
+		widgets
 	}
 	
 	def getTheWidget(widgetId: Long): Html = {
-		val widgetType = models.widgets.WidgetType.getById(widgetId).get;
-		val widgetChoose = widgetTypeChooser(WidgetTypeEnum.withName(widgetType.widgetType))
-		Logger.debug(widgetChoose.toString())
+		val widgetType = models.widgets.WidgetType.getWidgetTypeById(widgetId).get
 		try {
-			views.html.sites.widgets.textWidget(models.widgets.Text.getById(widgetId).get)
+			widgetTypeChooser(WidgetTypeEnum.withName(widgetType.widgetType), widgetId)
 		}
 		catch {
 			case nse: NoSuchElementException =>
@@ -26,9 +26,9 @@ object Widgets extends Controller {
 		}
 	}
 	
-	def widgetTypeChooser(widgetType: WidgetTypeEnum) = widgetType match {
-		case Text => "Text"
-		case Carousel => "Carousel"
+	def widgetTypeChooser(widgetType: WidgetTypeEnum, widgetId: Long) = widgetType match {
+		case Text => views.html.sites.widgets.textWidget(models.widgets.Text.getByWidgetId(widgetId).get)
+		case Carousel => views.html.sites.widgets.carouselWidget(List())
 	}
 	
 }
