@@ -8,7 +8,7 @@ import anorm.SqlParser._
 case class Text(
 		title: String,
 		text: String,
-		id: Long = -1) extends Widget
+		id: Long = -1)
 
 object Text {
 	
