@@ -14,8 +14,8 @@ object Widgets extends Controller {
 	}
 	
 	def getTheWidget(widgetId: Long): Html = {
-		val widgetType = "Text";
-		val widgetChoose = widgetTypeChooser(WidgetTypeEnum.withName(widgetType))
+		val widgetType = models.widgets.WidgetType.getById(widgetId).get;
+		val widgetChoose = widgetTypeChooser(WidgetTypeEnum.withName(widgetType.widgetType))
 		Logger.debug(widgetChoose.toString())
 		try {
 			views.html.sites.widgets.textWidget(models.widgets.Text.getById(widgetId).get)
@@ -27,8 +27,8 @@ object Widgets extends Controller {
 	}
 	
 	def widgetTypeChooser(widgetType: WidgetTypeEnum) = widgetType match {
-		case Text => models.widgets.Text
-		case Carousel => models.widgets.Carousel
+		case Text => "Text"
+		case Carousel => "Carousel"
 	}
 	
 }

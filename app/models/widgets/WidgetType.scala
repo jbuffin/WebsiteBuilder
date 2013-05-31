@@ -12,7 +12,7 @@ object WidgetType {
 
 	val simple = {
 		get[String]("widget_types.type_name") ~
-			get[Long]("widget_types.type_id") map {
+			get[Long]("widget_types.widget_type_id") map {
 				case type_name ~ type_id => WidgetType(type_name, type_id)
 			}
 	}
@@ -45,7 +45,7 @@ object WidgetType {
 			SQL(
 				"""
 					select * from widget_types
-						where type_id = {type_id}
+						where widget_type_id = {type_id}
 				"""
 			).on(
 					'type_id -> typeId
