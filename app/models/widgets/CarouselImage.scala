@@ -14,10 +14,10 @@ case class CarouselImage(
 object CarouselImage {
 
 	val simple = {
-		get[String]("carousel_image.image") ~
-			get[String]("carousel_image.title") ~
-			get[String]("carousel_image.text") ~
-			get[Long]("carousel_image.carousel_image_id") map {
+		get[String]("carousel_images.image") ~
+			get[String]("carousel_images.title") ~
+			get[String]("carousel_images.text") ~
+			get[Long]("carousel_images.carousel_images_id") map {
 				case image ~ title ~ text ~ id => CarouselImage(image, title, text, id)
 			}
 	}
@@ -26,7 +26,7 @@ object CarouselImage {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-					select * from carousel_image
+					select * from carousel_images
 						where carousel_image_id = {carousel_image_id}
 				"""
 			).on(
@@ -39,7 +39,7 @@ object CarouselImage {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-					select * from carousel_image
+					select * from carousel_images
 						where widget_id = {widget_id}
 				"""
 			).on(

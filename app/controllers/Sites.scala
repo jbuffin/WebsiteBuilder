@@ -15,7 +15,7 @@ object Sites extends Controller {
 			val page = Page.getPageByUri(site.siteId, uri).get
 			val listOfWidgets: List[Long] = Widgets.getWidgetList(page.pageId)
 			Logger.debug(listOfWidgets.toString)
-			if (listOfWidgets.length != 3) {
+			if (listOfWidgets.length != 4) {
 				Logger.error("Not enough widgets: "+listOfWidgets.length)
 				throw new NoSuchElementException
 			}
@@ -28,12 +28,6 @@ object Sites extends Controller {
 				Redirect(routes.Application.indexWithNoSiteFound)
 			}
 		}
-	}
-
-	def createNewSite(site: Site, page: Page, textWidgets: List[Text]) = {
-		Site.create(site)
-		Page.create(page)
-		textWidgets.foreach(Text.create)
 	}
 
 }

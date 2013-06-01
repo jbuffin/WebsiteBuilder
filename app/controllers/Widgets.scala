@@ -6,6 +6,7 @@ import models._
 import play.api.templates.Html
 import models.widgets.WidgetTypeEnum
 import models.widgets.WidgetTypeEnum._
+import models.widgets.Carousel
 
 object Widgets extends Controller {
 	
@@ -28,7 +29,7 @@ object Widgets extends Controller {
 	
 	def widgetTypeChooser(widgetType: WidgetTypeEnum, widgetId: Long) = widgetType match {
 		case Text => views.html.sites.widgets.textWidget(models.widgets.Text.getByWidgetId(widgetId).get)
-		case Carousel => views.html.sites.widgets.carouselWidget(List())
+		case WidgetTypeEnum.Carousel => views.html.sites.widgets.carouselWidget(models.widgets.Carousel.getByWidgetId(widgetId).images)
 	}
 	
 }
