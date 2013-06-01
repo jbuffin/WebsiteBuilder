@@ -28,6 +28,21 @@ object Sites extends Controller {
 		}
 	}
 	
+	def getPageFromSiteIdAndUri(siteId: Long, uri: String = "") = Action { implicit request =>
+		Logger.debug("[Sites.getPageFromSiteIdAndUri]: siteId: '"+siteId+"', uri: '"+uri+"'")
+		try {
+			val page = Page.getPageByUri(siteId, uri).get
+			pageTypeChooser(PageType.getById(page.pageType).get, page)
+		}
+		catch {
+			case nse: NoSuchElementException => {
+				Logger.error(nse.getMessage())
+				nse.printStackTrace()
+				Redirect(routes.Application.indexWithNoSiteFound)
+			}
+		}
+	}
+	
 	def pageTypeChooser(pageType: PageType, page: Page) = {
 		try {
 			val listOfWidgets: List[Long] = Widgets.getWidgetList(page.pageId)
