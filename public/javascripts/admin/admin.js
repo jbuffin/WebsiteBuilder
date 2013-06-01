@@ -11,7 +11,6 @@ function AdminViewModel() {
 	self.currentWidget = ko.observable();
 
 	self.init = function() {
-		console.log('AdminViewModel init()');
 		server = new FakeServerAccessor("");
 		siteServer = new SiteAccessor(server);
 		pageServer = new PageAccessor(server);
