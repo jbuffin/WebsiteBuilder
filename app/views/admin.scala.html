@@ -1,5 +1,55 @@
 @(siteName: String)
 @main("Admin Home") {
 @loggedInNavBar(siteName)
-
+<div class="container roomForHeader">
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span2">
+				<div class="well sidebar-nav">
+					<ul class="nav nav-list">
+						<li class="nav-header"></li>
+						<li><a href="#sites">Sites</a></li>
+						<li><a href="#pages">Pages</a></li>
+						<li><a href="#page-widgets">Page widgets</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="span10">
+				<div class="row-fluid" id="sites">
+					<div class="span12">
+						<div class="page-header">
+							<h1>Sites</h1>
+						</div>
+						<p>...</p>
+						<hr>
+					</div>
+				</div>
+				<section class="row-fluid" id="pages">
+					<div class="span12">
+						<div class="page-header">
+							<h1>Pages</h1>
+						</div>
+						<p>...</p>
+						<hr>
+					</div>
+				</section>
+				<section class="row-fluid" id="page-widgets">
+					<div class="span12">
+						<div class="page-header">
+							<h1>Page widgets</h1>
+						</div>
+						<p>...</p>
+						<hr>
+					</div>
+				</section>
+			</div>
+		</div>
+		<hr>
+		<footer>
+			<p></p>
+		</footer>
+	</div>
+</div>
 }
+<script type="text/javascript" src="@routes.Assets.at("javascripts/knockout/knockout-2.2.1.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/admin/admin.js")"></script>
