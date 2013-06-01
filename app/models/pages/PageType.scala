@@ -1,4 +1,4 @@
-package models
+package models.pages
 
 import play.api.db._
 import play.api.Play.current
@@ -23,6 +23,21 @@ object PageType {
 					select * from page_types
 				"""
 			).as(PageType.simple *)
+		}
+	}
+	
+	def getPageByTypeId(pageId: Long) = {
+		DB.withConnection { implicit connection =>
+			SQL(
+				"""
+					select page_type from pages
+						where page_id = {page_id}
+				"""
+			).on(
+					'page_id -> pageId
+				).as(get[Long]("page_id").singleOpt map {
+						case page_type => PageType.getById(page_type.get)
+					})
 		}
 	}
 	

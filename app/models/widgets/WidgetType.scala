@@ -40,9 +40,8 @@ object WidgetType {
 				).as(WidgetType.simple.singleOpt)
 		}
 	}
-	
+
 	def getWidgetTypeById(widgetId: Long): Option[WidgetType] = {
-		Logger.debug(widgetId.toString)
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
@@ -52,10 +51,9 @@ object WidgetType {
 			).on(
 					'widget_id -> widgetId
 				).as(get[Long]("widget_type").singleOpt map {
-					case widget_type => WidgetType.getById(widget_type.get)
-				})
-			}
-		
+						case widget_type => WidgetType.getById(widget_type.get)
+					})
+		}
 	}
 
 	def getById(typeId: Long): Option[WidgetType] = {

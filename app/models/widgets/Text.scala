@@ -62,4 +62,8 @@ object Text {
 		}
 	}
 	
+	def emptyTextWidget = {
+		Text("", "")
+	}
+	
 }

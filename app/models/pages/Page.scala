@@ -1,4 +1,4 @@
-package models
+package models.pages
 
 import anorm._
 import anorm.SqlParser._
@@ -62,7 +62,6 @@ object Page {
 	}
 	
 	def getWidgetsByPageId(pageId: Long): List[Long] = {
-		Logger.debug(pageId.toString)
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
