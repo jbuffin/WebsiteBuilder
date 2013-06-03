@@ -18,27 +18,48 @@
 				<div class="row-fluid" id="sites">
 					<div class="span12">
 						<div class="page-header">
-							<h1>Sites</h1>
+							<h1>Sites</h1>&nbsp;<a href="#">New</a>
 						</div>
-						<p>...</p>
+						<p>
+							<select data-bind="options: siteList,
+												optionsText: 'siteName',
+												value: currentSite,
+												optionsCaption: 'Choose a site...'">
+							</select>
+						</p>
+						<p data-bind="if:currentSite">Info about <span data-bind="text:currentSite().siteName"></p>
 						<hr>
 					</div>
 				</div>
 				<section class="row-fluid" id="pages">
 					<div class="span12">
 						<div class="page-header">
-							<h1>Pages</h1>
+							<h1>Pages</h1>&nbsp;<a href="#">New</a>
 						</div>
-						<p>...</p>
+						<p>
+							<select data-bind="options: pageList,
+												optionsText: 'title',
+												value: currentPage,
+												optionsCaption: 'Choose a page...'">
+							</select>
+						</p>
+						<p data-bind="if:currentPage">Info about <span data-bind="text:currentPage().title"></span></p>
 						<hr>
 					</div>
 				</section>
 				<section class="row-fluid" id="page-widgets">
 					<div class="span12">
 						<div class="page-header">
-							<h1>Page widgets</h1>
+							<h1>Page widgets</h1>&nbsp;<a href="#">New</a>
 						</div>
-						<p>...</p>
+						<p>
+							<select data-bind="options: widgetList,
+												optionsText: 'id',
+												value: currentWidget,
+												optionsCaption: 'Choose a widget...'">
+							</select>
+						</p>
+						<p data-bind="if:currentWidget"><span data-bind="text:currentWidget().id"></span></p>
 						<hr>
 					</div>
 				</section>
