@@ -12,6 +12,10 @@ function AdminViewModel() {
 	self.siteList = ko.observableArray([]);
 	self.pageList = ko.observableArray([]);
 	self.widgetList = ko.observableArray([]);
+	
+	self.siteFormVisible = ko.observable(false);
+	self.pageFormVisible = ko.observable(false);
+	self.widgetFormVisible = ko.observable(false);
 
 	self.currentSite.subscribe(function(newValue) {
 		if(newValue) {
@@ -32,6 +36,32 @@ function AdminViewModel() {
 			self.widgetList([]);
 		}
 	});
+	
+	self.showNewSiteForm = function() {
+		self.siteFormVisible(!self.siteFormVisible());
+	};
+	self.showNewPageForm = function() {
+		self.pageFormVisible(self.pageFormVisible());
+	};
+	self.showNewWidgetForm = function() {
+		self.widgetFormVisible(self.widgetFormVisible());
+	};
+	
+	self.createNewSite = function(formElement) {
+		var theFormData = {
+			siteName: $(formElement).find('#siteNameInput').val(),
+			hostName: $(formElement).find('#siteHostName').val()
+		};
+		siteServer.newSite(theFormData, function() {
+			siteServer.getAll(function(data) {
+				self.siteList(data);
+			});
+			$(formElement).find('#siteNameInput').val('');
+			$(formElement).find('#siteHostName').val('');
+		});
+	};
+	
+	
 
 	self.init = function() {
 		server = new FakeServerAccessor("");
@@ -56,19 +86,22 @@ function SiteAccessor(server) {
 	var self = this;
 	self.server = server;
 
+	self.fakeSites = [ {
+		id : 1,
+		siteName : 'grace church',
+		hostName : 'gracechurch.net'
+	}, {
+		id : 2,
+		siteName : 'my church site',
+		hostName : 'mychurchsite.com'
+	} ];
 	self.getAll = function(callback) {
-		callback([ {
-			id : 1,
-			siteName : 'grace church',
-			hostName : 'gracechurch.net'
-		}, {
-			id : 2,
-			siteName : 'my church site',
-			hostName : 'mychurchsite.com'
-		} ]);
+		callback(self.fakeSites);
 	};
-	self.newSite = function(site, callback) {
-
+	self.newSite = function(formData, callback) {
+		formData.id = self.fakeSites.length + 1;
+		self.fakeSites.push(formData);
+		callback();
 	};
 }
 function PageAccessor(server) {

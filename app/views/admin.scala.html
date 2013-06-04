@@ -18,16 +18,38 @@
 				<div class="row-fluid" id="sites">
 					<div class="span12">
 						<div class="page-header">
-							<h1>Sites</h1>&nbsp;<a href="#">New</a>
+							<h1>Sites</h1>&nbsp;<a href="#" data-bind="click: showNewSiteForm">New</a>
 						</div>
-						<p>
+						<div id="newSiteForm" data-bind="visible: siteFormVisible">
+							<form class="form-horizontal" data-bind="submit: createNewSite">
+								<div class="control-group">
+									<label class="control-label" for="siteNameInput">Site name: </label>
+									<div class="controls">
+										<input type="text" id="siteNameInput" placeholder="site name"/>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="siteHostName">Domain name: </label>
+									<div class="controls">
+										<input type="text" id="siteHostName" placeholder="domain name"/>
+									</div>
+								</div>
+								<div class="control-group">
+									<div class="controls">
+										<button type="submit" class="btn">Create</button>
+									</div>
+								</div>
+								
+							</form>
+						</div>
+						<div>
 							<select data-bind="options: siteList,
 												optionsText: 'siteName',
 												value: currentSite,
 												optionsCaption: 'Choose a site...'">
 							</select>
-						</p>
-						<p data-bind="if:currentSite">Info about <span data-bind="text:currentSite().siteName"></p>
+						</div>
+						<div data-bind="if:currentSite">Info about <span data-bind="text:currentSite().siteName"></div>
 						<hr>
 					</div>
 				</div>
