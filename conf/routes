@@ -6,6 +6,7 @@
 GET   /                        controllers.Sites.getPageFromUri(uri = "")
 GET   /notfound                controllers.Application.indexWithNoSiteFound
 GET   /admin-home              controllers.Application.adminHome
+GET   /admin-static            controllers.Assets.at(path="/public", file="html/admin-static.html")
 GET   /getsitebyid/:id         controllers.Sites.getPageFromSiteIdAndUri(id: Long, uri = "")
 
 # Map the javascript routes
