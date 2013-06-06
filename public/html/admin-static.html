@@ -77,7 +77,8 @@
 													optionsCaption: 'Choose a site...'">
 								</select>
 							</div>
-							<div data-bind="if:currentSite">Info about <span data-bind="text:currentSite().siteName"></span></div>
+							<div data-bind="if:currentSite">
+								Info about <span data-bind="text:currentSite().siteName"></span>:&nbsp;<a target="_blank" data-bind="attr:{href: 'http://'+currentSite().hostName+':9000'},text: currentSite().hostName"></a>&nbsp;(<a target="_blank" data-bind="attr:{href: 'http://localhost:9000/getsitebyid/'+currentSite().id},text: 'http://localhost/getsitebyid/'+currentSite().id"></a>)</div>
 							<hr>
 						</div>
 					</div>

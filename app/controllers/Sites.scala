@@ -9,6 +9,9 @@ import models.pages.Page
 import models.pages.PageType
 import models.pages.PageTypeEnum
 import models.pages.PageTypeEnum._
+import play.api.libs.json
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 object Sites extends Controller {
 
@@ -27,7 +30,7 @@ object Sites extends Controller {
 			}
 		}
 	}
-	
+
 	def getPageFromSiteIdAndUri(siteId: Long, uri: String = "") = Action { implicit request =>
 		Logger.debug("[Sites.getPageFromSiteIdAndUri]: siteId: '"+siteId+"', uri: '"+uri+"'")
 		try {
@@ -42,7 +45,7 @@ object Sites extends Controller {
 			}
 		}
 	}
-	
+
 	def pageTypeChooser(pageType: PageType, page: Page) = {
 		try {
 			val listOfWidgets: List[Long] = Widgets.getWidgetList(page.pageId)
@@ -61,6 +64,25 @@ object Sites extends Controller {
 				nse.printStackTrace()
 				Redirect(routes.Application.indexWithNoSiteFound)
 			}
+		}
+	}
+
+	def getAllPagesAsJson = Action {
+		Ok(Json.toJson(Site.getAll map { site =>
+			Json.obj("id" -> site.siteId.toString, "siteName" -> site.siteName, "hostName" -> site.hostName)
+		}))
+	}
+
+	implicit val siteRds = (
+		(__ \ 'siteName).read[String] and
+		(__ \ 'hostName).read[String]
+	) tupled
+
+	def newSiteFromJson = Action(parse.json) { request =>
+		request.body.validate[(String, String)].map {
+			case (siteName, hostName) => Ok(Site.create(Site(siteName, hostName)).toString)
+		}.recoverTotal {
+			e => BadRequest("Detected error: "+JsError.toFlatJson(e))
 		}
 	}
 
