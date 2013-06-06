@@ -21,8 +21,9 @@ object Application extends Controller {
 		import routes.javascript._
 		Ok(
 			Routes.javascriptRouter("jsRoutes") (
-				Sites.getAllPagesAsJson,
-				Sites.newSiteFromJson
+				Sites.getAllSitesAsJson,
+				Sites.newSiteFromJson,
+				Sites.getAllPagesBySiteAsJson
 			)
 		).as("text/javascript")
 	}

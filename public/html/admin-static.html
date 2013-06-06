@@ -53,13 +53,13 @@
 									<div class="control-group">
 										<label class="control-label" for="siteNameInput">Site name: </label>
 										<div class="controls">
-											<input type="text" id="siteNameInput" placeholder="site name"/>
+											<input type="text" id="siteNameInput" placeholder="site name" required/>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label" for="siteHostName">Domain name: </label>
 										<div class="controls">
-											<input type="text" id="siteHostName" placeholder="domain name"/>
+											<input type="text" id="siteHostName" placeholder="domain name" required/>
 										</div>
 									</div>
 									<div class="control-group">
@@ -78,7 +78,7 @@
 								</select>
 							</div>
 							<div data-bind="if:currentSite">
-								Info about <span data-bind="text:currentSite().siteName"></span>:&nbsp;<a target="_blank" data-bind="attr:{href: 'http://'+currentSite().hostName+':9000'},text: currentSite().hostName"></a>&nbsp;(<a target="_blank" data-bind="attr:{href: 'http://localhost:9000/getsitebyid/'+currentSite().id},text: 'http://localhost/getsitebyid/'+currentSite().id"></a>)</div>
+								Info about <span data-bind="text:currentSite().siteName"></span>:&nbsp;<a target="_blank" data-bind="attr:{href: 'http://'+currentSite().hostName+':9000'},text: currentSite().hostName"></a>&nbsp;(<a target="_blank" data-bind="attr:{href: '/getsitebyid/'+currentSite().id},text: '/getsitebyid/'+currentSite().id"></a>)</div>
 							<hr>
 						</div>
 					</div>

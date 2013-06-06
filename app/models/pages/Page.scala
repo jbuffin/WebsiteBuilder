@@ -42,6 +42,19 @@ object Page {
 		}
 	}
 	
+	def getAllBySiteId(siteId: Long) = {
+		DB.withConnection { implicit connection =>
+			SQL(
+				"""
+					select * from pages
+						where site_id = {site_id}
+				"""
+			).on(
+					'site_id -> siteId
+				).as(Page.simple *)
+		}
+	}
+	
 	def create(page: Page): Long = {
 		DB.withConnection { implicit connection =>
 			SQL(

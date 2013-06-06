@@ -67,23 +67,30 @@ object Sites extends Controller {
 		}
 	}
 
-	def getAllPagesAsJson = Action {
+	def getAllSitesAsJson = Action {
 		Ok(Json.toJson(Site.getAll map { site =>
 			Json.obj("id" -> site.siteId.toString, "siteName" -> site.siteName, "hostName" -> site.hostName)
 		}))
 	}
 
 	implicit val siteRds = (
-		(__ \ 'siteName).read[String] and
-		(__ \ 'hostName).read[String]
+		(__ \ "id").read[Long] and
+		(__ \ "siteName").read[String] and
+		(__ \ "hostName").read[String]
 	) tupled
 
 	def newSiteFromJson = Action(parse.json) { request =>
-		request.body.validate[(String, String)].map {
-			case (siteName, hostName) => Ok(Site.create(Site(siteName, hostName)).toString)
+		request.body.validate[(Long, String, String)].map {
+			case (id, siteName, hostName) => Ok(Site.create(Site(siteName, hostName)).toString)
 		}.recoverTotal {
 			e => BadRequest("Detected error: "+JsError.toFlatJson(e))
 		}
+	}
+	
+	def getAllPagesBySiteAsJson(siteId: Long) = Action {
+		Ok(Json.toJson(Page.getAllBySiteId(siteId) map { page =>
+			Json.obj("id" -> page.pageId, "uri" -> page.uri, "title" -> page.title, "pageType" -> page.pageType, "parent" -> page.parent, "siteId" -> page.siteId)
+		}))
 	}
 
 }

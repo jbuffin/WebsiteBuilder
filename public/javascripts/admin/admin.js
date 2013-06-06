@@ -49,6 +49,7 @@ function AdminViewModel() {
 
 	self.createNewSite = function(formElement) {
 		var theFormData = {
+			id : -1,
 			siteName : $(formElement).find('#siteNameInput').val(),
 			hostName : $(formElement).find('#siteHostName').val()
 		};
@@ -84,24 +85,20 @@ function SiteAccessor(server) {
 	var self = this;
 	self.server = server;
 
-	self.fakeSites = [ {
-		id : 1,
-		siteName : 'grace church',
-		hostName : 'gracechurch.net'
-	}, {
-		id : 2,
-		siteName : 'my church site',
-		hostName : 'mychurchsite.com'
-	} ];
 	self.getAll = function(callback) {
-		jsRoutes.controllers.Sites.getAllPagesAsJson().ajax({
+		jsRoutes.controllers.Sites.getAllSitesAsJson().ajax({
 			success : callback
-		});// self.fakeSites);
+		});
 	};
 	self.newSite = function(formData, callback) {
-		formData.id = self.fakeSites.length + 1;
-		self.fakeSites.push(formData);
-		callback();
+		jsRoutes.controllers.Sites.newSiteFromJson().ajax({
+			data : JSON.stringify(formData),
+			contentType : 'text/json',
+			success : callback,
+			error : function(e) {
+				console.error(JSON.stringify(e));
+			}
+		});
 	};
 }
 function PageAccessor(server) {
@@ -109,16 +106,9 @@ function PageAccessor(server) {
 	self.server = server;
 
 	self.getAllBySite = function(siteId, callback) {
-		callback([ {
-			id : 1,
-			title : 'Default Page'
-		}, {
-			id : 2,
-			title : 'Our Church'
-		}, {
-			id : 3,
-			title : 'Directions'
-		} ]);
+		jsRoutes.controllers.Sites.getAllPagesBySiteAsJson(siteId).ajax({
+			success: callback
+		});
 	};
 	self.newPage = function(page, callback) {
 
