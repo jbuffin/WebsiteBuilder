@@ -64,7 +64,7 @@
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<button type="submit" class="btn">Create</button>
+											<button type="submit" class="btn">Create site</button>
 										</div>
 									</div>
 									
@@ -85,7 +85,48 @@
 					<section class="row-fluid" id="pages">
 						<div class="span12">
 							<div class="page-header">
-								<h1>Pages</h1>&nbsp;<a href="#">New</a>
+								<h1>Pages</h1>&nbsp;<a href="#" data-bind="click: showNewPageForm">New</a>
+							</div>
+							<div id="newPageForm" data-bind="visible: pageFormVisible">
+								<form class="form-horizontal" data-bind="submit: createNewPage">
+									<div class="control-group">
+										<label class="control-label" for="pageUri">Page URI: </label>
+										<div class="controls">
+											<input type="text" id="pageUri" placeholder="uri"/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="pageTitle">Page title: </label>
+										<div class="controls">
+											<input type="text" id="pageTitle" placeholder="Page title" required/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="pageType">Page type: </label>
+										<div class="controls">
+											<select id="pageType" data-bind="options: allPageTypes,
+													optionsText: 'typeName',
+													optionsValue: 'pageTypeId',
+													optionsCaption: 'Choose a page type...'">
+											</select>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="newPageParent">Parent page: </label>
+										<div class="controls">
+											<select id="newPageParent" data-bind="options: pageList,
+													optionsText: 'title',
+													optionsValue: 'id',
+													optionsCaption: 'Choose a page type...'">
+											</select>
+										</div>
+									</div>
+									<div class="control-group">
+										<div class="controls">
+											<button type="submit" class="btn">Create page</button>
+										</div>
+									</div>
+								</form>
 							</div>
 							<div>
 								<select data-bind="options: pageList,
@@ -95,7 +136,7 @@
 								</select>
 							</div>
 							<div data-bind="if:currentPage">
-								Info about <span data-bind="text:currentPage().title"></span>:&nbsp;<a target="_blank" data-bind="attr:{href: 'http://'+currentSite().hostName+':9000/'+currentPage().uri},text: currentSite().hostName+'/'+currentPage().uri"></a>&nbsp;(<a target="_blank" data-bind="attr:{href: '/getsitebyid/'+currentSite().id},text: '/getsitebyid/'+currentSite().id"></a>)
+								Info about <span data-bind="text:currentPage().title"></span>:&nbsp;<a target="_blank" data-bind="attr:{href: 'http://'+currentSite().hostName+':9000/'+currentPage().uri},text: currentSite().hostName+'/'+currentPage().uri"></a>&nbsp;(<a target="_blank" data-bind="attr:{href: '/getsitebyid/'+currentSite().id+'/'+currentPage().uri},text: '/getsitebyid/'+currentSite().id+'/'+currentPage().uri"></a>)
 							</div>
 							<hr>
 						</div>
@@ -103,16 +144,21 @@
 					<section class="row-fluid" id="page-widgets">
 						<div class="span12">
 							<div class="page-header">
-								<h1>Page widgets</h1>&nbsp;<a href="#">New</a>
+								<h1>Page widgets</h1>&nbsp;<a href="#" data-bind="click: showNewWidgetForm">New</a>
 							</div>
-							<p>
+							<div id="newWidgetForm" data-bind="visible: widgetFormVisible">
+								new
+							</div>
+							<div>
 								<select data-bind="options: widgetList,
 													optionsText: 'id',
 													value: currentWidget,
 													optionsCaption: 'Choose a widget...'">
 								</select>
-							</p>
-							<p data-bind="if:currentWidget"><span data-bind="text:currentWidget().id"></span></p>
+							</div>
+							<div data-bind="if:currentWidget">
+								<span data-bind="text:currentWidget().id"></span>
+							</div>
 							<hr>
 						</div>
 					</section>

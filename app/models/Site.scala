@@ -4,6 +4,9 @@ import play.api.db._
 import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
+import play.api.libs.json
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 import models._
 
@@ -13,6 +16,12 @@ case class Site(
 	siteId: Long = -1)
 
 object Site {
+	
+	implicit val siteReads = (
+		(__ \ "siteName").read[String] ~
+		(__ \ "hostName").read[String] ~
+		(__ \ "id").read[Long]
+	) (Site.apply _)
 
 	val simple = {
 		get[String]("sites.site_name") ~

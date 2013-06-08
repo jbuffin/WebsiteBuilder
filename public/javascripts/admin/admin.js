@@ -1,7 +1,6 @@
 var siteServer;
 var pageServer;
 var widgetServer;
-var server;
 
 function AdminViewModel() {
 	var self = this;
@@ -12,6 +11,7 @@ function AdminViewModel() {
 	self.siteList = ko.observableArray([]);
 	self.pageList = ko.observableArray([]);
 	self.widgetList = ko.observableArray([]);
+	self.allPageTypes = ko.observableArray([]);
 
 	self.siteFormVisible = ko.observable(false);
 	self.pageFormVisible = ko.observable(false);
@@ -41,10 +41,13 @@ function AdminViewModel() {
 		self.siteFormVisible(!self.siteFormVisible());
 	};
 	self.showNewPageForm = function() {
-		self.pageFormVisible(self.pageFormVisible());
+		self.pageFormVisible(!self.pageFormVisible());
+		pageServer.getAllPageTypes(function(data) {
+			self.allPageTypes(data);
+		});
 	};
 	self.showNewWidgetForm = function() {
-		self.widgetFormVisible(self.widgetFormVisible());
+		self.widgetFormVisible(!self.widgetFormVisible());
 	};
 
 	self.createNewSite = function(formElement) {
@@ -59,18 +62,37 @@ function AdminViewModel() {
 			});
 			$(formElement).find('#siteNameInput').val('');
 			$(formElement).find('#siteHostName').val('');
+			self.showNewSiteForm();
+		});
+	};
+	
+	self.createNewPage = function(formElement) {
+		var formData = {
+			id : -1,
+			uri : $(formElement).find('#pageUri').val(),
+			title : $(formElement).find('#pageTitle').val(),
+			pageType : Number($(formElement).find('#pageType').val()),
+			parent : $(formElement).find('#newPageParent').val() === '' ? -1 : Number($(formElement).find('#newPageParent').val()),
+			siteId : Number(self.currentSite().id)
+		};
+		pageServer.newPage(formData, function() {
+			pageServer.getAllBySite(self.currentSite().id, function(data) {
+				self.pageList(data);
+			});
+			$(formElement).find('#pageUri').val('');
+			$(formElement).find('#pageTitle').val('');
+			self.showNewPageForm();
 		});
 	};
 
 	self.init = function() {
-		server = new FakeServerAccessor("");
-		siteServer = new SiteAccessor(server);
-		pageServer = new PageAccessor(server);
-		widgetServer = new WidgetAccessor(server);
+		siteServer = new SiteAccessor();
+		pageServer = new PageAccessor();
+		widgetServer = new WidgetAccessor();
 		siteServer.getAll(function(data) {
 			self.siteList(data);
 		});
-	}
+	};
 }
 
 var avm = new AdminViewModel();
@@ -83,7 +105,6 @@ $(function() {
 
 function SiteAccessor(server) {
 	var self = this;
-	self.server = server;
 
 	self.getAll = function(callback) {
 		jsRoutes.controllers.Sites.getAllSitesAsJson().ajax({
@@ -103,20 +124,31 @@ function SiteAccessor(server) {
 }
 function PageAccessor(server) {
 	var self = this;
-	self.server = server;
 
 	self.getAllBySite = function(siteId, callback) {
 		jsRoutes.controllers.Sites.getAllPagesBySiteAsJson(siteId).ajax({
 			success: callback
 		});
 	};
+	self.getAllPageTypes = function(callback) {
+		jsRoutes.controllers.Sites.getAllPageTypesAsJson().ajax({
+			success: callback
+		});
+	};
 	self.newPage = function(page, callback) {
-
+		console.log(JSON.stringify(page));
+		jsRoutes.controllers.Sites.newPageFromJson().ajax({
+			data : JSON.stringify(page),
+			contentType : 'text/json',
+			success : callback,
+			error : function(e) {
+				console.error(JSON.stringify(e));
+			}
+		});
 	};
 }
 function WidgetAccessor(server) {
 	var self = this;
-	self.server = server;
 
 	self.getAllByPage = function(pageId, callback) {
 		callback([ {
@@ -137,18 +169,6 @@ function WidgetAccessor(server) {
 function ServerAccessor(url) {
 	var self = this;
 	self.where = url;
-
-	self.get = function(what, successCallBack) {
-
-	}
-
-	self.put = function(what, stuff, successCallBack) {
-
-	}
-}
-
-function FakeServerAccessor() {
-	var self = this;
 
 	self.get = function(what, successCallBack) {
 

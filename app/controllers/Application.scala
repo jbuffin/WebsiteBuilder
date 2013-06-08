@@ -23,7 +23,9 @@ object Application extends Controller {
 			Routes.javascriptRouter("jsRoutes") (
 				Sites.getAllSitesAsJson,
 				Sites.newSiteFromJson,
-				Sites.getAllPagesBySiteAsJson
+				Sites.getAllPagesBySiteAsJson,
+				Sites.getAllPageTypesAsJson,
+				Sites.newPageFromJson
 			)
 		).as("text/javascript")
 	}

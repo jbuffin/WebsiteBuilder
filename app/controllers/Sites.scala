@@ -48,13 +48,8 @@ object Sites extends Controller {
 
 	def pageTypeChooser(pageType: PageType, page: Page) = {
 		try {
-			val listOfWidgets: List[Long] = Widgets.getWidgetList(page.pageId)
-			if (listOfWidgets.length != 4) {
-				Logger.error("Not enough widgets: "+listOfWidgets.length)
-				throw new NoSuchElementException
-			}
 			PageTypeEnum.withName(pageType.typeName) match {
-				case ROOT => Ok(views.html.sites.templates.gracechurch.index(page.title, listOfWidgets))
+				case ROOT => Ok(views.html.sites.templates.gracechurch.index(page.title, Widgets.getWidgetList(page.pageId)))
 				case _ => NotFound
 			}
 		}
@@ -66,6 +61,12 @@ object Sites extends Controller {
 			}
 		}
 	}
+	
+	def getAllPageTypesAsJson = Action {
+		Ok(Json.toJson(PageType.getAll map { pageType =>
+			Json.obj("typeName" -> pageType.typeName, "pageTypeId" -> pageType.pageTypeId)
+		}))
+	}
 
 	def getAllSitesAsJson = Action {
 		Ok(Json.toJson(Site.getAll map { site =>
@@ -73,15 +74,9 @@ object Sites extends Controller {
 		}))
 	}
 
-	implicit val siteRds = (
-		(__ \ "id").read[Long] and
-		(__ \ "siteName").read[String] and
-		(__ \ "hostName").read[String]
-	) tupled
-
 	def newSiteFromJson = Action(parse.json) { request =>
-		request.body.validate[(Long, String, String)].map {
-			case (id, siteName, hostName) => Ok(Site.create(Site(siteName, hostName)).toString)
+		request.body.validate[Site].map { site =>
+			Ok(Site.create(Site(site.siteName, site.hostName)).toString)
 		}.recoverTotal {
 			e => BadRequest("Detected error: "+JsError.toFlatJson(e))
 		}
@@ -91,6 +86,23 @@ object Sites extends Controller {
 		Ok(Json.toJson(Page.getAllBySiteId(siteId) map { page =>
 			Json.obj("id" -> page.pageId, "uri" -> page.uri, "title" -> page.title, "pageType" -> page.pageType, "parent" -> page.parent, "siteId" -> page.siteId)
 		}))
+	}
+	
+	implicit val pageRds = (
+		(__ \ "id").read[Long] and
+		(__ \ "uri").read[String] and
+		(__ \ "title").read[String] and
+		(__ \ "pageType").read[Long] and
+		(__ \ "parent").read[Long] and
+		(__ \ "siteId").read[Long]
+	) tupled
+	
+	def newPageFromJson = Action(parse.json) { request =>
+		request.body.validate[(Long, String, String, Long, Long, Long)].map {
+			case (id, uri, title, pageType, parent, siteId) => Ok(Page.create(Page(uri, title, pageType, parent, siteId)).toString)
+		}.recoverTotal{
+			e => BadRequest("Detected error: "+JsError.toFlatJson(e)+"\n"+request.body)
+		}
 	}
 
 }

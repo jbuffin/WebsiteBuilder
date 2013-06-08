@@ -14,7 +14,10 @@ GET    /javascriptroutes         controllers.Application.javascriptRoutes
 GET    /ajax/sites               controllers.Sites.getAllSitesAsJson
 POST   /ajax/sites/new           controllers.Sites.newSiteFromJson
 
+GET    /ajax/pagetypes           controllers.Sites.getAllPageTypesAsJson
 GET    /ajax/pages/all/:siteId   controllers.Sites.getAllPagesBySiteAsJson(siteId: Long)
+
+POST   /ajax/pages/new           controllers.Sites.newPageFromJson
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file             controllers.Assets.at(path="/public", file)
