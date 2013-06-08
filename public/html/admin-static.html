@@ -87,14 +87,16 @@
 							<div class="page-header">
 								<h1>Pages</h1>&nbsp;<a href="#">New</a>
 							</div>
-							<p>
+							<div>
 								<select data-bind="options: pageList,
 													optionsText: 'title',
 													value: currentPage,
 													optionsCaption: 'Choose a page...'">
 								</select>
-							</p>
-							<p data-bind="if:currentPage">Info about <span data-bind="text:currentPage().title"></span></p>
+							</div>
+							<div data-bind="if:currentPage">
+								Info about <span data-bind="text:currentPage().title"></span>:&nbsp;<a target="_blank" data-bind="attr:{href: 'http://'+currentSite().hostName+':9000/'+currentPage().uri},text: currentSite().hostName+'/'+currentPage().uri"></a>&nbsp;(<a target="_blank" data-bind="attr:{href: '/getsitebyid/'+currentSite().id},text: '/getsitebyid/'+currentSite().id"></a>)
+							</div>
 							<hr>
 						</div>
 					</section>
