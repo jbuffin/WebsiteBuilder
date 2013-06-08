@@ -136,7 +136,6 @@ function PageAccessor(server) {
 		});
 	};
 	self.newPage = function(page, callback) {
-		console.log(JSON.stringify(page));
 		jsRoutes.controllers.Sites.newPageFromJson().ajax({
 			data : JSON.stringify(page),
 			contentType : 'text/json',

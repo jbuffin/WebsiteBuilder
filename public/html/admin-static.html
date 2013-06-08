@@ -136,7 +136,7 @@
 								</select>
 							</div>
 							<div data-bind="if:currentPage">
-								Info about <span data-bind="text:currentPage().title"></span>:&nbsp;<a target="_blank" data-bind="attr:{href: 'http://'+currentSite().hostName+':9000/'+currentPage().uri},text: currentSite().hostName+'/'+currentPage().uri"></a>&nbsp;(<a target="_blank" data-bind="attr:{href: '/getsitebyid/'+currentSite().id+'/'+currentPage().uri},text: '/getsitebyid/'+currentSite().id+'/'+currentPage().uri"></a>)
+								Info about <span data-bind="text:currentPage().title"></span>:&nbsp;<a target="_blank" data-bind="attr:{href: 'http://'+currentSite().hostName+':9000/'+currentPage().uri},text: currentSite().hostName+'/'+currentPage().uri"></a>&nbsp;(<a target="_blank" data-bind="attr:{href: '/getsitebyid/'+currentSite().id+function(){return currentPage().uri==='' ? '' : '/';}()+currentPage().uri},text: '/getsitebyid/'+currentSite().id+function(){return currentPage().uri==='' ? '' : '/';}()+currentPage().uri"></a>)
 							</div>
 							<hr>
 						</div>
