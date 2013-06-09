@@ -1,0 +1,9 @@
+@(siteId: Long)
+<div class="well sidebar-nav">
+	<ul class="nav nav-list">
+		<li class="nav-header"></li>
+		@Sites.getNavigationBySiteId(siteId).map { page =>
+		<li><a href="/@page.uri">@page.title</a></li>			
+		}
+	</ul>
+</div>

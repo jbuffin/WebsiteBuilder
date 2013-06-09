@@ -1,4 +1,4 @@
-@(title: String, widgetIdsList: List[Long])
+@(title: String, siteId: Long, widgetIdsList: List[Long])
 @import views.html.sites.widgets._
 @import models.widgets._
 @import controllers._
@@ -8,17 +8,7 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span2">
-				<div class="well sidebar-nav">
-					<ul class="nav nav-list">
-						<li class="nav-header"></li>
-						<li><a href="/">Home</a></li>
-						<li><a href="/our_church">Our Church</a></li>
-						<li><a href="#">Audio</a></li>
-						<li><a href="#">Ministries</a></li>
-						<li><a href="#">Services</a></li>
-						<li><a href="/our_church/directions">Directions</a></li>
-					</ul>
-				</div>
+				@navigation(siteId)
 			</div>
 			<div class="span10">
 				@if(widgetIdsList.length >= 1) {

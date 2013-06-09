@@ -49,7 +49,7 @@ object Sites extends Controller {
 	def pageTypeChooser(pageType: PageType, page: Page) = {
 		try {
 			PageTypeEnum.withName(pageType.typeName) match {
-				case ROOT => Ok(views.html.sites.templates.gracechurch.index(page.title, Widgets.getWidgetList(page.pageId)))
+				case ROOT => Ok(views.html.sites.templates.gracechurch.index(page.title, page.siteId, Widgets.getWidgetList(page.pageId)))
 				case _ => NotFound
 			}
 		}
@@ -60,6 +60,10 @@ object Sites extends Controller {
 				Redirect(routes.Application.indexWithNoSiteFound)
 			}
 		}
+	}
+	
+	def getNavigationBySiteId(siteId: Long) = {
+		Page.getAllBySiteId(siteId)
 	}
 	
 	def getAllPageTypesAsJson = Action {
