@@ -8,11 +8,26 @@ import models.widgets.WidgetTypeEnum
 import models.widgets.WidgetTypeEnum._
 import models.widgets.Carousel
 import models.pages.Page
+import play.api.libs.json.Json
+import models.widgets.WidgetType
 
 object Widgets extends Controller {
 	
 	def getWidgetList(pageId: Long): List[Long] = {
 		Page.getWidgetsByPageId(pageId)
+	}
+	
+	def getWidgetsByPageIdAsJson(pageId: Long) = Action {
+		Ok(Json.toJson(getWidgetList(pageId) map { widgetId =>
+			WidgetTypeEnum.withName(WidgetType.getWidgetTypeById(widgetId).get.widgetType) match {
+				case Text => models.widgets.Text.getByWidgetId(widgetId) map { widget =>
+					Json.obj("widgetId" -> widgetId.toString, "widgetType" -> "Text", "id" -> widget.id.toString, "title" -> widget.title, "text" -> widget.text)				
+				}
+				case WidgetTypeEnum.Carousel => models.widgets.Carousel.getByWidgetId(widgetId) map { carouselWidget =>
+					Json.obj("widgetId" -> widgetId.toString, "widgetType" -> "Carousel", "id" -> carouselWidget.widgetId)
+				}
+			}
+		}))
 	}
 	
 	def getTheWidget(widgetId: Long): Html = {
@@ -28,7 +43,7 @@ object Widgets extends Controller {
 	
 	def widgetTypeChooser(widgetType: WidgetTypeEnum, widgetId: Long) = widgetType match {
 		case Text => views.html.sites.widgets.textWidget(models.widgets.Text.getByWidgetId(widgetId).get)
-		case WidgetTypeEnum.Carousel => views.html.sites.widgets.carouselWidget(models.widgets.Carousel.getByWidgetId(widgetId).images)
+		case WidgetTypeEnum.Carousel => views.html.sites.widgets.carouselWidget(models.widgets.Carousel.getByWidgetId(widgetId).get.images)
 		case _ => views.html.sites.widgets.textWidget(models.widgets.Text.emptyTextWidget)
 	}
 	

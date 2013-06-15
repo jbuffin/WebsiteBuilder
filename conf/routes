@@ -3,25 +3,27 @@
 # ~~~~
 
 # Home page
-GET    /                             controllers.Sites.getPageFromUri(uri = "")
-GET    /notfound                     controllers.Application.indexWithNoSiteFound
-GET    /admin-home                   controllers.Application.adminHome
-GET    /admin-static                 controllers.Assets.at(path="/public", file="html/admin-static.html")
-GET    /getsitebyid/:id              controllers.Sites.getPageFromSiteIdAndUri(id: Long, uri = "")
+GET    /                        controllers.Sites.getPageFromUri(uri = "")
+GET    /notfound                controllers.Application.indexWithNoSiteFound
+GET    /admin-home              controllers.Application.adminHome
+GET    /admin-static            controllers.Assets.at(path="/public", file="html/admin-static.html")
+GET    /getsitebyid/:id         controllers.Sites.getPageFromSiteIdAndUri(id: Long, uri = "")
 
 # Map the javascript routes
-GET    /javascriptroutes             controllers.Application.javascriptRoutes
-GET    /ajax/sites                   controllers.Sites.getAllSitesAsJson
-POST   /ajax/sites/new               controllers.Sites.newSiteFromJson
+GET    /javascriptroutes        controllers.Application.javascriptRoutes
+GET    /ajax/sites              controllers.Sites.getAllSitesAsJson
+POST   /ajax/sites/new          controllers.Sites.newSiteFromJson
 
-GET    /ajax/pagetypes               controllers.Sites.getAllPageTypesAsJson
-GET    /ajax/pages/all/:siteId       controllers.Sites.getAllPagesBySiteAsJson(siteId: Long)
+GET    /ajax/pagetypes          controllers.Sites.getAllPageTypesAsJson
+GET    /ajax/pages/:siteId      controllers.Sites.getAllPagesBySiteAsJson(siteId: Long)
 
-POST   /ajax/pages/new               controllers.Sites.newPageFromJson
+POST   /ajax/pages/new          controllers.Sites.newPageFromJson
+
+GET    /ajax/widgets/:pageId    controllers.Widgets.getWidgetsByPageIdAsJson(pageId: Long)
 
 # Map static resources from the /public folder to the /assets URL path
-GET    /assets/*file                 controllers.Assets.at(path="/public", file)
+GET    /assets/*file            controllers.Assets.at(path="/public", file)
 
 # Map the hosted sites
-GET    /getsitebyid/:id/*page        controllers.Sites.getPageFromSiteIdAndUri(id: Long, page: String)
-GET    /*page                        controllers.Sites.getPageFromUri(page: String)
+GET    /getsitebyid/:id/*page   controllers.Sites.getPageFromSiteIdAndUri(id: Long, page: String)
+GET    /*page                   controllers.Sites.getPageFromUri(page: String)

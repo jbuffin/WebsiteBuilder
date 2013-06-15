@@ -150,15 +150,7 @@ function WidgetAccessor(server) {
 	var self = this;
 
 	self.getAllByPage = function(pageId, callback) {
-		callback([ {
-			id : 1
-		}, {
-			id : 2
-		}, {
-			id : 3
-		}, {
-			id : 4
-		} ]);
+		jsRoutes.controllers.Widgets.getWidgetsByPageIdAsJson(pageId).ajax({success: callback});
 	};
 	self.newWidget = function(page, callback) {
 
