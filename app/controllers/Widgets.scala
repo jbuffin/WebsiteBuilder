@@ -21,10 +21,10 @@ object Widgets extends Controller {
 		Ok(Json.toJson(getWidgetList(pageId) map { widgetId =>
 			WidgetTypeEnum.withName(WidgetType.getWidgetTypeById(widgetId).get.widgetType) match {
 				case Text => models.widgets.Text.getByWidgetId(widgetId) map { widget =>
-					Json.obj("widgetId" -> widgetId.toString, "widgetType" -> "Text", "id" -> widget.id.toString, "title" -> widget.title, "text" -> widget.text)				
+					Json.obj("id" -> widget.id.toString, "widgetType" -> "Text", "title" -> widget.title, "text" -> widget.text)				
 				}
 				case WidgetTypeEnum.Carousel => models.widgets.Carousel.getByWidgetId(widgetId) map { carouselWidget =>
-					Json.obj("widgetId" -> widgetId.toString, "widgetType" -> "Carousel", "id" -> carouselWidget.widgetId)
+					Json.obj("id" -> carouselWidget.widgetId, "widgetType" -> "Carousel")
 				}
 			}
 		}))

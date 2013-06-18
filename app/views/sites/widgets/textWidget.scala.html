@@ -1,6 +1,5 @@
-@(textWidget: models.widgets.Text)
-<h4>@textWidget.title</h4>
-<p>@textWidget.text</p>
-<p>
-	<a class="btn" href="#">View details &raquo;</a>
-</p>
+@(textWidget: models.widgets.Text, editable: Boolean = false)
+<div id="@textWidget.id" name="@textWidget.id">
+	@h4(textWidget.title, editable)
+	<p @makeEditable(editable)>@textWidget.text</p>
+</div>
