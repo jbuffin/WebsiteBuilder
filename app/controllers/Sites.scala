@@ -15,7 +15,7 @@ import play.api.libs.functional.syntax._
 
 object Sites extends Controller {
 
-	def getPageFromUri(uri: String = "") = Action { implicit request =>
+	def getPageFromUri(uri: String = "", editable: Boolean = false) = Action { implicit request =>
 		Logger.debug("[Sites.getPageFromUri]: request.domain: '"+request.domain+"', uri: '"+uri+"'")
 		try {
 			val site = Site.getSiteByHostName(request.domain).get
