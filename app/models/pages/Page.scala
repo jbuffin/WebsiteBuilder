@@ -78,8 +78,9 @@ object Page {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-					select widget_id from page_widgets
+					select widget_id from widget
 						where page_id = {page_id}
+						order by page_order
 				"""
 			).on(
 					'page_id -> pageId
