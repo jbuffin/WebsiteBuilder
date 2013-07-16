@@ -1,21 +1,12 @@
-import models._
-import controllers._
-import anorm._
-import play.api.db.DB
-import play.api.GlobalSettings
-import play.api.Play._
-import play.api._
-import play.api.mvc._
-import play.api.mvc.Results._
 import play.api.Application
-import controllers.DefaultDataInit
+import play.api.GlobalSettings
+import play.api.Logger
+import play.api.mvc.RequestHeader
+import play.api.mvc.Results.BadRequest
 
 object Global extends GlobalSettings {
 
 	override def onStart(app: Application) {
-		Logger.debug("Initializing default data...")
-		DefaultDataInit.insert()
-		Logger.debug("...done")
 		Logger.info("ChurchSite has started")
 	}
 
