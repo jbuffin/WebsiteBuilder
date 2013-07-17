@@ -1,5 +1,24 @@
-@(title: String)(content: Html)
-@import views.html.sites.templates.gracechurch._
-@main(title) {
-	@content
+@(title: String, siteId: Long, widgetIdsList: List[Long], editing: Boolean = true)
+@import views.html.sites.widgets._
+@import models.widgets._
+@import controllers._
+@main(title){
+<div class="container">
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span2">
+				@views.html.sites.navigation(siteId)
+			</div>
+			<div class="span10">
+				@widgetIdsList.map { theWidgetId =>
+					@Widgets.getTheWidget(theWidgetId)
+				}
+			</div>
+		</div>
+		<hr>
+		<footer>
+			<p>&copy; site.siteName 2013</p>
+		</footer>
+	</div>
+</div>
 }

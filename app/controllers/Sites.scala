@@ -1,17 +1,19 @@
 package controllers
 
-import play.api._
-import play.api.mvc._
-import models._
-import models.widgets._
-import play.api.templates.Html
+import models.Site
 import models.pages.Page
 import models.pages.PageType
 import models.pages.PageTypeEnum
 import models.pages.PageTypeEnum._
-import play.api.libs.json
-import play.api.libs.json._
-import play.api.libs.functional.syntax._
+import play.api.Logger
+import play.api.libs.functional.syntax.functionalCanBuildApplicative
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.json.JsError
+import play.api.libs.json.Json
+import play.api.libs.json.Json.toJsFieldJsValueWrapper
+import play.api.libs.json.__
+import play.api.mvc.Action
+import play.api.mvc.Controller
 
 object Sites extends Controller {
 
@@ -49,7 +51,7 @@ object Sites extends Controller {
 	def pageTypeChooser(pageType: PageType, page: Page) = {
 		try {
 			PageTypeEnum.withName(pageType.typeName) match {
-				case ROOT => Ok(views.html.sites.templates.gracechurch.index(page.title, page.siteId, Widgets.getWidgetList(page.pageId)))
+				case ROOT => Ok(views.html.sites.index(page.title, page.siteId, Widgets.getWidgetList(page.pageId)))
 				case _ => NotFound
 			}
 		}
