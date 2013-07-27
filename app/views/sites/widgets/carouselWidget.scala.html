@@ -8,7 +8,7 @@
 	<div class="carousel-inner">
 		@carousel.zipWithIndex.map { case (carouselImage, index) =>
 		<div class="item@(if(index==0){" active"})">
-			<img src="@carouselImage.image" alt="">
+			<img src="@carouselImage.image" alt="@carouselImage.title">
 			<div class="carousel-caption">
 				<h4>@carouselImage.title</h4>
 				<p>@carouselImage.text</p>
