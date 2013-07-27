@@ -51,7 +51,7 @@ object Sites extends Controller {
 	def pageTypeChooser(pageType: PageType, page: Page) = {
 		try {
 			PageTypeEnum.withName(pageType.typeName) match {
-				case ROOT => Ok(views.html.sites.index(page.title, page.siteId, Widgets.getWidgetList(page.pageId)))
+				case ROOT => Ok(views.html.sites.index(page.title, page.siteId, Page.getWidgetsByPageIdSortedByRow(page.pageId)))
 				case _ => NotFound
 			}
 		}

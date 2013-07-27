@@ -14,6 +14,7 @@ import models.widgets.WidgetType
 object Widgets extends Controller {
 	
 	def getWidgetList(pageId: Long): List[Long] = {
+		val numRows = Page.getNumRowsByPageId(pageId)
 		Page.getWidgetsByPageId(pageId)
 	}
 	

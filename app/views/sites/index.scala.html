@@ -1,18 +1,42 @@
-@(title: String, siteId: Long, widgetIdsList: List[Long], editing: Boolean = true)
+@(title: String, siteId: Long, widgetIdsList: List[List[Long]], editing: Boolean = true)
 @import views.html.sites.widgets._
 @import models.widgets._
 @import controllers._
 @main(title){
-<div class="container">
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse"
+				data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+				class="icon-bar"></span> <span class="icon-bar"></span>
+			</a> <a class="brand" href="#">@title</a>
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li><a href="#">Home</a></li>
+				</ul>
+				<ul class="nav pull-right">
+					<li><a href="#">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container roomForHeader">
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span2">
 				@views.html.sites.navigation(siteId)
 			</div>
 			<div class="span10">
-				@widgetIdsList.map { theWidgetId =>
+		@widgetIdsList.map { theWidgets =>
+			<div class="row-fluid">
+				@theWidgets.map { theWidgetId =>
+				<div class="span@(12/theWidgets.length)">
 					@Widgets.getTheWidget(theWidgetId)
+				</div>
 				}
+			</div>
+		}
 			</div>
 		</div>
 		<hr>
