@@ -1,4 +1,6 @@
 @(textWidget: models.widgets.Text, editable: Boolean = true)
 <div id="@textWidget.id" name="@textWidget.id">
-	<p @makeEditable(editable)>@textWidget.text</p>
+	<div @if(editable){contenteditable="true"}>
+		@textWidget.text
+	</div>
 </div>

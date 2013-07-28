@@ -9,7 +9,15 @@
 	 <a class="navbar-brand" href="#">@siteName</a>
 		<div class="nav-collapse collapse">
 			<ul class="nav navbar-nav">
-				<li><a href="#">Home</a></li>
+				<li>
+					<a href="#"><span class="glyphicon glyphicon-check"></span> Save</a>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Insert <b class="caret"></b></a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+						<li><a tabindex="-1" href="#" data-bind="click:insertHeader">Header (h4)</a></li>
+					</ul>
+				</li>
 			</ul>
 			<ul class="nav navbar-nav pull-right">
 				<li><a href="#">Logout</a></li>
