@@ -1,19 +1,19 @@
 @(siteName: String)
 <div class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container">
-			<a class="btn btn-navbar" data-toggle="collapse"
-				data-target=".nav-collapse"> <span class="icon-bar"></span> <span
-				class="icon-bar"></span> <span class="icon-bar"></span>
-			</a> <a class="brand" href="#">@siteName</a>
-			<div class="nav-collapse collapse">
-				<ul class="nav">
-					<li><a href="#">Home</a></li>
-				</ul>
-				<ul class="nav pull-right">
-					<li><a href="#">Logout</a></li>
-				</ul>
-			</div>
+	<div class="container">
+	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+	 <a class="navbar-brand" href="#">@siteName</a>
+		<div class="nav-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="#">Home</a></li>
+			</ul>
+			<ul class="nav navbar-nav pull-right">
+				<li><a href="#">Logout</a></li>
+			</ul>
 		</div>
 	</div>
 </div>

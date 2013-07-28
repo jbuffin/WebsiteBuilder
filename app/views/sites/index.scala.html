@@ -3,29 +3,29 @@
 @import models.widgets._
 @import controllers._
 @main(title){
-@views.html.loggedInNavBar(title)
-<div class="container roomForHeader">
-	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span2">
-				@views.html.sites.navigation(siteId)
-			</div>
-			<div class="span10">
-		@widgetIdsList.map { theWidgets =>
-			<div class="row-fluid">
-				@theWidgets.map { theWidgetId =>
-				<div class="span@(12/theWidgets.length)">
-					@Widgets.getTheWidget(theWidgetId)
-				</div>
-				}
-			</div>
-		}
-			</div>
+@if(editing) {
+	@views.html.loggedInNavBar(title)
+}
+<div class="container@if(editing){ roomForHeader}">
+	<div class="row">
+		<div class="col-lg-2">
+			@views.html.sites.navigation(siteId)
 		</div>
-		<hr>
-		<footer>
-			<p>&copy; Site Name 2013</p>
-		</footer>
+		<div class="col-lg-10">
+	@widgetIdsList.map { theWidgets =>
+		<div class="row">
+			@theWidgets.map { theWidgetId =>
+			<div class="col-lg-@(12/theWidgets.length)">
+				@Widgets.getTheWidget(theWidgetId)
+			</div>
+			}
+		</div>
+	}
+		</div>
 	</div>
+	<hr>
+	<footer>
+		<p>&copy; Site Name 2013</p>
+	</footer>
 </div>
 }

@@ -6,17 +6,15 @@ import anorm._
 import anorm.SqlParser._
 
 case class Text(
-		title: String,
 		text: String,
 		id: Long = -1)
 
 object Text {
 	
 	val simple = {
-		get[String]("text_widget.title") ~
 		get[String]("text_widget.text") ~
 		get[Long]("text_widget.text_widget_id") map {
-			case title ~ text ~ text_widget_id => Text(title, text, text_widget_id)
+			case text ~ text_widget_id => Text(text, text_widget_id)
 		}
 	}
 	
@@ -50,11 +48,10 @@ object Text {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-				insert into text_widget (title, text) values (
-					{title}, {text}
+				insert into text_widget (text) values (
+					{text}
 				)
 				""").on(
-					'title -> textWidget.title,
 					'text -> textWidget.text).executeInsert()
 		} match {
 			case Some(textWidgetId) => textWidgetId
@@ -63,7 +60,7 @@ object Text {
 	}
 	
 	def emptyTextWidget = {
-		Text("", "")
+		Text("")
 	}
 	
 }

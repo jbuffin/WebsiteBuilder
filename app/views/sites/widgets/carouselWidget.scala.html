@@ -1,5 +1,5 @@
 @(carousel: List[models.widgets.CarouselImage])
-<div id="myCarousel" class="carousel slide" data-interval="5000">
+<div id="myCarousel" class="carousel slide">
 	<ol class="carousel-indicators">
 	@carousel.zipWithIndex.map { case (el, index) =>
 		<li data-target="#myCarousel" data-slide-to="@index" class="@(if(index==0){"active"})"></li>
@@ -7,7 +7,7 @@
 	</ol>
 	<div class="carousel-inner">
 		@carousel.zipWithIndex.map { case (carouselImage, index) =>
-		<div class="item@(if(index==0){" active"})">
+		<div class="item@if(index==0){ active}">
 			<img src="@carouselImage.image" alt="@carouselImage.title">
 			<div class="carousel-caption">
 				<h4>@carouselImage.title</h4>
@@ -16,6 +16,6 @@
 		</div>
 		}
 	</div>
-	<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-	<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+	<a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+	<a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
 </div>
