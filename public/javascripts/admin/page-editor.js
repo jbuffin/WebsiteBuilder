@@ -1,14 +1,12 @@
 function PageEditorViewModel() {
 	var self = this;
 	
-	self.widgetTypes = ko.observableArray([{widgetType:'textWidget',widgetText:'Text Widget'}]);
+	self.widgetTypes = ko.observableArray([{widgetType:'textWidget',menuText:'Text Widget'}]);
 
 	self.insertHeader = function() {
 		pasteHtmlAtCaret("<h4>Header Text</h4>");
 	};
 	self.insertWidget = function(widgetType) {
-		console.log(widgetType.widgetType);
-		
 		insertHtmlAtBottom(widgetHtml[widgetType.widgetType]);
 	};
 
