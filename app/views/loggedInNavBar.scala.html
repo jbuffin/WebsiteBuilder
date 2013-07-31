@@ -13,14 +13,17 @@
 					<a href="#"><span class="glyphicon glyphicon-check"></span> Save</a>
 				</li>
 				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Insert Widget <b class="caret"></b></a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" data-bind="foreach: widgetTypes">
+						<li><a tabindex="-1" href="#" data-bind="text: widgetText,click:$parent.insertWidget"></a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Insert <b class="caret"></b></a>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 						<li><a tabindex="-1" href="#" data-bind="click:insertHeader">Header (h4)</a></li>
 					</ul>
 				</li>
-			</ul>
-			<ul class="nav navbar-nav pull-right">
-				<li><a href="#">Logout</a></li>
 			</ul>
 		</div>
 	</div>
