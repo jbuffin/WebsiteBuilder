@@ -2,6 +2,7 @@ function PageEditorViewModel() {
 	var self = this;
 	
 	self.widgetTypes = ko.observableArray([{widgetType:'textWidget',menuText:'Text Widget'}]);
+	self.numRows = ko.observable(0);
 
 	self.insertHeader = function() {
 		pasteHtmlAtCaret("<h4>Header Text</h4>");
@@ -9,9 +10,14 @@ function PageEditorViewModel() {
 	self.insertWidget = function(widgetType) {
 		insertHtmlAtBottom(widgetHtml[widgetType.widgetType]);
 	};
+	self.addRow = function() {
+		var newRowCount = self.numRows() + 1;
+		insertHtmlAtBottom('<div class="row" id="row'+newRowCount+'"></div>');
+		self.numRows(newRowCount);
+	};
 
 	self.init = function() {
-
+		self.numRows(countRows());
 	};
 }
 var pevm = new PageEditorViewModel();
@@ -28,6 +34,18 @@ var widgetHtml = {
 
 function insertHtmlAtBottom(html) {
 	$('#insertPoint').append(html);
+}
+
+function addRow() {
+	insertHtmlAtBottom('<div class="row" id="row'+(pevm.numRows()+1)+'"></div>');
+}
+
+function countRows() {
+	var count = 0;
+	$('div[id^="row"]').each(function() {
+		count++;
+	});
+	return count;
 }
 
 function pasteHtmlAtCaret(html) {
