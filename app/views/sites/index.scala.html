@@ -20,6 +20,18 @@
 						@Widgets.getTheWidget(theWidgetId)
 					</div>
 					}
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="navbar navbar-row-editor">
+								<div class="btn-group pull-right">
+									<button type="button" class="btn btn-default btn-mini navbar-btn dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-edit"></span></button>
+									<ul class="dropdown-menu" data-bind="foreach: widgetTypes">
+										<li><a tabindex="-1" href="#" data-bind="text: menuText,click:$parent.insertWidget"></a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				}
 			</div>
