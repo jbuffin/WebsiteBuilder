@@ -118,7 +118,7 @@ object Page {
 		}
 	}
 
-	def getWidgetsByPageIdSortedByRow(pageId: Long): List[List[Long]] = {
+	def getWidgetsByPageIdSortedByRow(pageId: Long): List[List[play.api.templates.Html]] = {
 		val rowNums = getRowNumsByPageId(pageId)
 		List.tabulate(rowNums.length)(index => {
 			val rowNum = rowNums(index)
@@ -131,7 +131,9 @@ object Page {
 					"""
 				).on(
 						'page_row -> (rowNum)
-					).as(get[Long]("widget_id")*)
+					).as(get[Long]("widget_id") map { 
+						case widgetId => controllers.Widgets.getTheWidget(widgetId)
+					}*)
 			}
 		})
 	}

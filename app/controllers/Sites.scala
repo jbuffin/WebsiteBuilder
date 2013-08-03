@@ -22,7 +22,7 @@ object Sites extends Controller {
 		try {
 			val site = Site.getSiteByHostName(request.domain).get
 			val page = Page.getPageByUri(site.siteId, uri).get
-			pageTypeChooser(PageType.getById(page.pageType).get, page)
+			pageTypeChooser(PageType.getById(page.pageType).get, page, site)
 		}
 		catch {
 			case nse: NoSuchElementException => {
@@ -37,7 +37,7 @@ object Sites extends Controller {
 		Logger.debug("[Sites.getPageFromSiteIdAndUri]: siteId: '"+siteId+"', uri: '"+uri+"'")
 		try {
 			val page = Page.getPageByUri(siteId, uri).get
-			pageTypeChooser(PageType.getById(page.pageType).get, page)
+			pageTypeChooser(PageType.getById(page.pageType).get, page, Site.getSiteById(siteId).get)
 		}
 		catch {
 			case nse: NoSuchElementException => {
@@ -48,10 +48,10 @@ object Sites extends Controller {
 		}
 	}
 
-	def pageTypeChooser(pageType: PageType, page: Page) = {
+	def pageTypeChooser(pageType: PageType, page: Page, site: Site) = {
 		try {
 			PageTypeEnum.withName(pageType.typeName) match {
-				case ROOT => Ok(views.html.sites.index(page.title, page.siteId, Page.getWidgetsByPageIdSortedByRow(page.pageId)))
+				case ROOT => Ok(views.html.sites.index(page.title, site.siteName, Sites.getNavigationBySiteId(site.siteId), Page.getWidgetsByPageIdSortedByRow(page.pageId)))
 				case _ => NotFound
 			}
 		}

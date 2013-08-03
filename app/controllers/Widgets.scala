@@ -43,7 +43,7 @@ object Widgets extends Controller {
 	}
 	
 	def widgetTypeChooser(widgetType: WidgetTypeEnum, widgetId: Long) = widgetType match {
-		case Text => views.html.sites.widgets.textWidget(models.widgets.Text.getByWidgetId(widgetId).get)
+		case Text => views.html.sites.widgets.textWidget(models.widgets.Text.getByWidgetId(widgetId).getOrElse(models.widgets.Text.emptyTextWidget))
 		case WidgetTypeEnum.Carousel => views.html.sites.widgets.carouselWidget(models.widgets.Carousel.getByWidgetId(widgetId).get.images)
 		case _ => views.html.sites.widgets.textWidget(models.widgets.Text.emptyTextWidget)
 	}

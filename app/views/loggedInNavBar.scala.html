@@ -9,10 +9,16 @@
 	 <a class="navbar-brand" href="#">@siteName</a>
 		<div class="nav-collapse collapse">
 			<ul class="nav navbar-nav">
-				<li>
-					<a href="#"><span class="glyphicon glyphicon-check"></span> Save</a>
+				<li data-bind="visible:!editing()">
+					<a href="#" data-bind="click:toggleEditing"><span class="glyphicon glyphicon-edit"></span> Edit</a>
 				</li>
-				<li class="dropdown">
+				<li data-bind="visible:editing">
+					<a href="#" data-bind="click:savePage"><span class="glyphicon glyphicon-check"></span> Save</a>
+				</li>
+				<li data-bind="visible:editing">
+					<a href="#" data-bind="click:discardChanges"><span class="glyphicon glyphicon-trash"></span> Discard</a>
+				</li>
+				<!-- <li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Insert Widget <b class="caret"></b></a>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" data-bind="foreach: widgetTypes">
 						<li><a tabindex="-1" href="#" data-bind="text: menuText,click:$parent.insertWidget"></a></li>
@@ -23,7 +29,7 @@
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
 						<li><a tabindex="-1" href="#" data-bind="click:insertHeader">Header (h4)</a></li>
 					</ul>
-				</li>
+				</li> -->
 			</ul>
 		</div>
 	</div>

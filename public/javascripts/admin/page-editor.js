@@ -3,6 +3,20 @@ function PageEditorViewModel() {
 	
 	self.widgetTypes = ko.observableArray([{widgetType:'textWidget',menuText:'Text Widget'}]);
 	self.numRows = ko.observable(0);
+	self.editing = ko.observable(false);
+	
+	self.toggleEditing = function() {
+		self.editing(!self.editing());
+	};
+	
+	self.savePage = function() {
+		//TODO: save all the stuff
+		self.toggleEditing();
+	};
+	self.discardChanges = function() {
+		//TODO: any discard actions
+		self.toggleEditing();
+	}
 
 	self.insertHeader = function() {
 		pasteHtmlAtCaret("<h4>Header Text</h4>");
