@@ -21,8 +21,8 @@ function PageEditorViewModel() {
 	self.insertHeader = function() {
 		pasteHtmlAtCaret("<h4>Header Text</h4>");
 	};
-	self.insertWidget = function(widgetType) {
-		insertHtmlAtBottom(widgetHtml[widgetType.widgetType]);
+	self.insertWidget = function(rowNum,widgetType) {
+		insertHtmlAtLoc('row'+rowNum, widgetHtml[widgetType.widgetType]);
 	};
 	self.addRow = function() {
 		var newRowCount = self.numRows() + 1;
@@ -43,8 +43,19 @@ $(function() {
 });
 
 var widgetHtml = {
-	textWidget : '<div><div contenteditable="true">Type your text here</div></div>'
+	textWidget : '<div contenteditable="true">Type your text here</div>'
 };
+
+function insertHtmlAtLoc(loc, html) {
+	colCount = 0;
+	$('#'+loc).find('div[class^="col-lg-"]').each(function() {
+		colCount++;
+	});
+	$('#'+loc).find('div[class^="col-lg"]').each(function() {
+		$(this).removeClass('col-lg-'+12/colCount).addClass('col-lg-'+Math.floor(12/(colCount+1)));
+	});
+	$('#'+loc).append('<div class="col-lg-'+Math.floor(12/(colCount+1))+'">'+html+'</div>');
+}
 
 function insertHtmlAtBottom(html) {
 	$('#insertPoint').append(html);
