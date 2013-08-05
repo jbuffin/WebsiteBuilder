@@ -22,11 +22,20 @@ function PageEditorViewModel() {
 		pasteHtmlAtCaret("<h4>Header Text</h4>");
 	};
 	self.insertWidget = function(rowNum,widgetType) {
-		insertHtmlAtLoc('row'+rowNum, widgetHtml[widgetType.widgetType]);
+		var loc = 'row'+rowNum;
+		var cols = $('#'+loc).find('div[class^="col-lg-"]');
+		var colCount = 0;
+		cols.each(function() {
+			colCount++;
+		});
+		cols.each(function() {
+			$(this).removeClass('col-lg-'+12/colCount).addClass('col-lg-'+Math.floor(12/(colCount+1)));
+		});
+		insertHtmlAtLoc(loc, '<div class="col-lg-'+Math.floor(12/(colCount+1))+'">'+widgetHtml[widgetType.widgetType]+'</div>');
 	};
 	self.addRow = function() {
 		var newRowCount = self.numRows() + 1;
-		insertHtmlAtBottom('<div class="row" id="row'+newRowCount+'"></div>');
+		insertHtmlAtLoc('insertPoint', '<div class="container"><div class="row" id="row'+newRowCount+'"></div></div>');
 		self.numRows(newRowCount);
 	};
 
@@ -47,23 +56,12 @@ var widgetHtml = {
 };
 
 function insertHtmlAtLoc(loc, html) {
-	colCount = 0;
-	$('#'+loc).find('div[class^="col-lg-"]').each(function() {
-		colCount++;
-	});
-	$('#'+loc).find('div[class^="col-lg"]').each(function() {
-		$(this).removeClass('col-lg-'+12/colCount).addClass('col-lg-'+Math.floor(12/(colCount+1)));
-	});
-	$('#'+loc).append('<div class="col-lg-'+Math.floor(12/(colCount+1))+'">'+html+'</div>');
+	$('#'+loc).append(html);
 }
 
-function insertHtmlAtBottom(html) {
+/*function insertHtmlAtBottom(html) {
 	$('#insertPoint').append(html);
-}
-
-function addRow() {
-	insertHtmlAtBottom('<div class="row" id="row'+(pevm.numRows()+1)+'"></div>');
-}
+}*/
 
 function countRows() {
 	var count = 0;
