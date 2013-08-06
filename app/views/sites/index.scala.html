@@ -1,11 +1,13 @@
-@(title: String, siteName: String, siteNav: List[models.pages.Page], widgetRowsHtml: List[List[play.api.templates.Html]], isAdmin: Boolean = true)
+@(page: models.pages.Page, siteName: String, siteNav: List[models.pages.Page], widgetRowsHtml: List[List[play.api.templates.Html]], isAdmin: Boolean = true)
 @import views.html.sites.widgets._
+@import models.pages.Page
 @import models.widgets._
 @import controllers._
-@main(title){
+@main(page.title){
 @if(isAdmin) {
 	@views.html.loggedInNavBar(siteName)
 }
+<div id="pageId-@page.pageId"></div>
 <div class="container@if(isAdmin){ roomForHeader}">
 	<div class="row">
 		<div class="col-lg-2">

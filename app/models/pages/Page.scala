@@ -5,6 +5,8 @@ import anorm.SqlParser._
 import play.api.db._
 import play.api.Play.current
 import play.api.Logger
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 case class Page(uri: String,
 	title: String,
@@ -25,6 +27,15 @@ object Page {
 				case (uri ~ title ~ page_type ~ parent ~ page_id ~ site_id) => Page(uri, title, page_type, parent, site_id, page_id)
 			}
 	}
+
+	implicit val pageRds = (
+		(__ \ "uri").read[String] ~
+		(__ \ "title").read[String] ~
+		(__ \ "pageType").read[Long] ~
+		(__ \ "parent").read[Long] ~
+		(__ \ "siteId").read[Long] ~
+		(__ \ "id").read[Long]
+	)(Page.apply _)
 
 	def getPageByUri(siteId: Long, uri: String): Option[Page] = {
 		Logger.debug("[Page.getPageByUri]: siteId: "+siteId+", uri: '"+uri+"'")
@@ -131,9 +142,9 @@ object Page {
 					"""
 				).on(
 						'page_row -> (rowNum)
-					).as(get[Long]("widget_id") map { 
-						case widgetId => controllers.Widgets.getTheWidget(widgetId)
-					}*)
+					).as(get[Long]("widget_id") map {
+							case widgetId => controllers.Widgets.getTheWidget(widgetId)
+						}*)
 			}
 		})
 	}
@@ -144,12 +155,31 @@ object Page {
 				"""
 					select widget_id from widget
 						where page_id = {page_id}
-						order by page_order
 				"""
 			).on(
 					'page_id -> pageId
 				).as(get[Long]("widget_id")*)
 		}
+	}
+
+	def addRowsByPageId(pageId: Long, numRows: Long) = {
+		val currentNumRows = getNumRowsByPageId(pageId)
+		List.tabulate((numRows).toInt)(index => {
+			DB.withConnection { implicit connetion =>
+				SQL(
+					"""
+					insert into page_rows (page_id, row_order) values
+						({page_id}, {row_order})
+				"""
+				).on(
+						'page_id -> pageId,
+						'row_order -> (currentNumRows + index + 1)
+					).executeInsert()
+			} match {
+				case Some(long) => long
+				case None => -1
+			}
+		})
 	}
 
 }

@@ -26,6 +26,7 @@ object Application extends Controller {
 				Sites.getAllPagesBySiteAsJson,
 				Sites.getAllPageTypesAsJson,
 				Sites.newPageFromJson,
+				Sites.addRowsToPage,
 				Widgets.getWidgetsByPageIdAsJson
 			)
 		).as("text/javascript")

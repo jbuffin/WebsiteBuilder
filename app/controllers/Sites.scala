@@ -51,7 +51,7 @@ object Sites extends Controller {
 	def pageTypeChooser(pageType: PageType, page: Page, site: Site) = {
 		try {
 			PageTypeEnum.withName(pageType.typeName) match {
-				case ROOT => Ok(views.html.sites.index(page.title, site.siteName, Sites.getNavigationBySiteId(site.siteId), Page.getWidgetsByPageIdSortedByRow(page.pageId)))
+				case ROOT => Ok(views.html.sites.index(page, site.siteName, Sites.getNavigationBySiteId(site.siteId), Page.getWidgetsByPageIdSortedByRow(page.pageId)))
 				case _ => NotFound
 			}
 		}
@@ -82,7 +82,7 @@ object Sites extends Controller {
 
 	def newSiteFromJson = Action(parse.json) { request =>
 		request.body.validate[Site].map { site =>
-			Ok(Site.create(Site(site.siteName, site.hostName)).toString)
+			Ok(Site.create(site).toString)
 		}.recoverTotal {
 			e => BadRequest("Detected error: "+JsError.toFlatJson(e))
 		}
@@ -94,21 +94,16 @@ object Sites extends Controller {
 		}))
 	}
 	
-	implicit val pageRds = (
-		(__ \ "id").read[Long] and
-		(__ \ "uri").read[String] and
-		(__ \ "title").read[String] and
-		(__ \ "pageType").read[Long] and
-		(__ \ "parent").read[Long] and
-		(__ \ "siteId").read[Long]
-	) tupled
-	
 	def newPageFromJson = Action(parse.json) { request =>
-		request.body.validate[(Long, String, String, Long, Long, Long)].map {
-			case (id, uri, title, pageType, parent, siteId) => Ok(Page.create(Page(uri, title, pageType, parent, siteId)).toString)
+		request.body.validate[Page].map { page =>
+			Ok(Page.create(page).toString)
 		}.recoverTotal{
 			e => BadRequest("Detected error: "+JsError.toFlatJson(e)+"\n"+request.body)
 		}
+	}
+	
+	def addRowsToPage(pageId: Long, numRows: Long) = Action {
+		Ok(Json.toJson(Json.obj("rows" -> Page.addRowsByPageId(pageId, numRows))))
 	}
 
 }
