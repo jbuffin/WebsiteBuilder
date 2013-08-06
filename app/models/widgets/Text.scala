@@ -6,18 +6,18 @@ import anorm._
 import anorm.SqlParser._
 
 case class Text(
-		text: String,
-		id: Long = -1)
+	text: String,
+	id: Long = -1)
 
 object Text {
-	
+
 	val simple = {
 		get[String]("text_widget.text") ~
-		get[Long]("text_widget.text_widget_id") map {
-			case text ~ text_widget_id => Text(text, text_widget_id)
-		}
+			get[Long]("text_widget.text_widget_id") map {
+				case text ~ text_widget_id => Text(text, text_widget_id)
+			}
 	}
-	
+
 	def getById(textWidgetId: Long): Option[Text] = {
 		DB.withConnection { implicit connection =>
 			SQL(
@@ -26,11 +26,11 @@ object Text {
 						where text_widget_id = {text_widget_id}
 				"""
 			).on(
-				'text_widget_id -> textWidgetId
-			).as(Text.simple.singleOpt)
+					'text_widget_id -> textWidgetId
+				).as(Text.simple.singleOpt)
 		}
 	}
-	
+
 	def getByWidgetId(widgetId: Long): Option[Text] = {
 		DB.withConnection { implicit connection =>
 			SQL(
@@ -39,11 +39,11 @@ object Text {
 						where widget_id = {widget_id}
 				"""
 			).on(
-				'widget_id -> widgetId
-			).as(Text.simple.singleOpt)
+					'widget_id -> widgetId
+				).as(Text.simple.singleOpt)
 		}
 	}
-	
+
 	def create(textWidget: Text): Long = {
 		DB.withConnection { implicit connection =>
 			SQL(
@@ -58,9 +58,23 @@ object Text {
 			case None => -1
 		}
 	}
-	
+
+	def updateById(textWidget: Text) = {
+		DB.withConnection { implicit connection =>
+			SQL(
+				"""
+				update text_widget
+					set text = {text}
+					where text_widget_id = {text_widget_id}
+				""").on(
+					'text -> textWidget.text,
+					'text_widget_id -> textWidget.id
+				).executeUpdate()
+		}
+	}
+
 	def emptyTextWidget = {
 		Text("")
 	}
-	
+
 }

@@ -30,8 +30,11 @@
 							<div class="col-lg-12">
 								<div class="btn-group pull-right">
 									<button type="button" class="btn btn-default btn-mini dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-edit"></span></button>
-									<ul class="dropdown-menu" data-bind="foreach: widgetTypes">
+									<ul class="dropdown-menu">
+										<!-- ko foreach: widgetTypes -->
 										<li><a tabindex="-1" href="#" data-bind="text: menuText,click:function(data, event){$parent.insertWidget(@(index+1),data)}"></a></li>
+										<!-- /ko -->
+										<li><a tabindex="-1" href="#" data-bind="click:insertHeader">Header (h4)</a></li>
 									</ul>
 								</div>
 							</div>

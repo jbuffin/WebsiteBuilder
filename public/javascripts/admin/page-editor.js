@@ -17,17 +17,26 @@ function PageEditorViewModel() {
 		}
 		self.toggleEditing();
 	};
+	
 	self.discardChanges = function() {
 		thingsToAdd.rows.forEach(function(row) {
 			$('#row'+row).parent().remove();
 		});
 		discardRows();
+		//TODO: discardTextWidgetChanges
 		self.toggleEditing();
 	}
 
 	self.insertHeader = function() {
-		pasteHtmlAtCaret("<h4>Header Text</h4>");
+		//TODO: if it's the first time inserting anything, save state to go back to
+		pasteHtmlAtCaret('<h4 id="newHeader">Header Text</h4>');
+		var widgetNode = $('#newHeader').parents('.textWidget:first');
+		$('#newHeader').removeAttr('id');
+		var savedHtml = widgetNode.children(':first').html();
+		var textWidgetId = widgetNode.attr('id');
+		thingsToAdd.textWidgets.push({'textWidgetId' : textWidgetId, 'savedHtml' : savedHtml});
 	};
+	
 	self.insertWidget = function(rowNum,widgetType) {
 		var loc = 'row'+rowNum;
 		var cols = $('#'+loc).find('div[class^="col-lg-"]');
@@ -40,6 +49,7 @@ function PageEditorViewModel() {
 		});
 		insertHtmlAtLoc(loc, '<div class="col-lg-'+Math.floor(12/(colCount+1))+'">'+widgetHtml[widgetType.widgetType]+'</div>');
 	};
+	
 	self.addRow = function() {
 		var newRowCount = self.numRows() + 1;
 		insertHtmlAtLoc('insertPoint',
@@ -92,7 +102,8 @@ function discardRows() {
 }
 
 var thingsToAdd = {
-	rows : []
+	rows : [],
+	textWidgets : []
 };
 
 function pasteHtmlAtCaret(html) {
@@ -103,9 +114,6 @@ function pasteHtmlAtCaret(html) {
 		if (sel.getRangeAt && sel.rangeCount) {
 			range = sel.getRangeAt(0);
 			range.deleteContents();
-
-			// Range.createContextualFragment() would be useful here but is
-			// non-standard and not supported in all browsers (IE9, for one)
 			var el = document.createElement("div");
 			el.innerHTML = html;
 			var frag = document.createDocumentFragment(), node, lastNode;

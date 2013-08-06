@@ -1,5 +1,5 @@
 @(textWidget: models.widgets.Text, editable: Boolean = true)
-<div id="@textWidget.id" name="@textWidget.id">
+<div id="@textWidget.id" name="@textWidget.id" class="textWidget">
 	<div @if(editable){contenteditable="true"}>
 		@textWidget.text
 	</div>
