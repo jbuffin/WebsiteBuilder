@@ -20,6 +20,8 @@ GET    /ajax/pages/:siteId                    controllers.Sites.getAllPagesBySit
 POST   /ajax/pages/new                        controllers.Sites.newPageFromJson
 POST   /ajax/pages/:pageId/addrows/:numRows   controllers.Sites.addRowsToPage(pageId: Long, numRows: Long)
 
+POST   /ajax/widgets/text/update              controllers.Widgets.updateTextWidgetById
+
 GET    /ajax/widgets/:pageId                  controllers.Widgets.getWidgetsByPageIdAsJson(pageId: Long)
 
 # Map static resources from the /public folder to the /assets URL path

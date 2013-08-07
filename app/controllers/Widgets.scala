@@ -10,6 +10,7 @@ import models.widgets.Carousel
 import models.pages.Page
 import play.api.libs.json.Json
 import models.widgets.WidgetType
+import play.api.libs.json.JsError
 
 object Widgets extends Controller {
 	
@@ -46,6 +47,17 @@ object Widgets extends Controller {
 		case Text => views.html.sites.widgets.textWidget(models.widgets.Text.getByWidgetId(widgetId).getOrElse(models.widgets.Text.emptyTextWidget))
 		case WidgetTypeEnum.Carousel => views.html.sites.widgets.carouselWidget(models.widgets.Carousel.getByWidgetId(widgetId).get.images)
 		case _ => views.html.sites.widgets.textWidget(models.widgets.Text.emptyTextWidget)
+	}
+	
+	def updateTextWidgetById = Action(parse.json) { request =>
+		request.body.validate[List[models.widgets.Text]].map { textWidgets =>
+			textWidgets map { textWidget => 
+				models.widgets.Text.updateById(textWidget)
+			}
+			Ok(Json.toJson("updateTextWidgetById"))
+		}.recoverTotal(
+			e => BadRequest("Detected error: "+JsError.toFlatJson(e)+"\n"+request.body)
+		)
 	}
 	
 }

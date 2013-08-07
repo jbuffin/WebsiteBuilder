@@ -1,67 +1,101 @@
 function PageEditorViewModel() {
 	var self = this;
-	
-	self.widgetTypes = ko.observableArray([{widgetType:'textWidget',menuText:'Text Widget'}]);
+
+	self.widgetTypes = ko.observableArray([ {
+		widgetType : 'textWidget',
+		menuText : 'Text Widget'
+	} ]);
 	self.numRows = ko.observable(0);
 	self.editing = ko.observable(false);
 	self.pageId = -1;
-	
+
 	self.toggleEditing = function() {
 		self.editing(!self.editing());
 	};
-	
+
 	self.savePage = function() {
-		if(thingsToAdd.rows.length) {
-			jsRoutes.controllers.Sites.addRowsToPage(self.pageId, thingsToAdd.rows.length).ajax({success:function(data){}});
-			discardRows();			
+		if (thingsToAdd.rows.length) {
+			jsRoutes.controllers.Sites.addRowsToPage(self.pageId,
+					thingsToAdd.rows.length).ajax({
+				success : function(data) {
+					discardRows();
+				}
+			});
+		}
+		if (thingsToAdd.textWidgets.length) {
+			var textWidgetsToSend = [];
+			var htmlToSave = '';
+			for(var i = 0; i < thingsToAdd.textWidgets.length; i++) {
+				htmlToSave = $('#'+thingsToAdd.textWidgets[i]).children(':first').html();
+				textWidgetsToSend.push({'textWidgetId' : thingsToAdd.textWidgets[i], 'savedHtml' : htmlToSave});
+			}
+			jsRoutes.controllers.Widgets.updateTextWidgetById().ajax({
+				data : JSON.stringify(textWidgetsToSend),
+				contentType : 'text/json',
+				error : function(e) {
+					console.error(JSON.stringify(e));
+				},
+				success : function(data) {
+					discardTextWidgetChanges();
+				}
+			});
 		}
 		self.toggleEditing();
 	};
-	
+
 	self.discardChanges = function() {
 		thingsToAdd.rows.forEach(function(row) {
-			$('#row'+row).parent().remove();
+			$('#row' + row).parent().remove();
 		});
 		discardRows();
-		//TODO: discardTextWidgetChanges
+		discardTextWidgetChanges();
 		self.toggleEditing();
 	}
 
 	self.insertHeader = function() {
-		//TODO: if it's the first time inserting anything, save state to go back to
+		// TODO: if it's the first time inserting anything, save state to go
+		// back to
+
 		pasteHtmlAtCaret('<h4 id="newHeader">Header Text</h4>');
 		var widgetNode = $('#newHeader').parents('.textWidget:first');
 		$('#newHeader').removeAttr('id');
 		var savedHtml = widgetNode.children(':first').html();
-		var textWidgetId = widgetNode.attr('id');
-		thingsToAdd.textWidgets.push({'textWidgetId' : textWidgetId, 'savedHtml' : savedHtml});
+		var textWidgetId = parseInt(widgetNode.attr('id'));
+		if (thingsToAdd.textWidgets.indexOf(textWidgetId) === -1) {
+			thingsToAdd.textWidgets.push(textWidgetId);
+		}
 	};
-	
-	self.insertWidget = function(rowNum,widgetType) {
-		var loc = 'row'+rowNum;
-		var cols = $('#'+loc).find('div[class^="col-lg-"]');
+
+	self.insertWidget = function(rowNum, widgetType) {
+		var loc = 'row' + rowNum;
+		var cols = $('#' + loc).find('div[class^="col-lg-"]');
 		var colCount = 0;
 		cols.each(function() {
 			colCount++;
 		});
 		cols.each(function() {
-			$(this).removeClass('col-lg-'+12/colCount).addClass('col-lg-'+Math.floor(12/(colCount+1)));
+			$(this).removeClass('col-lg-' + 12 / colCount).addClass(
+					'col-lg-' + Math.floor(12 / (colCount + 1)));
 		});
-		insertHtmlAtLoc(loc, '<div class="col-lg-'+Math.floor(12/(colCount+1))+'">'+widgetHtml[widgetType.widgetType]+'</div>');
+		insertHtmlAtLoc(loc, '<div class="col-lg-'
+				+ Math.floor(12 / (colCount + 1)) + '">'
+				+ widgetHtml[widgetType.widgetType] + '</div>');
 	};
-	
+
 	self.addRow = function() {
 		var newRowCount = self.numRows() + 1;
-		insertHtmlAtLoc('insertPoint',
-				'<div class="container" id="newRow">'+
-				'<div class="row" id="row'+newRowCount+'"></div>'+
-				'<div data-bind="if:editing"><div class="row"><div class="col-lg-12"><div class="btn-group pull-right">'+
-				'<button type="button" class="btn btn-default btn-mini dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-edit"></span></button>'+
-				'<ul class="dropdown-menu" data-bind="foreach: widgetTypes">'+
-				'<li><a tabindex="-1" href="#" data-bind="text: menuText,click:function(data, event){$parent.insertWidget('+newRowCount+',data)}">Text Widget</a></li>'+
-				'</ul></div></div></div></div>'+
-				'</div>'
-				);
+		insertHtmlAtLoc(
+				'insertPoint',
+				'<div class="container" id="newRow">'
+						+ '<div class="row" id="row'
+						+ newRowCount
+						+ '"></div>'
+						+ '<div data-bind="if:editing"><div class="row"><div class="col-lg-12"><div class="btn-group pull-right">'
+						+ '<button type="button" class="btn btn-default btn-mini dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-edit"></span></button>'
+						+ '<ul class="dropdown-menu" data-bind="foreach: widgetTypes">'
+						+ '<li><a tabindex="-1" href="#" data-bind="text: menuText,click:function(data, event){$parent.insertWidget('
+						+ newRowCount + ',data)}">Text Widget</a></li>'
+						+ '</ul></div></div></div></div>' + '</div>');
 		ko.applyBindings(self, document.getElementById('newRow'));
 		$('#newRow').removeAttr('id');
 		self.numRows(newRowCount);
@@ -86,7 +120,7 @@ var widgetHtml = {
 };
 
 function insertHtmlAtLoc(loc, html) {
-	$('#'+loc).append(html);
+	$('#' + loc).append(html);
 }
 
 function countRows() {
@@ -99,6 +133,9 @@ function countRows() {
 
 function discardRows() {
 	thingsToAdd.rows = [];
+}
+function discardTextWidgetChanges() {
+	thingsToAdd.textWidgets = [];
 }
 
 var thingsToAdd = {
@@ -135,4 +172,19 @@ function pasteHtmlAtCaret(html) {
 		// IE < 9
 		document.selection.createRange().pasteHTML(html);
 	}
+}
+
+if (!Array.prototype.indexOf) {
+	Array.prototype.indexOf = function(obj, fromIndex) {
+		if (fromIndex == null) {
+			fromIndex = 0;
+		} else if (fromIndex < 0) {
+			fromIndex = Math.max(0, this.length + fromIndex);
+		}
+		for ( var i = fromIndex, j = this.length; i < j; i++) {
+			if (this[i] === obj)
+				return i;
+		}
+		return -1;
+	};
 }

@@ -4,6 +4,8 @@ import play.api.db._
 import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 case class Text(
 	text: String,
@@ -17,6 +19,11 @@ object Text {
 				case text ~ text_widget_id => Text(text, text_widget_id)
 			}
 	}
+	
+	implicit val textRds = (
+		(__ \ "savedHtml").read[String] ~
+		(__ \ "textWidgetId").read[Long]
+	)(Text.apply _)
 
 	def getById(textWidgetId: Long): Option[Text] = {
 		DB.withConnection { implicit connection =>
