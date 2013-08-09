@@ -27,7 +27,7 @@ function PageEditorViewModel() {
 			var htmlToSave = '';
 			for(var i = 0; i < thingsToAdd.textWidgets.length; i++) {
 				htmlToSave = $('#'+thingsToAdd.textWidgets[i]).children(':first').html();
-				textWidgetsToSend.push({'textWidgetId' : thingsToAdd.textWidgets[i], 'savedHtml' : htmlToSave});
+				textWidgetsToSend.push({'textWidgetId' : parseInt(thingsToAdd.textWidgets[i]), 'savedHtml' : htmlToSave});
 			}
 			jsRoutes.controllers.Widgets.updateTextWidgetById().ajax({
 				data : JSON.stringify(textWidgetsToSend),
@@ -105,6 +105,14 @@ function PageEditorViewModel() {
 	self.init = function() {
 		self.pageId = parseInt($('div[id^="pageId"]').attr("id").substr(7));
 		self.numRows(countRows());
+		$(function() {
+			$('.textWidgetTextBox').bind("propertychange keyup input paste", function(e) {
+				if(thingsToAdd.textWidgets.indexOf(e.currentTarget.parentNode.attributes[0].value) === -1){
+					console.log(e.currentTarget.parentNode.attributes[0].value);
+					thingsToAdd.textWidgets.push(parseInt(e.currentTarget.parentNode.attributes[0].value));
+				}
+			});
+		});
 	};
 }
 var pevm = new PageEditorViewModel();
