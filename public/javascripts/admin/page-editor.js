@@ -108,7 +108,6 @@ function PageEditorViewModel() {
 		$(function() {
 			$('.textWidgetTextBox').bind("propertychange keyup input paste", function(e) {
 				if(thingsToAdd.textWidgets.indexOf(e.currentTarget.parentNode.attributes[0].value) === -1){
-					console.log(e.currentTarget.parentNode.attributes[0].value);
 					thingsToAdd.textWidgets.push(parseInt(e.currentTarget.parentNode.attributes[0].value));
 				}
 			});
