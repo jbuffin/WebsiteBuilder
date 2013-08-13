@@ -18,7 +18,8 @@ function PageEditorViewModel() {
 			jsRoutes.controllers.Sites.addRowsToPage(self.pageId,
 					thingsToAdd.rows.length).ajax({
 				success : function(data) {
-					discardRows();
+					console.log(JSON.stringify(data));
+					thingsToAdd.rows = [];
 				}
 			});
 		}
@@ -74,9 +75,11 @@ function PageEditorViewModel() {
 			$(this).removeClass('col-lg-' + 12 / colCount).addClass(
 					'col-lg-' + Math.floor(12 / (colCount + 1)));
 		});
-		insertHtmlAtLoc(loc, '<div class="col-lg-'
+		insertHtmlAtLoc(loc, '<div id="newTextWidget" class="col-lg-'
 				+ Math.floor(12 / (colCount + 1)) + '">'
 				+ widgetHtml[widgetType.widgetType] + '</div>');
+		ko.applyBindings(self, document.getElementById('newTextWidget'));
+		$('#newTextWidget').removeAttr('id');
 	};
 
 	self.addRow = function() {
@@ -121,7 +124,7 @@ $(function() {
 });
 
 var widgetHtml = {
-	textWidget : '<div contenteditable="true">Type your text here</div>'
+	textWidget : '<div class="textWidget"><div class="textWidgetTextBox" data-bind="attr:{\'contenteditable\':editing()}">Type your text here</div></div>'
 };
 
 function insertHtmlAtLoc(loc, html) {
