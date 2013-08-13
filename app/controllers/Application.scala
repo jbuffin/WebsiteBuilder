@@ -28,7 +28,8 @@ object Application extends Controller {
 				Sites.newPageFromJson,
 				Sites.addRowsToPage,
 				Widgets.getWidgetsByPageIdAsJson,
-				Widgets.updateTextWidgetById
+				Widgets.updateTextWidgetById,
+				Widgets.getTextWidgetHtmlByIdAsJSON
 			)
 		).as("text/javascript")
 	}

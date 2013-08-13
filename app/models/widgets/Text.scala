@@ -25,7 +25,7 @@ object Text {
 		(__ \ "textWidgetId").read[Long]
 	)(Text.apply _)
 
-	def getById(textWidgetId: Long): Option[Text] = {
+	def getByTextWidgetId(textWidgetId: Long): Option[Text] = {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""

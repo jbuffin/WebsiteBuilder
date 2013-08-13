@@ -25,9 +25,13 @@ function PageEditorViewModel() {
 		if (thingsToAdd.textWidgets.length) {
 			var textWidgetsToSend = [];
 			var htmlToSave = '';
-			for(var i = 0; i < thingsToAdd.textWidgets.length; i++) {
-				htmlToSave = $('#'+thingsToAdd.textWidgets[i]).children(':first').html();
-				textWidgetsToSend.push({'textWidgetId' : parseInt(thingsToAdd.textWidgets[i]), 'savedHtml' : htmlToSave});
+			for ( var i = 0; i < thingsToAdd.textWidgets.length; i++) {
+				htmlToSave = $('#' + thingsToAdd.textWidgets[i]).children(
+						':first').html();
+				textWidgetsToSend.push({
+					'textWidgetId' : parseInt(thingsToAdd.textWidgets[i]),
+					'savedHtml' : htmlToSave
+				});
 			}
 			jsRoutes.controllers.Widgets.updateTextWidgetById().ajax({
 				data : JSON.stringify(textWidgetsToSend),
@@ -36,7 +40,7 @@ function PageEditorViewModel() {
 					console.error(JSON.stringify(e));
 				},
 				success : function(data) {
-					discardTextWidgetChanges();
+					thingsToAdd.textWidgets = [];
 				}
 			});
 		}
@@ -44,22 +48,15 @@ function PageEditorViewModel() {
 	};
 
 	self.discardChanges = function() {
-		thingsToAdd.rows.forEach(function(row) {
-			$('#row' + row).parent().remove();
-		});
 		discardRows();
 		discardTextWidgetChanges();
 		self.toggleEditing();
 	}
 
 	self.insertHeader = function() {
-		// TODO: if it's the first time inserting anything, save state to go
-		// back to
-
 		pasteHtmlAtCaret('<h4 id="newHeader">Header Text</h4>');
 		var widgetNode = $('#newHeader').parents('.textWidget:first');
 		$('#newHeader').removeAttr('id');
-		var savedHtml = widgetNode.children(':first').html();
 		var textWidgetId = parseInt(widgetNode.attr('id'));
 		if (thingsToAdd.textWidgets.indexOf(textWidgetId) === -1) {
 			thingsToAdd.textWidgets.push(textWidgetId);
@@ -107,8 +104,9 @@ function PageEditorViewModel() {
 		self.numRows(countRows());
 		$(function() {
 			$('.textWidgetTextBox').bind("propertychange keyup input paste", function(e) {
-				if(thingsToAdd.textWidgets.indexOf(e.currentTarget.parentNode.attributes[0].value) === -1){
-					thingsToAdd.textWidgets.push(parseInt(e.currentTarget.parentNode.attributes[0].value));
+				var textWidgetId = parseInt(e.currentTarget.parentNode.attributes[0].value);
+				if (thingsToAdd.textWidgets.indexOf(textWidgetId) === -1) {
+					thingsToAdd.textWidgets.push(textWidgetId);
 				}
 			});
 		});
@@ -139,9 +137,19 @@ function countRows() {
 }
 
 function discardRows() {
+	thingsToAdd.rows.forEach(function(row) {
+		$('#row' + row).parent().remove();
+	});
 	thingsToAdd.rows = [];
 }
 function discardTextWidgetChanges() {
+	thingsToAdd.textWidgets.forEach(function(widgetId) {
+		jsRoutes.controllers.Widgets.getTextWidgetHtmlByIdAsJSON(widgetId).ajax({
+			success : function(textWidget) {
+				$('#' + widgetId).children(':first').html(textWidget.text)
+			}
+		});
+	});
 	thingsToAdd.textWidgets = [];
 }
 

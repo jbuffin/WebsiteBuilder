@@ -49,6 +49,12 @@ object Widgets extends Controller {
 		case _ => views.html.sites.widgets.textWidget(models.widgets.Text.emptyTextWidget)
 	}
 	
+	def getTextWidgetHtmlByIdAsJSON(textWidgetId: Long) = Action {
+		Ok(Json.toJson(models.widgets.Text.getByTextWidgetId(textWidgetId) map { textWidget =>
+			Json.obj("textWidgetId" -> textWidget.id, "text" -> textWidget.text)
+		}))
+	}
+	
 	def updateTextWidgetById = Action(parse.json) { request =>
 		request.body.validate[List[models.widgets.Text]].map { textWidgets =>
 			textWidgets map { textWidget => 
