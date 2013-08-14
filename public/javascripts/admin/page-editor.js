@@ -14,12 +14,14 @@ function PageEditorViewModel() {
 	};
 
 	self.savePage = function() {
+		self.toggleEditing();
 		if (thingsToAdd.rows.length) {
 			jsRoutes.controllers.Sites.addRowsToPage(self.pageId,
 					thingsToAdd.rows.length).ajax({
 				success : function(data) {
 					console.log(JSON.stringify(data));
 					thingsToAdd.rows = [];
+					
 				}
 			});
 		}
@@ -42,11 +44,11 @@ function PageEditorViewModel() {
 					console.error(JSON.stringify(e));
 				},
 				success : function(data) {
+					console.log(JSON.stringify(data));
 					thingsToAdd.textWidgets = [];
 				}
 			});
 		}
-		self.toggleEditing();
 	};
 
 	self.discardChanges = function() {
@@ -110,6 +112,7 @@ function PageEditorViewModel() {
 			$('.textWidgetTextBox').bind("propertychange keyup input paste", function(e) {
 				var textWidgetId = parseInt(e.currentTarget.parentNode.attributes[0].value);
 				if (thingsToAdd.textWidgets.indexOf(textWidgetId) === -1) {
+					console.log(textWidgetId);
 					thingsToAdd.textWidgets.push(textWidgetId);
 				}
 			});
