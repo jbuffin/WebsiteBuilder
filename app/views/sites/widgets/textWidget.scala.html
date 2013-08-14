@@ -1,5 +1,5 @@
 @(textWidget: models.widgets.Text, editable: Boolean = true)
-<div id="@textWidget.id" name="@textWidget.id" class="textWidget">
+<div id="@textWidget.id" name="@textWidget.id" class="textWidget widgetId@textWidget.widgetId">
 	<div class="textWidgetTextBox" @if(editable){data-bind="attr:{'contenteditable':editing()}"}>
 		@Html(textWidget.text)
 	</div>

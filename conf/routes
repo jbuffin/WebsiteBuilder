@@ -15,10 +15,11 @@ GET    /ajax/sites                            controllers.Sites.getAllSitesAsJso
 POST   /ajax/sites/new                        controllers.Sites.newSiteFromJson
 
 GET    /ajax/pagetypes                        controllers.Sites.getAllPageTypesAsJson
-GET    /ajax/pages/:siteId                    controllers.Sites.getAllPagesBySiteAsJson(siteId: Long)
+GET    /ajax/sites/:siteId/pages              controllers.Sites.getAllPagesBySiteAsJson(siteId: Long)
 
-POST   /ajax/pages/new                        controllers.Sites.newPageFromJson
+POST   /ajax/pages                            controllers.Sites.newPageFromJson
 POST   /ajax/pages/:pageId/addrows/:numRows   controllers.Sites.addRowsToPage(pageId: Long, numRows: Long)
+POST   /ajax/pages/:pageId/widgets            controllers.Widgets.createTextWidgetsByPageIdFromJSON(pageId: Long)
 
 POST   /ajax/widgets/text/update              controllers.Widgets.updateTextWidgetById
 

@@ -31,7 +31,8 @@ function PageEditorViewModel() {
 						':first').html();
 				textWidgetsToSend.push({
 					'textWidgetId' : parseInt(thingsToAdd.textWidgets[i]),
-					'savedHtml' : htmlToSave
+					'savedHtml' : htmlToSave,
+					'widgetId' : -1
 				});
 			}
 			jsRoutes.controllers.Widgets.updateTextWidgetById().ajax({
@@ -158,7 +159,8 @@ function discardTextWidgetChanges() {
 
 var thingsToAdd = {
 	rows : [],
-	textWidgets : []
+	textWidgets : [],
+	newTextWidgets : []
 };
 
 function pasteHtmlAtCaret(html) {

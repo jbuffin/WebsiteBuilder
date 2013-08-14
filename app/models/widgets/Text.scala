@@ -9,19 +9,22 @@ import play.api.libs.functional.syntax._
 
 case class Text(
 	text: String,
+	widgetId: Long = -1,
 	id: Long = -1)
 
 object Text {
 
 	val simple = {
 		get[String]("text_widget.text") ~
+			get[Long]("text_widget.widget_id") ~
 			get[Long]("text_widget.text_widget_id") map {
-				case text ~ text_widget_id => Text(text, text_widget_id)
+				case text ~ widget_id ~ text_widget_id => Text(text, widget_id, text_widget_id)
 			}
 	}
-	
+
 	implicit val textRds = (
 		(__ \ "savedHtml").read[String] ~
+		(__ \ "widgetId").read[Long] ~
 		(__ \ "textWidgetId").read[Long]
 	)(Text.apply _)
 
@@ -55,11 +58,12 @@ object Text {
 		DB.withConnection { implicit connection =>
 			SQL(
 				"""
-				insert into text_widget (text) values (
-					{text}
+				insert into text_widget (text, widget_id) values (
+					{text}, {widget_id}
 				)
 				""").on(
-					'text -> textWidget.text).executeInsert()
+					'text -> textWidget.text,
+					'widget_id -> textWidget.widgetId).executeInsert()
 		} match {
 			case Some(textWidgetId) => textWidgetId
 			case None => -1
@@ -81,7 +85,7 @@ object Text {
 	}
 
 	def emptyTextWidget = {
-		Text("")
+		Text("", -1)
 	}
 
 }
