@@ -17,13 +17,32 @@ function PageEditorViewModel() {
 		self.toggleEditing();
 		if (thingsToAdd.rows.length) {
 			jsRoutes.controllers.Sites.addRowsToPage(self.pageId,
-					thingsToAdd.rows.length).ajax({
-				success : function(data) {
-					console.log(JSON.stringify(data));
-					thingsToAdd.rows = [];
-					
-				}
-			});
+					thingsToAdd.rows.length).ajax(
+					{
+						success : function(data) {
+							console.log(JSON.stringify(data));
+							thingsToAdd.rows = [];
+							if (thingsToAdd.newTextWidgets.length) {
+								var newWidgets = [];
+								thingsToAdd.newTextWidgets.forEach(function(
+										widgetLoc) {
+									newWidgets.push({
+										'rowNum' : 1,
+										'text' : 'test'
+									});
+								});
+								jsRoutes.controllers.Widgets
+										.createTextWidgetsByPageIdFromJSON(
+												self.pageId).ajax({
+											data : JSON.stringify(newWidgets),
+											contentType : 'text/json',
+											success : function(data) {
+												console.log(data);
+											}
+										});
+							}
+						}
+					});
 		}
 		if (thingsToAdd.textWidgets.length) {
 			var textWidgetsToSend = [];
@@ -53,6 +72,7 @@ function PageEditorViewModel() {
 
 	self.discardChanges = function() {
 		discardRows();
+		self.numRows(countRows());
 		discardTextWidgetChanges();
 		self.toggleEditing();
 	}
@@ -83,6 +103,10 @@ function PageEditorViewModel() {
 				+ widgetHtml[widgetType.widgetType] + '</div>');
 		ko.applyBindings(self, document.getElementById('newTextWidget'));
 		$('#newTextWidget').removeAttr('id');
+		thingsToAdd.newTextWidgets.push({
+			row : rowNum,
+			col : colCount + 1
+		});
 	};
 
 	self.addRow = function() {
@@ -108,15 +132,7 @@ function PageEditorViewModel() {
 	self.init = function() {
 		self.pageId = parseInt($('div[id^="pageId"]').attr("id").substr(7));
 		self.numRows(countRows());
-		$(function() {
-			$('.textWidgetTextBox').bind("propertychange keyup input paste", function(e) {
-				var textWidgetId = parseInt(e.currentTarget.parentNode.attributes[0].value);
-				if (thingsToAdd.textWidgets.indexOf(textWidgetId) === -1) {
-					console.log(textWidgetId);
-					thingsToAdd.textWidgets.push(textWidgetId);
-				}
-			});
-		});
+		bindTextWidgetTextBoxes();
 	};
 }
 var pevm = new PageEditorViewModel();
@@ -127,8 +143,22 @@ $(function() {
 	}
 });
 
+function bindTextWidgetTextBoxes() {
+	$(function() {
+		$('.textWidgetTextBox')
+				.bind(
+						"propertychange keyup input paste",
+						function(e) {
+							var textWidgetId = parseInt(e.currentTarget.parentNode.attributes[0].value);
+							if (thingsToAdd.textWidgets.indexOf(textWidgetId) === -1) {
+								thingsToAdd.textWidgets.push(textWidgetId);
+							}
+						});
+	});
+}
+
 var widgetHtml = {
-	textWidget : '<div class="textWidget"><div class="textWidgetTextBox" data-bind="attr:{\'contenteditable\':editing()}">Type your text here</div></div>'
+	textWidget : '<div class="textWidget newTextWidget"><div class="textWidgetTextBox" data-bind="attr:{\'contenteditable\':editing()}">Type your text here</div></div>'
 };
 
 function insertHtmlAtLoc(loc, html) {
@@ -151,11 +181,14 @@ function discardRows() {
 }
 function discardTextWidgetChanges() {
 	thingsToAdd.textWidgets.forEach(function(widgetId) {
-		jsRoutes.controllers.Widgets.getTextWidgetHtmlByIdAsJSON(widgetId).ajax({
-			success : function(textWidget) {
-				$('#' + widgetId).children(':first').html(textWidget.text)
-			}
-		});
+		jsRoutes.controllers.Widgets.getTextWidgetHtmlByIdAsJSON(widgetId)
+				.ajax(
+						{
+							success : function(textWidget) {
+								$('#' + widgetId).children(':first').html(
+										textWidget.text)
+							}
+						});
 	});
 	thingsToAdd.textWidgets = [];
 }

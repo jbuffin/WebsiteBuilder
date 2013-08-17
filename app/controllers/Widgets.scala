@@ -82,7 +82,7 @@ object Widgets extends Controller {
 						models.widgets.WidgetType.getByTypeName(models.widgets.WidgetTypeEnum.Text.toString()).get.typeId,
 						pageId,
 						Page.getRowNumsByPageId(pageId)(textWidget._1.toInt-1),
-						models.pages.Page.getWidgetsByRow(Page.getRowNumsByPageId(pageId)(textWidget._1.toInt-1).toInt).length
+						models.pages.Page.getWidgetsByRow(Page.getRowNumsByPageId(pageId)(textWidget._1.toInt-1).toInt).length+1
 					)
 				)
 				models.widgets.Text.create(models.widgets.Text(textWidget._2, widgetId))
