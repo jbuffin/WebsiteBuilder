@@ -1,17 +1,12 @@
 package controllers
 
 import models.Site
-import models.pages.Page
-import models.pages.PageType
-import models.pages.PageTypeEnum
+import models.pages._
 import models.pages.PageTypeEnum._
 import play.api.Logger
-import play.api.libs.functional.syntax.functionalCanBuildApplicative
-import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.JsError
-import play.api.libs.json.Json
+import play.api.libs.functional.syntax._
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
-import play.api.libs.json.__
+import play.api.libs.json._
 import play.api.mvc.Action
 import play.api.mvc.Controller
 
@@ -63,11 +58,11 @@ object Sites extends Controller {
 			}
 		}
 	}
-	
+
 	def getNavigationBySiteId(siteId: Long) = {
 		Page.getAllBySiteId(siteId)
 	}
-	
+
 	def getAllPageTypesAsJson = Action {
 		Ok(Json.toJson(PageType.getAll map { pageType =>
 			Json.obj("typeName" -> pageType.typeName, "pageTypeId" -> pageType.pageTypeId)
@@ -87,21 +82,21 @@ object Sites extends Controller {
 			e => BadRequest("Detected error: "+JsError.toFlatJson(e))
 		}
 	}
-	
+
 	def getAllPagesBySiteAsJson(siteId: Long) = Action {
 		Ok(Json.toJson(Page.getAllBySiteId(siteId) map { page =>
 			Json.obj("id" -> page.pageId, "uri" -> page.uri, "title" -> page.title, "pageType" -> page.pageType, "parent" -> page.parent, "siteId" -> page.siteId)
 		}))
 	}
-	
+
 	def newPageFromJson = Action(parse.json) { request =>
 		request.body.validate[Page].map { page =>
 			Ok(Page.create(page).toString)
-		}.recoverTotal{
+		}.recoverTotal {
 			e => BadRequest("Detected error: "+JsError.toFlatJson(e)+"\n"+request.body)
 		}
 	}
-	
+
 	def addRowsToPage(pageId: Long, numRows: Long) = Action {
 		Ok(Json.toJson(Json.obj("rows" -> Page.addRowsByPageId(pageId, numRows))))
 	}
