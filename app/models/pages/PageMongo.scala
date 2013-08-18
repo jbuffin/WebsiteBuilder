@@ -9,7 +9,7 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.templates.Html
 
-case class PageMongo(uri: String, title: String, parent: String, rows: List[Row])
+case class PageMongo(siteId: Long, uri: String, title: String, parent: String, rows: List[Row])
 
 case class Row(order: Long, columns: List[Column])
 

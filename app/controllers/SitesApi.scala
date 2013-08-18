@@ -18,11 +18,11 @@ import models.pages.PageMongo
 object SitesApi extends Controller with MongoController {
 
 	def collection: JSONCollection = db.collection[JSONCollection]("pages")
-	
+
 	def newPage(siteId: Long) = Action(parse.json) { request =>
 		request.body.validate[PageMongo].map { page =>
 			val objectId = BSONObjectID.generate
-			val pageWithId = Json.obj("_id" -> objectId, "siteId" -> siteId, "uri" -> page.uri, "title" -> page.title, "parent" -> page.parent, "rows" -> page.rows)
+			val pageWithId = Json.obj("_id" -> objectId, "page" -> page)
 			val futureResult = collection.insert(pageWithId)
 			Async {
 				futureResult.map(_ => Ok(Json.obj("_id" -> objectId)))
@@ -31,43 +31,43 @@ object SitesApi extends Controller with MongoController {
 			BadRequest(Json.obj("res" -> "KO") ++ Json.obj("error" -> JsError.toFlatJson(error)))
 		}
 	}
-	
+
 	def getAllPagesBySiteId(siteId: Long) = Action {
 		Async {
-			val cursor: Cursor[JsValue] = collection.find(Json.obj("siteId" -> siteId)).cursor[JsValue]
+			val cursor: Cursor[JsValue] = collection.find(Json.obj("page.siteId" -> siteId)).cursor[JsValue]
 			val futurePagesList: Future[List[JsValue]] = cursor.toList
-			
+
 			futurePagesList.map { pages =>
 				Ok(Json.toJson(pages))
 			}
 		}
 	}
-	
+
 	def getPageById(siteId: Long, pageId: String) = Action {
 		Async {
-			val cursor: Cursor[JsValue] = collection.find(Json.obj("_id" -> BSONObjectID(pageId))).cursor[JsValue]
+			val cursor: Cursor[JsValue] = collection.find(Json.obj("_id" -> BSONObjectID(pageId), "page.siteId" -> siteId)).cursor[JsValue]
 			val futurePage: Future[Option[JsValue]] = cursor.headOption
-			
+
 			futurePage.map { page =>
 				Ok(Json.toJson(page))
 			}
 		}
 	}
-	
-	def getPageByUri(uri: String) = {
-		val cursor: Cursor[JsValue] = collection.find(Json.obj("uri" -> uri)).cursor[JsValue]
-		val futurePage: Future[Option[JsValue]] = cursor.headOption
-		
-		futurePage.map { page =>
-			page.map { pageJson =>
-				pageJson
+
+	def getPageByUri(siteId: Long, uri: String) = Action {
+		Async {
+			val cursor: Cursor[JsValue] = collection.find(Json.obj("page.uri" -> uri, "page.siteId" -> siteId)).cursor[JsValue]
+			val futurePage: Future[Option[JsValue]] = cursor.headOption
+
+			futurePage.map { page =>
+				Ok(Json.toJson(page))
 			}
 		}
 	}
-	
+
 	def updatePage(siteId: Long, pageId: String) = Action(parse.json) { request =>
 		request.body.validate[PageMongo].map { page =>
-			val pageWithId = Json.obj("_id" -> BSONObjectID(pageId), "siteId" -> siteId, "uri" -> page.uri, "title" -> page.title, "parent" -> page.parent, "rows" -> page.rows)
+			val pageWithId = Json.obj("_id" -> BSONObjectID(pageId), "page" -> page)
 			val futureResult = collection.save(pageWithId)
 			Async {
 				futureResult.map(_ => Ok(Json.obj("res" -> "Ok")))
@@ -76,5 +76,5 @@ object SitesApi extends Controller with MongoController {
 			BadRequest(Json.obj("res" -> "KO") ++ Json.obj("error" -> JsError.toFlatJson(error)))
 		}
 	}
-	
+
 }

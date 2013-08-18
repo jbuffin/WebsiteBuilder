@@ -7,6 +7,7 @@
 @if(isAdmin) {
 	@views.html.loggedInNavBar(siteName)
 }
+<div id="@page.uri"></div>
 <div id="pageId-@page.pageId"></div>
 <div class="container@if(isAdmin){ roomForHeader}">
 	<div class="row">

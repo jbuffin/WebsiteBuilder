@@ -30,7 +30,12 @@ object Application extends Controller {
 				Widgets.getWidgetsByPageIdAsJson,
 				Widgets.updateTextWidgetById,
 				Widgets.getTextWidgetHtmlByIdAsJSON,
-				Widgets.createTextWidgetsByPageIdFromJSON
+				Widgets.createTextWidgetsByPageIdFromJSON,
+				SitesApi.getAllPagesBySiteId,
+				SitesApi.getPageById,
+				SitesApi.newPage,
+				SitesApi.getPageByUri,
+				SitesApi.updatePage
 			)
 		).as("text/javascript")
 	}
