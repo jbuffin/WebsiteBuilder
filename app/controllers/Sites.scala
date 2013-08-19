@@ -30,12 +30,11 @@ object Sites extends Controller with MongoController {
 				Logger.debug(query.toString)
 				val futurePage = collection.find(query).one[PageMongoWithId]
 				Logger.debug("got the future")
-				futurePage.map { 
+				futurePage.map {
 					case Some(pageMongo) => goToPage(page, site, uri, getNavigationBySiteId(site.siteId), Page.getWidgetsByPageIdSortedByRow(page.pageId), pageMongo)
 					case None => Redirect(routes.Application.indexWithNoSiteFound)
 				}
 			}
-			//			pageTypeChooser(PageType.getById(page.pageType).get, page, site)
 		}
 		catch {
 			case nse: NoSuchElementException => {
@@ -49,10 +48,17 @@ object Sites extends Controller with MongoController {
 	def getPageFromSiteIdAndUri(siteId: Long, uri: String = "") = Action { implicit request =>
 		Logger.debug("[Sites.getPageFromSiteIdAndUri]: siteId: '"+siteId+"', uri: '"+uri+"'")
 		try {
-			//			val page = Page.getPageByUri(siteId, uri).get
-			//			goToPage(page, Site.getSiteById(siteId).get, uri, getNavigationBySiteId(siteId), Page.getWidgetsByPageIdSortedByRow(page.pageId))
-			Ok
-			//			pageTypeChooser(PageType.getById(page.pageType).get, page, Site.getSiteById(siteId).get)
+			val page = Page.getPageByUri(siteId, uri).get
+			Async {
+				val query = Json.obj("page.uri" -> uri, "page.siteId" -> siteId)
+				Logger.debug(query.toString)
+				val futurePage = collection.find(query).one[PageMongoWithId]
+				Logger.debug("got the future")
+				futurePage.map {
+					case Some(pageMongo) => goToPage(page, Site.getSiteById(siteId).get, uri, getNavigationBySiteId(siteId), Page.getWidgetsByPageIdSortedByRow(page.pageId), pageMongo)
+					case None => Redirect(routes.Application.indexWithNoSiteFound)
+				}
+			}
 		}
 		catch {
 			case nse: NoSuchElementException => {
@@ -65,7 +71,6 @@ object Sites extends Controller with MongoController {
 
 	def goToPage(page: Page, site: Site, uri: String, navigation: List[Page], widgets: List[List[play.api.templates.Html]], pageMongo: PageMongoWithId) = {
 		Ok(views.html.sites.index(page, site.siteName, navigation, widgets, pageMongo))
-		//		Ok(views.html.sites.indexkomongo(site.siteId, uri))
 	}
 
 	def getNavigationBySiteId(siteId: Long) = {
