@@ -1,6 +1,6 @@
-@(page: models.pages.Page, siteName: String, siteNav: List[models.pages.Page], widgetRowsHtml: List[List[play.api.templates.Html]], isAdmin: Boolean = true)
+@(page: models.pages.Page, siteName: String, siteNav: List[models.pages.Page], widgetRowsHtml: List[List[play.api.templates.Html]], pageMongo: models.pages.PageMongoWithId, isAdmin: Boolean = true)
 @import views.html.sites.widgets._
-@import models.pages.Page
+@import models.pages._
 @import models.widgets._
 @import controllers._
 @main(page.title){

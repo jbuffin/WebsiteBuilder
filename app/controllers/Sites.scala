@@ -9,16 +9,33 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import play.api.libs.json._
 import play.api.mvc.Action
 import play.api.mvc.Controller
+import reactivemongo.api._
+import play.modules.reactivemongo.MongoController
+import play.modules.reactivemongo.json.collection.JSONCollection
+import reactivemongo.api.Cursor
+import scala.concurrent.Future
+import models.pages.JsonFormats._
+import play.api.data.Form
 
-object Sites extends Controller {
+object Sites extends Controller with MongoController {
+	def collection: JSONCollection = db.collection[JSONCollection]("pages")
 
 	def getPageFromUri(uri: String = "", editable: Boolean = false) = Action { implicit request =>
 		Logger.debug("[Sites.getPageFromUri]: request.domain: '"+request.domain+"', uri: '"+uri+"'")
 		try {
 			val site = Site.getSiteByHostName(request.domain).get
 			val page = Page.getPageByUri(site.siteId, uri).get
-			goToPage(page, site, uri, getNavigationBySiteId(site.siteId), Page.getWidgetsByPageIdSortedByRow(page.pageId))
-//			pageTypeChooser(PageType.getById(page.pageType).get, page, site)
+			Async {
+				val query = Json.obj("page.uri" -> uri, "page.siteId" -> site.siteId)
+				Logger.debug(query.toString)
+				val futurePage = collection.find(query).one[PageMongoWithId]
+				Logger.debug("got the future")
+				futurePage.map { 
+					case Some(pageMongo) => goToPage(page, site, uri, getNavigationBySiteId(site.siteId), Page.getWidgetsByPageIdSortedByRow(page.pageId), pageMongo)
+					case None => Redirect(routes.Application.indexWithNoSiteFound)
+				}
+			}
+			//			pageTypeChooser(PageType.getById(page.pageType).get, page, site)
 		}
 		catch {
 			case nse: NoSuchElementException => {
@@ -32,9 +49,10 @@ object Sites extends Controller {
 	def getPageFromSiteIdAndUri(siteId: Long, uri: String = "") = Action { implicit request =>
 		Logger.debug("[Sites.getPageFromSiteIdAndUri]: siteId: '"+siteId+"', uri: '"+uri+"'")
 		try {
-			val page = Page.getPageByUri(siteId, uri).get
-			goToPage(page, Site.getSiteById(siteId).get, uri, getNavigationBySiteId(siteId), Page.getWidgetsByPageIdSortedByRow(page.pageId))
-//			pageTypeChooser(PageType.getById(page.pageType).get, page, Site.getSiteById(siteId).get)
+			//			val page = Page.getPageByUri(siteId, uri).get
+			//			goToPage(page, Site.getSiteById(siteId).get, uri, getNavigationBySiteId(siteId), Page.getWidgetsByPageIdSortedByRow(page.pageId))
+			Ok
+			//			pageTypeChooser(PageType.getById(page.pageType).get, page, Site.getSiteById(siteId).get)
 		}
 		catch {
 			case nse: NoSuchElementException => {
@@ -44,10 +62,10 @@ object Sites extends Controller {
 			}
 		}
 	}
-	
-	def goToPage(page: Page, site: Site, uri: String, navigation: List[Page], widgets: List[List[play.api.templates.Html]]) = {
-//		Ok(views.html.sites.index(page, site.siteName, navigation, widgets))
-		Ok(views.html.sites.indexkomongo(site.siteId, uri))
+
+	def goToPage(page: Page, site: Site, uri: String, navigation: List[Page], widgets: List[List[play.api.templates.Html]], pageMongo: PageMongoWithId) = {
+		Ok(views.html.sites.index(page, site.siteName, navigation, widgets, pageMongo))
+		//		Ok(views.html.sites.indexkomongo(site.siteId, uri))
 	}
 
 	def getNavigationBySiteId(siteId: Long) = {
