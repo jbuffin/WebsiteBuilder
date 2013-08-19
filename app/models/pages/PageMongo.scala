@@ -13,7 +13,7 @@ case class PageMongo(siteId: Long, uri: String, title: String, parent: String, r
 
 case class Row(order: Long, columns: List[Column])
 
-case class Column(order: Long, html: String)
+case class Column(order: Long, columnHtml: String)
 
 object JsonFormats {
 	import play.api.libs.json.Json

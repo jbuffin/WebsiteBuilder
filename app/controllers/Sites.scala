@@ -46,7 +46,8 @@ object Sites extends Controller {
 	}
 	
 	def goToPage(page: Page, site: Site, uri: String, navigation: List[Page], widgets: List[List[play.api.templates.Html]]) = {
-		Ok(views.html.sites.index(page, site.siteName, navigation, widgets))
+//		Ok(views.html.sites.index(page, site.siteName, navigation, widgets))
+		Ok(views.html.sites.indexkomongo(site.siteId, uri))
 	}
 
 	def getNavigationBySiteId(siteId: Long) = {
