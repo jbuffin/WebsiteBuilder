@@ -4,7 +4,7 @@ Site(postgresql) {
 }
 
 Page(mongodb) {
-	_id: ObjectID()
+	_id: ObjectId()
 	page: {
 		siteId: Number,
 		uri: String,

@@ -34,7 +34,7 @@ object Widgets extends Controller {
 		}))
 	}
 
-	def getTheWidget(widgetId: Long): Html = {
+/*	def getTheWidget(widgetId: Long): Html = {
 		try {
 			val widgetType = models.widgets.WidgetType.getWidgetTypeById(widgetId).get
 			widgetTypeChooser(WidgetTypeEnum.withName(widgetType.widgetType), widgetId)
@@ -43,13 +43,13 @@ object Widgets extends Controller {
 			case nse: NoSuchElementException =>
 				views.html.sites.widgets.textWidget(models.widgets.Text.emptyTextWidget)
 		}
-	}
+	}*/
 
-	def widgetTypeChooser(widgetType: WidgetTypeEnum, widgetId: Long) = widgetType match {
+/*	def widgetTypeChooser(widgetType: WidgetTypeEnum, widgetId: Long) = widgetType match {
 		case Text => views.html.sites.widgets.textWidget(models.widgets.Text.getByWidgetId(widgetId).getOrElse(models.widgets.Text.emptyTextWidget))
 		case WidgetTypeEnum.Carousel => views.html.sites.widgets.carouselWidget(models.widgets.Carousel.getByWidgetId(widgetId).get.images)
 		case _ => views.html.sites.widgets.textWidget(models.widgets.Text.emptyTextWidget)
-	}
+	}*/
 
 	def getTextWidgetHtmlByIdAsJSON(textWidgetId: Long) = Action {
 		Ok(Json.toJson(models.widgets.Text.getByTextWidgetId(textWidgetId) map { textWidget =>

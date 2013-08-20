@@ -3,39 +3,41 @@
 # ~~~~
 
 # Home page
-GET    /                                      controllers.Sites.getPageFromUri(uri = "")
-GET    /notfound                              controllers.Application.indexWithNoSiteFound
-GET    /admin-home                            controllers.Application.adminHome
-GET    /admin-static                          controllers.Assets.at(path="/public", file="html/admin-static.html")
-GET    /getsitebyid/:id                       controllers.Sites.getPageFromSiteIdAndUri(id: Long, uri = "")
+GET    /                                     controllers.Sites.getPageFromUri(uri = "")
+GET    /notfound                             controllers.Application.indexWithNoSiteFound
+GET    /admin-home                           controllers.Application.adminHome
+GET    /admin-static                         controllers.Assets.at(path="/public", file="html/admin-static.html")
+GET    /getsitebyid/:id                      controllers.Sites.getPageFromSiteIdAndUri(id: Long, uri = "")
 
 # Map the javascript routes
-GET    /javascriptroutes                      controllers.Application.javascriptRoutes
-GET    /ajax/sites                            controllers.Sites.getAllSitesAsJson
-POST   /ajax/sites/new                        controllers.Sites.newSiteFromJson
+GET    /javascriptroutes                     controllers.Application.javascriptRoutes
+#GET    /ajax/sites                            controllers.Sites.getAllSitesAsJson
+#POST   /ajax/sites                        controllers.Sites.newSiteFromJson
 
-GET    /ajax/pagetypes                        controllers.Sites.getAllPageTypesAsJson
-GET    /ajax/sites/:siteId/pages              controllers.Sites.getAllPagesBySiteAsJson(siteId: Long)
+#GET    /ajax/pagetypes                        controllers.Sites.getAllPageTypesAsJson
+#GET    /ajax/sites/:siteId/pages              controllers.Sites.getAllPagesBySiteAsJson(siteId: Long)
 
-POST   /ajax/pages                            controllers.Sites.newPageFromJson
-POST   /ajax/pages/:pageId/addrows/:numRows   controllers.Sites.addRowsToPage(pageId: Long, numRows: Long)
-POST   /ajax/pages/:pageId/widgets            controllers.Widgets.createTextWidgetsByPageIdFromJSON(pageId: Long)
+#POST   /ajax/pages                            controllers.Sites.newPageFromJson
+#POST   /ajax/pages/:pageId/addrows/:numRows   controllers.Sites.addRowsToPage(pageId: Long, numRows: Long)
+#POST   /ajax/pages/:pageId/widgets            controllers.Widgets.createTextWidgetsByPageIdFromJSON(pageId: Long)
 
-POST   /ajax/widgets/text/update              controllers.Widgets.updateTextWidgetById
+#POST   /ajax/widgets/text/update              controllers.Widgets.updateTextWidgetById
 
-GET    /ajax/pages/:pageId/widgets            controllers.Widgets.getWidgetsByPageIdAsJson(pageId: Long)
-GET    /ajax/widgets/:widgetId/text           controllers.Widgets.getTextWidgetHtmlByIdAsJSON(widgetId: Long)
+#GET    /ajax/pages/:pageId/widgets            controllers.Widgets.getWidgetsByPageIdAsJson(pageId: Long)
+#GET    /ajax/widgets/:widgetId/text           controllers.Widgets.getTextWidgetHtmlByIdAsJSON(widgetId: Long)
 
-GET    /api/sites/:siteId/pages               controllers.SitesApi.getAllPagesBySiteId(siteId: Long)
-POST   /api/sites/:siteId/pages               controllers.SitesApi.newPage(siteId: Long)
-GET    /api/sites/:siteId/pages/:pageId       controllers.SitesApi.getPageById(siteId: Long, pageId: String)
-POST   /api/sites/:siteId/pages/:pageId       controllers.SitesApi.updatePage(siteId: Long, pageId: String)
-GET    /api/sites/:siteId/pages/byuri/        controllers.SitesApi.getPageByUri(siteId: Long, uri = "")
-GET    /api/sites/:siteId/pages/byuri/*uri    controllers.SitesApi.getPageByUri(siteId: Long, uri: String)
+GET    /api/sites                            controllers.SitesApi.getAllSites
+POST   /api/sites                            controllers.SitesApi.newSite
+GET    /api/sites/:siteId/pages              controllers.SitesApi.getAllPagesBySiteId(siteId: Long)
+POST   /api/sites/:siteId/pages              controllers.SitesApi.newPage(siteId: Long)
+GET    /api/sites/:siteId/pages/:pageId      controllers.SitesApi.getPageById(siteId: Long, pageId: String)
+POST   /api/sites/:siteId/pages/:pageId      controllers.SitesApi.updatePage(siteId: Long, pageId: String)
+GET    /api/sites/:siteId/pages/byuri/       controllers.SitesApi.getPageByUri(siteId: Long, uri = "")
+GET    /api/sites/:siteId/pages/byuri/*uri   controllers.SitesApi.getPageByUri(siteId: Long, uri: String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET    /assets/*file                          controllers.Assets.at(path="/public", file)
+GET    /assets/*file                         controllers.Assets.at(path="/public", file)
 
 # Map the hosted sites
-GET    /getsitebyid/:id/*page                 controllers.Sites.getPageFromSiteIdAndUri(id: Long, page: String)
-GET    /*page                                 controllers.Sites.getPageFromUri(page: String)
+GET    /getsitebyid/:id/*page                controllers.Sites.getPageFromSiteIdAndUri(id: Long, page: String)
+GET    /*page                                controllers.Sites.getPageFromUri(page: String)

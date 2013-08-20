@@ -19,6 +19,20 @@ object SitesApi extends Controller with MongoController {
 
 	def collection: JSONCollection = db.collection[JSONCollection]("pages")
 
+	def newSite = Action(parse.json) { request =>
+		request.body.validate[Site].map { site =>
+			Ok(Site.create(site).toString)
+		}.recoverTotal {
+			e => BadRequest("Detected error: "+JsError.toFlatJson(e))
+		}
+	}
+
+	def getAllSites = Action {
+		Ok(Json.toJson(Site.getAll map { site =>
+			Json.obj("id" -> site.siteId.toString, "siteName" -> site.siteName, "hostName" -> site.hostName)
+		}))
+	}
+
 	def newPage(siteId: Long) = Action(parse.json) { request =>
 		request.body.validate[PageMongo].map { page =>
 			val objectId = BSONObjectID.generate

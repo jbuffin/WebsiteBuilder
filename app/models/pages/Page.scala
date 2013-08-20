@@ -129,7 +129,7 @@ object Page {
 		}
 	}
 
-	def getWidgetsByPageIdSortedByRow(pageId: Long): List[List[play.api.templates.Html]] = {
+/*	def getWidgetsByPageIdSortedByRow(pageId: Long): List[List[play.api.templates.Html]] = {
 		val rowNums = getRowNumsByPageId(pageId)
 		List.tabulate(rowNums.length)(index => {
 			val rowNum = rowNums(index)
@@ -147,7 +147,7 @@ object Page {
 						}*)
 			}
 		})
-	}
+	}*/
 
 	def getWidgetsByPageId(pageId: Long): List[Long] = {
 		DB.withConnection { implicit connection =>

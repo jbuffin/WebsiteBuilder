@@ -1,6 +1,5 @@
 var siteServer;
 var pageServer;
-var widgetServer;
 
 function AdminViewModel() {
 	var self = this;
@@ -107,12 +106,12 @@ function SiteAccessor(server) {
 	var self = this;
 
 	self.getAll = function(callback) {
-		jsRoutes.controllers.Sites.getAllSitesAsJson().ajax({
+		jsRoutes.controllers.SitesApi.getAllSites().ajax({
 			success : callback
 		});
 	};
 	self.newSite = function(formData, callback) {
-		jsRoutes.controllers.Sites.newSiteFromJson().ajax({
+		jsRoutes.controllers.Sites.newSite().ajax({
 			data : JSON.stringify(formData),
 			contentType : 'text/json',
 			success : callback,
@@ -145,27 +144,4 @@ function PageAccessor(server) {
 			}
 		});
 	};
-}
-function WidgetAccessor(server) {
-	var self = this;
-
-	self.getAllByPage = function(pageId, callback) {
-		jsRoutes.controllers.Widgets.getWidgetsByPageIdAsJson(pageId).ajax({success: callback});
-	};
-	self.newWidget = function(page, callback) {
-
-	};
-}
-
-function ServerAccessor(url) {
-	var self = this;
-	self.where = url;
-
-	self.get = function(what, successCallBack) {
-
-	}
-
-	self.put = function(what, stuff, successCallBack) {
-
-	}
 }

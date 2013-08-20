@@ -38,7 +38,6 @@
 							<li class="nav-header"></li>
 							<li><a href="#sites">Sites</a></li>
 							<li><a href="#pages">Pages</a></li>
-							<li><a href="#page-widgets">Page widgets</a></li>
 						</ul>
 					</div>
 				</div>
@@ -137,27 +136,6 @@
 							</div>
 							<div data-bind="if:currentPage">
 								Info about <span data-bind="text:currentPage().title"></span>:&nbsp;<a target="_blank" data-bind="attr:{href: 'http://'+currentSite().hostName+':9000/'+currentPage().uri},text: currentSite().hostName+'/'+currentPage().uri"></a>&nbsp;(<a target="_blank" data-bind="attr:{href: '/getsitebyid/'+currentSite().id+function(){return currentPage().uri==='' ? '' : '/';}()+currentPage().uri},text: '/getsitebyid/'+currentSite().id+function(){return currentPage().uri==='' ? '' : '/';}()+currentPage().uri"></a>)
-							</div>
-							<hr>
-						</div>
-					</section>
-					<section class="row-fluid" id="page-widgets">
-						<div class="span12">
-							<div class="page-header">
-								<h1>Page widgets</h1>&nbsp;<a href="#" data-bind="click: showNewWidgetForm">New</a>
-							</div>
-							<div id="newWidgetForm" data-bind="visible: widgetFormVisible">
-								new
-							</div>
-							<div>
-								<select data-bind="options: widgetList,
-													optionsText: 'widgetType',
-													value: currentWidget,
-													optionsCaption: 'Choose a widget...'">
-								</select>
-							</div>
-							<div data-bind="if:currentWidget">
-								<span data-bind="text:currentWidget().id"></span>
 							</div>
 							<hr>
 						</div>

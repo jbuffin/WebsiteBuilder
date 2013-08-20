@@ -1,6 +1,6 @@
-@(textWidget: models.widgets.Text, editable: Boolean = true)
-<div id="@textWidget.id" name="@textWidget.id" class="textWidget widgetId@textWidget.widgetId">
+@(textWidget: models.pages.Column, editable: Boolean = true)
+<div class="textWidget">
 	<div class="textWidgetTextBox" @if(editable){data-bind="attr:{'contenteditable':editing()}"}>
-		@Html(textWidget.text)
+		@Html(textWidget.columnHtml)
 	</div>
 </div>

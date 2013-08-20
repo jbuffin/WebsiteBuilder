@@ -1,14 +1,13 @@
-@(page: models.pages.Page, siteName: String, siteNav: List[models.pages.Page], widgetRowsHtml: List[List[play.api.templates.Html]], pageMongo: models.pages.PageMongoWithId, isAdmin: Boolean = true)
+@(siteName: String, siteNav: List[models.pages.Page], pageMongo: models.pages.PageMongoWithId, isAdmin: Boolean = true)
 @import views.html.sites.widgets._
 @import models.pages._
 @import models.widgets._
 @import controllers._
-@main(page.title){
+@main(pageMongo.page.title){
 @if(isAdmin) {
 	@views.html.loggedInNavBar(siteName)
 }
-<div id="@page.uri"></div>
-<div id="pageId-@page.pageId"></div>
+<div id="pageId-@pageMongo._id"></div>
 <div class="container@if(isAdmin){ roomForHeader}">
 	<div class="row">
 		<div class="col-lg-2">
@@ -16,12 +15,12 @@
 		</div>
 		<div class="col-lg-10">
 			<div class="container" @if(isAdmin){id="insertPoint" name="insertPoint"}>
-				@widgetRowsHtml.zipWithIndex.map { case(columns, index) =>
+				@pageMongo.page.rows.zipWithIndex.map { case(row, index) =>
 				<div class="container">
 					<div class="row" id="row@(index+1)">
-						@columns.map { theWidgetHtml =>
-						<div class="col-lg-@(12/columns.length)">
-							@theWidgetHtml
+						@row.columns.map { column =>
+						<div class="col-lg-@(12/row.columns.length)">
+							@views.html.sites.widgets.textWidget(column)
 						</div>
 						}
 					</div>	
