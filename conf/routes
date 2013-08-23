@@ -7,7 +7,6 @@ GET    /                                     controllers.Sites.getPageFromUri(ur
 GET    /notfound                             controllers.Application.indexWithNoSiteFound
 GET    /admin-home                           controllers.Application.adminHome
 GET    /admin-static                         controllers.Assets.at(path="/public", file="html/admin-static.html")
-GET    /getsitebyid/:id                      controllers.Sites.getPageFromSiteIdAndUri(id: Long, uri = "")
 
 # Map the javascript routes
 GET    /javascriptroutes                     controllers.Application.javascriptRoutes
@@ -39,5 +38,4 @@ GET    /api/sites/:siteId/pages/byuri/*uri   controllers.SitesApi.getPageByUri(s
 GET    /assets/*file                         controllers.Assets.at(path="/public", file)
 
 # Map the hosted sites
-GET    /getsitebyid/:id/*page                controllers.Sites.getPageFromSiteIdAndUri(id: Long, page: String)
 GET    /*page                                controllers.Sites.getPageFromUri(page: String)

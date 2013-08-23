@@ -1,9 +1,9 @@
-@(siteNav: List[models.pages.Page])
+@(pagesList: List[models.pages.PageMongoWithId])
 <div class="well sidebar-nav">
 	<ul class="nav nav-list">
 		<li class="nav-header"></li>
-		@siteNav.map { page =>
-		<li><a href="/@page.uri">@page.title</a></li>			
+		@pagesList.map { page =>
+		<li><a href="/@page.page.uri">@page.page.title</a></li>
 		}
 	</ul>
 </div>

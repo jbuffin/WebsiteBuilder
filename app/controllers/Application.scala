@@ -21,16 +21,6 @@ object Application extends Controller {
 		import routes.javascript._
 		Ok(
 			Routes.javascriptRouter("jsRoutes") (
-/*				Sites.getAllSitesAsJson,
-				Sites.newSiteFromJson,
-				Sites.getAllPagesBySiteAsJson,
-				Sites.getAllPageTypesAsJson,
-				Sites.newPageFromJson,
-				Sites.addRowsToPage,
-				Widgets.getWidgetsByPageIdAsJson,
-				Widgets.updateTextWidgetById,
-				Widgets.getTextWidgetHtmlByIdAsJSON,
-				Widgets.createTextWidgetsByPageIdFromJSON,*/
 				SitesApi.getAllSites,
 				SitesApi.newSite,
 				SitesApi.getAllPagesBySiteId,

@@ -22,15 +22,24 @@ object Sites extends Controller with MongoController {
 
 	def getPageFromUri(uri: String = "", editable: Boolean = false) = Action { implicit request =>
 		Logger.debug("[Sites.getPageFromUri]: request.domain: '"+request.domain+"', uri: '"+uri+"'")
+		val site = Site.getSiteByHostName(request.domain).get
+		getPageFromSiteIdAndUri(site.siteId, uri)
+	}
+
+	def getPageFromSiteIdAndUri(siteId: Long, uri: String = "") = {
+		Logger.debug("[Sites.getPageFromSiteIdAndUri]: siteId: '"+siteId+"', uri: '"+uri+"'")
 		try {
-			val site = Site.getSiteByHostName(request.domain).get
 			Async {
-				val query = Json.obj("page.uri" -> uri, "page.siteId" -> site.siteId)
+				val query = Json.obj("page.uri" -> uri, "page.siteId" -> siteId)
 				val futurePage = collection.find(query).one[PageMongoWithId]
 				futurePage.map {
 					case Some(pageMongo) => {
-						Logger.debug("got a Some")
-						goToPage(site, uri, getNavigationBySiteId(site.siteId), pageMongo)
+						Async {
+							val pageNav = getNavigationBySiteId(siteId)
+							pageNav.map { pagesList =>
+								goToPage(Site.getSiteById(siteId).get, pagesList, pageMongo)
+							}
+						}
 					}
 					case None => Redirect(routes.Application.indexWithNoSiteFound)
 				}
@@ -45,35 +54,14 @@ object Sites extends Controller with MongoController {
 		}
 	}
 
-	def getPageFromSiteIdAndUri(siteId: Long, uri: String = "") = Action { implicit request =>
-		Logger.debug("[Sites.getPageFromSiteIdAndUri]: siteId: '"+siteId+"', uri: '"+uri+"'")
-		try {
-			Async {
-				val query = Json.obj("page.uri" -> uri, "page.siteId" -> siteId)
-				val futurePage = collection.find(query).one[PageMongoWithId]
-				futurePage.map {
-					case Some(pageMongo) => goToPage(Site.getSiteById(siteId).get, uri, getNavigationBySiteId(siteId), pageMongo)
-					case None => Redirect(routes.Application.indexWithNoSiteFound)
-				}
-			}
-		}
-		catch {
-			case nse: NoSuchElementException => {
-				Logger.error(nse.getMessage())
-				nse.printStackTrace()
-				Redirect(routes.Application.indexWithNoSiteFound)
-			}
-		}
-	}
-
-	def goToPage(site: Site, uri: String, navigation: List[Page], pageMongo: PageMongoWithId) = {
+	def goToPage(site: Site, navigation: List[PageMongoWithId], pageMongo: PageMongoWithId) = {
 		Ok(views.html.sites.index(site.siteName, navigation, pageMongo))
 	}
 
-	def getNavigationBySiteId(siteId: Long) = {
-		Page.getAllBySiteId(siteId)
+	def getNavigationBySiteId(siteId: Long): Future[List[PageMongoWithId]] = {
+		collection.find(Json.obj("page.siteId" -> siteId)).cursor[PageMongoWithId].toList
 	}
-/*
+	/*
 	def getAllPageTypesAsJson = Action {
 		Ok(Json.toJson(PageType.getAll map { pageType =>
 			Json.obj("typeName" -> pageType.typeName, "pageTypeId" -> pageType.pageTypeId)
