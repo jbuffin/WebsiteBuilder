@@ -60,31 +60,5 @@ object Sites extends Controller with MongoController {
 	def getNavigationBySiteId(siteId: Long): Future[List[PageMongoWithId]] = {
 		collection.find(Json.obj("page.siteId" -> siteId)).cursor[PageMongoWithId].toList
 	}
-	/*
-	def getAllPageTypesAsJson = Action {
-		Ok(Json.toJson(PageType.getAll map { pageType =>
-			Json.obj("typeName" -> pageType.typeName, "pageTypeId" -> pageType.pageTypeId)
-		}))
-	}
 
-
-
-	def getAllPagesBySiteAsJson(siteId: Long) = Action {
-		Ok(Json.toJson(Page.getAllBySiteId(siteId) map { page =>
-			Json.obj("id" -> page.pageId, "uri" -> page.uri, "title" -> page.title, "pageType" -> page.pageType, "parent" -> page.parent, "siteId" -> page.siteId)
-		}))
-	}
-
-	def newPageFromJson = Action(parse.json) { request =>
-		request.body.validate[Page].map { page =>
-			Ok(Page.create(page).toString)
-		}.recoverTotal {
-			e => BadRequest("Detected error: "+JsError.toFlatJson(e)+"\n"+request.body)
-		}
-	}
-
-	def addRowsToPage(pageId: Long, numRows: Long) = Action {
-		Ok(Json.toJson(Json.obj("rows" -> Page.addRowsByPageId(pageId, numRows))))
-	}
-*/
 }

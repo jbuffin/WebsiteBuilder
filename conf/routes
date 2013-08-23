@@ -10,20 +10,6 @@ GET    /admin-static                         controllers.Assets.at(path="/public
 
 # Map the javascript routes
 GET    /javascriptroutes                     controllers.Application.javascriptRoutes
-#GET    /ajax/sites                            controllers.Sites.getAllSitesAsJson
-#POST   /ajax/sites                        controllers.Sites.newSiteFromJson
-
-#GET    /ajax/pagetypes                        controllers.Sites.getAllPageTypesAsJson
-#GET    /ajax/sites/:siteId/pages              controllers.Sites.getAllPagesBySiteAsJson(siteId: Long)
-
-#POST   /ajax/pages                            controllers.Sites.newPageFromJson
-#POST   /ajax/pages/:pageId/addrows/:numRows   controllers.Sites.addRowsToPage(pageId: Long, numRows: Long)
-#POST   /ajax/pages/:pageId/widgets            controllers.Widgets.createTextWidgetsByPageIdFromJSON(pageId: Long)
-
-#POST   /ajax/widgets/text/update              controllers.Widgets.updateTextWidgetById
-
-#GET    /ajax/pages/:pageId/widgets            controllers.Widgets.getWidgetsByPageIdAsJson(pageId: Long)
-#GET    /ajax/widgets/:widgetId/text           controllers.Widgets.getTextWidgetHtmlByIdAsJSON(widgetId: Long)
 
 GET    /api/sites                            controllers.SitesApi.getAllSites
 POST   /api/sites                            controllers.SitesApi.newSite
