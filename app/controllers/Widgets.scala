@@ -7,7 +7,6 @@ import play.api.templates.Html
 import models.widgets.WidgetTypeEnum
 import models.widgets.WidgetTypeEnum._
 import models.widgets.Carousel
-import models.pages.Page
 import play.api.libs.json.Json
 import models.widgets.WidgetType
 import play.api.libs.json.JsError
@@ -16,12 +15,12 @@ import play.api.libs.functional.syntax._
 
 object Widgets extends Controller {
 
-	def getWidgetList(pageId: Long): List[Long] = {
+/*	def getWidgetList(pageId: Long): List[Long] = {
 		val numRows = Page.getNumRowsByPageId(pageId)
 		Page.getWidgetsByPageId(pageId)
-	}
+	}*/
 
-	def getWidgetsByPageIdAsJson(pageId: Long) = Action {
+/*	def getWidgetsByPageIdAsJson(pageId: Long) = Action {
 		Ok(Json.toJson(getWidgetList(pageId) map { widgetId =>
 			WidgetTypeEnum.withName(WidgetType.getWidgetTypeById(widgetId).get.widgetType) match {
 				case Text => models.widgets.Text.getByWidgetId(widgetId) map { widget =>
@@ -32,7 +31,7 @@ object Widgets extends Controller {
 				}
 			}
 		}))
-	}
+	}*/
 
 /*	def getTheWidget(widgetId: Long): Html = {
 		try {
@@ -73,7 +72,7 @@ object Widgets extends Controller {
 		(__ \ "text").read[String]
 	) tupled
 
-	def createTextWidgetsByPageIdFromJSON(pageId: Long) = Action(parse.json) { request =>
+/*	def createTextWidgetsByPageIdFromJSON(pageId: Long) = Action(parse.json) { request =>
 		request.body.validate[List[(Long, String)]].map { textWidgets =>
 			val idList = List.tabulate(textWidgets.length)(textWidgets.map { textWidget =>
 				val widgetId = models.widgets.Widget.create(
@@ -91,6 +90,6 @@ object Widgets extends Controller {
 		}.recoverTotal(
 			e => BadRequest("Detected error: "+JsError.toFlatJson(e)+"\n"+request.body)
 		)
-	}
+	}*/
 
 }

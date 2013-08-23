@@ -2,7 +2,6 @@ package controllers
 
 import models.Site
 import models.pages._
-import models.pages.PageTypeEnum._
 import play.api.Logger
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
