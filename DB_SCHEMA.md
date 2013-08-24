@@ -1,3 +1,5 @@
+
+```javascript
 Site(postgresql) {
 	id: Long,
 	hostName: String
@@ -23,3 +25,4 @@ Page(mongodb) {
 		]
 	}
 }
+```
