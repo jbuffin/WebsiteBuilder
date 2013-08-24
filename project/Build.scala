@@ -4,8 +4,8 @@ import play.Project._
 
 object ApplicationBuild extends Build {
 
-	val appName = "ChurchSite"
-	val appVersion = "0.0.6"
+	val appName = "WebsiteBuilder"
+	val appVersion = "0.0.8"
 
 	val appDependencies = Seq(
 		jdbc,
