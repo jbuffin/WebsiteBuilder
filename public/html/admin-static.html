@@ -78,9 +78,7 @@
 							<div data-bind="if:currentSite">
 								Info about <span data-bind="text:currentSite().siteName"></span>:&nbsp;<a
 									target="_blank"
-									data-bind="attr:{href: 'http://'+currentSite().hostName+':9000'},text: currentSite().hostName"></a>&nbsp;(<a
-									target="_blank"
-									data-bind="attr:{href: '/getsitebyid/'+currentSite().id},text: '/getsitebyid/'+currentSite().id"></a>)
+									data-bind="attr:{href: 'http://'+currentSite().hostName+':9000'},text: currentSite().hostName"></a>
 							</div>
 							<hr>
 						</div>
@@ -91,8 +89,8 @@
 								<h1>Pages</h1>
 								&nbsp;<a href="#" data-bind="click: showNewPageForm">New</a>
 							</div>
-							<div class="container" id="newPageForm" data-bind="visible: pageFormVisible">
-								<div class="row">
+							<div class="container">
+								<div id="newPageForm" data-bind="visible: pageFormVisible">
 									<form class="form-horizontal" data-bind="submit: createNewPage">
 										<div class="control-group">
 											<label class="control-label" for="pageUri">Page URI: </label>
@@ -128,7 +126,7 @@
 										</div>
 									</form>
 								</div>
-								<div class="row">
+								<div>
 									<select
 										data-bind="options: pageList,
 													optionsText: function(pageObject) {
@@ -137,15 +135,13 @@
 													value: currentPage,
 													optionsCaption: 'Choose a page...'">
 									</select>
-								</div>
 								<div data-bind="if:currentPage">
 									Info about <span data-bind="text:currentPage().page.title"></span>:&nbsp;<a
 										target="_blank"
-										data-bind="attr:{href: 'http://'+currentSite().hostName+':9000/'+currentPage().page.uri},text: currentSite().hostName+'/'+currentPage().page.uri"></a>&nbsp;(<a
-										target="_blank"
-										data-bind="attr:{href: '/getsitebyid/'+currentSite().id+function(){return currentPage().page.uri==='' ? '' : '/';}()+currentPage().page.uri},text: '/getsitebyid/'+currentSite().id+function(){return currentPage().page.uri==='' ? '' : '/';}()+currentPage().page.uri"></a>)
+										data-bind="attr:{href: 'http://'+currentSite().hostName+':9000/'+currentPage().page.uri},text: currentSite().hostName+'/'+currentPage().page.uri"></a>
 								</div>
 								<hr>
+								</div>
 							</div>
 						</div>
 					</div>

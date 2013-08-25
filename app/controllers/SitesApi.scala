@@ -14,6 +14,7 @@ import play.api.data.Form
 import models._
 import models.pages.JsonFormats._
 import models.pages.PageMongo
+import models.pages.PageMongoWithId
 
 object SitesApi extends Controller with MongoController {
 

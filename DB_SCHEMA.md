@@ -1,28 +1,29 @@
+##Site schema (postgresql)
 
 ```javascript
-Site(postgresql) {
-	id: Long,
-	hostName: String
-}
+id: bigserial,
+hostName: varchar(255)
+```
 
-Page(mongodb) {
-	_id: ObjectId()
-	page: {
-		siteId: Number,
-		uri: String,
-		title: String,
-		parent: ID
-		rows: [
-			{
-				order: Number,
-				columns: [
-					{
-						order: Number,
-						columnHtml: String
-					}
-				]
-			}
-		]
-	}
+##Page schema(mongodb)
+
+```javascript
+_id: ObjectId()
+page: {
+	siteId: Number,
+	uri: String,
+	title: String,
+	parent: ID
+	rows: [
+		{
+			order: Number,
+			columns: [
+				{
+					order: Number,
+					columnHtml: String
+				}
+			]
+		}
+	]
 }
 ```

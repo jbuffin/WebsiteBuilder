@@ -1,138 +1,130 @@
 function PageEditorViewModel() {
 	var self = this;
 
-	self.widgetTypes = ko.observableArray([ {
-		widgetType : 'textWidget',
-		menuText : 'Text Widget'
-	} ]);
-	self.numRows = ko.observable(0);
 	self.editing = ko.observable(false);
-	self.pageId = -1;
+	self.edited = ko.observable(false);
 
 	self.toggleEditing = function() {
 		self.editing(!self.editing());
 	};
 
+	self.bindTextBoxes = function() {
+		$(function() {
+			$('.textWidgetTextBox').bind("propertychange keyup input paste",
+					function() {
+						self.edited(true);
+					});
+		});
+	};
+
 	self.savePage = function() {
 		self.toggleEditing();
-		if (thingsToAdd.rows.length) {
-			jsRoutes.controllers.Sites.addRowsToPage(self.pageId,
-					thingsToAdd.rows.length).ajax(
-					{
-						success : function(data) {
-							console.log(JSON.stringify(data));
-							thingsToAdd.rows = [];
-							if (thingsToAdd.newTextWidgets.length) {
-								var newWidgets = [];
-								thingsToAdd.newTextWidgets.forEach(function(
-										widgetLoc) {
-									newWidgets.push({
-										'rowNum' : 1,
-										'text' : 'test'
-									});
-								});
-								jsRoutes.controllers.Widgets
-										.createTextWidgetsByPageIdFromJSON(
-												self.pageId).ajax({
-											data : JSON.stringify(newWidgets),
-											contentType : 'text/json',
-											success : function(data) {
-												console.log(data);
-											}
-										});
-							}
-						}
+		if (self.edited()) {
+			setTimeout(function() {
+				self.pageSchema.page.rows = [];
+				$('div[id^="row"]').each(function(rowsIndex, element) {
+					self.pageSchema.page.rows.push({
+						order : parseInt(rowsIndex),
+						columns : []
 					});
-		}
-		if (thingsToAdd.textWidgets.length) {
-			var textWidgetsToSend = [];
-			var htmlToSave = '';
-			for ( var i = 0; i < thingsToAdd.textWidgets.length; i++) {
-				htmlToSave = $('#' + thingsToAdd.textWidgets[i]).children(
-						':first').html();
-				textWidgetsToSend.push({
-					'textWidgetId' : parseInt(thingsToAdd.textWidgets[i]),
-					'savedHtml' : htmlToSave,
-					'widgetId' : -1
+					$(element).find('div[id^="column"]').each(function(columnIndex, element) {
+						self.pageSchema.page.rows[rowsIndex].columns.push({
+							order : parseInt(columnIndex),
+							columnHtml : $(element).find('.textWidget').find('.textWidgetTextBox').html()
+						});
+					});
 				});
-			}
-			jsRoutes.controllers.Widgets.updateTextWidgetById().ajax({
-				data : JSON.stringify(textWidgetsToSend),
-				contentType : 'text/json',
-				error : function(e) {
-					console.error(JSON.stringify(e));
-				},
-				success : function(data) {
-					console.log(JSON.stringify(data));
-					thingsToAdd.textWidgets = [];
-				}
-			});
+				jsRoutes.controllers.SitesApi.updatePage(self.siteId, self.pageId).ajax({
+					data : JSON.stringify(self.pageSchema.page),
+					contentType : 'text/json',
+					success : function() {
+						jsRoutes.controllers.SitesApi.getPageById(self.siteId, self.pageId)
+						.ajax({
+							success : function(thePage) {
+								self.pageSchema = thePage;
+								self.edited(false);
+							}
+						});
+					},
+					error : function(e) {
+						console.error(JSON.stringify(e));
+					}
+				});
+			}, 0);
 		}
 	};
 
 	self.discardChanges = function() {
-		discardRows();
-		self.numRows(countRows());
-		discardTextWidgetChanges();
+		if (self.edited()) {
+			var insertPoint = $('#insertPoint');
+			insertPoint.html('');
+			self.pageSchema.page.rows.forEach(function(row, rowIndex) {
+				self.addRow();
+				row.columns.forEach(function(column, columnIndex) {
+					self.insertWidget(rowIndex);
+					$('#column'+columnIndex).find('.textWidget').find('.textWidgetTextBox').html(column.columnHtml);
+				});
+			});
+		}
+		self.edited(false);
 		self.toggleEditing();
 	}
 
 	self.insertHeader = function() {
 		pasteHtmlAtCaret('<h4 id="newHeader">Header Text</h4>');
-		var widgetNode = $('#newHeader').parents('.textWidget:first');
-		$('#newHeader').removeAttr('id');
-		var textWidgetId = parseInt(widgetNode.attr('id'));
-		if (thingsToAdd.textWidgets.indexOf(textWidgetId) === -1) {
-			thingsToAdd.textWidgets.push(textWidgetId);
-		}
+		self.edited(true);
 	};
 
-	self.insertWidget = function(rowNum, widgetType) {
+	self.insertWidget = function(rowNum) {
 		var loc = 'row' + rowNum;
 		var cols = $('#' + loc).find('div[class^="col-lg-"]');
-		var colCount = 0;
 		cols.each(function() {
-			colCount++;
-		});
-		cols.each(function() {
-			$(this).removeClass('col-lg-' + 12 / colCount).addClass(
-					'col-lg-' + Math.floor(12 / (colCount + 1)));
+			$(this).removeClass('col-lg-' + 12 / cols.length).addClass(
+					'col-lg-' + Math.floor(12 / (cols.length + 1)));
 		});
 		insertHtmlAtLoc(loc, '<div id="newTextWidget" class="col-lg-'
-				+ Math.floor(12 / (colCount + 1)) + '">'
-				+ widgetHtml[widgetType.widgetType] + '</div>');
+				+ Math.floor(12 / (cols.length + 1)) + '">'
+				+ widgetHtml.textWidget + '</div>');
 		ko.applyBindings(self, document.getElementById('newTextWidget'));
-		$('#newTextWidget').removeAttr('id');
-		thingsToAdd.newTextWidgets.push({
-			row : rowNum,
-			col : colCount + 1
-		});
+		$('#newTextWidget').attr('id', 'column'+cols.length);
+		self.bindTextBoxes();
+		self.edited(true);
 	};
 
 	self.addRow = function() {
-		var newRowCount = self.numRows() + 1;
+		var rows = $('div[id^="row"]');
 		insertHtmlAtLoc(
 				'insertPoint',
 				'<div class="container" id="newRow">'
 						+ '<div class="row" id="row'
-						+ newRowCount
+						+ rows.length
 						+ '"></div>'
 						+ '<div data-bind="if:editing"><div class="row"><div class="col-lg-12"><div class="btn-group pull-right">'
 						+ '<button type="button" class="btn btn-default btn-mini dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-edit"></span></button>'
-						+ '<ul class="dropdown-menu" data-bind="foreach: widgetTypes">'
-						+ '<li><a tabindex="-1" href="#" data-bind="text: menuText,click:function(data, event){$parent.insertWidget('
-						+ newRowCount + ',data)}">Text Widget</a></li>'
+						+ '<ul class="dropdown-menu">'
+						+ '<li><a tabindex="-1" href="#" data-bind="text:\'Insert column\',click:function(){insertWidget('
+						+ rows.length
+						+ ')}"></a></li>'
+						+ '<li><a tabindex="-1" href="#" data-bind="click:insertHeader">Header (h4)</a></li>'
 						+ '</ul></div></div></div></div>' + '</div>');
 		ko.applyBindings(self, document.getElementById('newRow'));
 		$('#newRow').removeAttr('id');
-		self.numRows(newRowCount);
-		thingsToAdd.rows.push(newRowCount);
+		
+		self.edited(true);
 	};
 
 	self.init = function() {
-		self.pageId = parseInt($('div[id^="pageId"]').attr("id").substr(7));
-		self.numRows(countRows());
-		bindTextWidgetTextBoxes();
+		self.pageId = $('div[id^="pageId"]').attr("id").substr(7);
+		self.siteId = $('div[id^="siteId"]').attr("id").substr(7);
+		$(function() {
+			jsRoutes.controllers.SitesApi.getPageById(self.siteId, self.pageId)
+					.ajax({
+						success : function(thePage) {
+							self.pageSchema = thePage;
+						}
+					});
+		});
+		self.bindTextBoxes();
 	};
 }
 var pevm = new PageEditorViewModel();
@@ -143,61 +135,13 @@ $(function() {
 	}
 });
 
-function bindTextWidgetTextBoxes() {
-	$(function() {
-		$('.textWidgetTextBox')
-				.bind(
-						"propertychange keyup input paste",
-						function(e) {
-							var textWidgetId = parseInt(e.currentTarget.parentNode.attributes[0].value);
-							if (thingsToAdd.textWidgets.indexOf(textWidgetId) === -1) {
-								thingsToAdd.textWidgets.push(textWidgetId);
-							}
-						});
-	});
-}
-
 var widgetHtml = {
-	textWidget : '<div class="textWidget newTextWidget"><div class="textWidgetTextBox" data-bind="attr:{\'contenteditable\':editing()}">Type your text here</div></div>'
+	textWidget : '<div class="textWidget"><div class="textWidgetTextBox" data-bind="attr:{\'contenteditable\':editing()}">Type your text here</div></div>'
 };
 
 function insertHtmlAtLoc(loc, html) {
 	$('#' + loc).append(html);
 }
-
-function countRows() {
-	var count = 0;
-	$('div[id^="row"]').each(function() {
-		count++;
-	});
-	return count;
-}
-
-function discardRows() {
-	thingsToAdd.rows.forEach(function(row) {
-		$('#row' + row).parent().remove();
-	});
-	thingsToAdd.rows = [];
-}
-function discardTextWidgetChanges() {
-	thingsToAdd.textWidgets.forEach(function(widgetId) {
-		jsRoutes.controllers.Widgets.getTextWidgetHtmlByIdAsJSON(widgetId)
-				.ajax(
-						{
-							success : function(textWidget) {
-								$('#' + widgetId).children(':first').html(
-										textWidget.text)
-							}
-						});
-	});
-	thingsToAdd.textWidgets = [];
-}
-
-var thingsToAdd = {
-	rows : [],
-	textWidgets : [],
-	newTextWidgets : []
-};
 
 function pasteHtmlAtCaret(html) {
 	var sel, range;
