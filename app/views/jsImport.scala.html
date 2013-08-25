@@ -1,9 +1,11 @@
-@()
+@(isAdmin: Boolean)
 <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.1.js")"></script>
 <script type="text/javascript" src="@routes.Assets.at("bootstrap/js/bootstrap-3.min.js")"></script>
 <script type="text/javascript" src="@routes.Assets.at("javascripts/knockout/knockout-2.2.1.js")"></script>
+@if(isAdmin){
 <script type="text/javascript" src="@routes.Assets.at("javascripts/admin/page-editor.js")"></script>
 <script type="text/javascript" src="@routes.Application.javascriptRoutes"></script>
+}
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>

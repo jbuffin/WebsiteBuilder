@@ -4,9 +4,11 @@
 
 # Home page
 GET    /                                     controllers.Sites.getPageFromUri(uri = "")
+GET    /login                                controllers.LoginController.login
+POST   /login                                controllers.LoginController.authenticate
+GET    /logout                               controllers.LoginController.logout
 GET    /notfound                             controllers.Application.indexWithNoSiteFound
 GET    /admin-home                           controllers.Application.adminHome
-GET    /admin-static                         controllers.Assets.at(path="/public", file="html/admin-static.html")
 
 # Map the javascript routes
 GET    /javascriptroutes                     controllers.Application.javascriptRoutes

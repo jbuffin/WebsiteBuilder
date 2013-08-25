@@ -3,11 +3,13 @@ import play.api.GlobalSettings
 import play.api.Logger
 import play.api.mvc.RequestHeader
 import play.api.mvc.Results.BadRequest
+import controllers.LoginController
 
 object Global extends GlobalSettings {
 
 	override def onStart(app: Application) {
 		Logger.info("ChurchSite has started")
+		LoginController.firstStart
 	}
 
 	override def onStop(app: Application) {

@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String, isAdmin: Boolean = false)(content: Html)
 <!DOCTYPE html>
 <html>
 	<head>
@@ -10,5 +10,5 @@
 	<body>
 		@content
 	</body>
-	@jsImport()
+	@jsImport(isAdmin)
 </html>

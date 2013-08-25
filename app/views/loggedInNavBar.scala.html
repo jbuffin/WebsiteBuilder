@@ -21,19 +21,8 @@
 				<li data-bind="visible:editing">
 					<a href="#" data-bind="click:addRow"><span class="glyphicon glyphicon-plus"></span> Insert Row</a>
 				</li>
-				<!-- <li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Insert Widget <b class="caret"></b></a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" data-bind="foreach: widgetTypes">
-						<li><a tabindex="-1" href="#" data-bind="text: menuText,click:$parent.insertWidget"></a></li>
-					</ul>
-				</li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Insert <b class="caret"></b></a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-						<li><a tabindex="-1" href="#" data-bind="click:insertHeader">Header (h4)</a></li>
-					</ul>
-				</li> -->
 			</ul>
+			<p class="navbar-text pull-right"><a href="@routes.LoginController.logout" class="navbar-link">Log Out</a></p>
 		</div>
 	</div>
 </div>

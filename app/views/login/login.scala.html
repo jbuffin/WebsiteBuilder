@@ -1,0 +1,25 @@
+@(loginForm: Form[(String,String)])
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Login</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		@cssImports()
+		<link rel="stylesheet" href="@routes.Assets.at("stylesheets/loginpage.css")">
+		<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+	</head>
+	<body>
+		<div class="container">
+			@helper.form(action = routes.LoginController.authenticate, 'class -> "form-signin"){
+				<h2 class="form-signin-heading">Please sign in</h2>
+				<input type="text" name="username" class="form-control" placeholder="Username" autofocus>
+				<input type="password" name="password" class="form-control" placeholder="Password">
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+				@loginForm.errors.map { error =>
+					@error.message
+				}
+			}
+		</div>
+	</body>
+	@jsImport(false)
+</html>

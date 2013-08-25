@@ -1,90 +1,152 @@
 @(siteName: String)
-@main("Admin Home") {
-@loggedInNavBar(siteName)
-<div class="container roomForHeader">
-	<div class="container-fluid">
-		<div class="row-fluid">
-			<div class="span2">
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Home</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap-3.css">
+<link rel="stylesheet" href="/assets/stylesheets/main.css">
+<link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".nav-collapse">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Website Builder</a>
+			<div class="nav-collapse collapse">
+				<p class="navbar-text pull-right">
+					<a href="@routes.LoginController.logout" class="navbar-link">Log Out</a>
+				</p>
+				<ul class="nav navbar-nav">
+					<li><a href="/" target="_blank">Home</a></li>
+					<li class="active"><a href="/admin-home">Admin</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container roomForHeader">
+		<div class="row">
+			<div class="col-lg-2">
 				<div class="well sidebar-nav">
 					<ul class="nav nav-list">
 						<li class="nav-header"></li>
 						<li><a href="#sites">Sites</a></li>
 						<li><a href="#pages">Pages</a></li>
-						<li><a href="#page-widgets">Page widgets</a></li>
 					</ul>
 				</div>
 			</div>
-			<div class="span10">
-				<div class="row-fluid" id="sites">
-					<div class="span12">
-						<div class="page-header">
-							<h1>Sites</h1>&nbsp;<a href="#" data-bind="click: showNewSiteForm">New</a>
-						</div>
-						<div id="newSiteForm" data-bind="visible: siteFormVisible">
-							<form class="form-horizontal" data-bind="submit: createNewSite">
-								<div class="control-group">
-									<label class="control-label" for="siteNameInput">Site name: </label>
-									<div class="controls">
-										<input type="text" id="siteNameInput" placeholder="site name"/>
+			<div class="col-lg-10">
+				<div class="container">
+					<div class="row" id="sites">
+						<div class="col-lg-12">
+							<div class="page-header">
+								<h1>Sites</h1>
+								&nbsp;<a href="#" data-bind="click: showNewSiteForm">New</a>
+							</div>
+							<div id="newSiteForm" data-bind="visible: siteFormVisible">
+								<form class="form-horizontal" data-bind="submit: createNewSite">
+									<div class="control-group">
+										<label class="control-label" for="siteNameInput">Site name: </label>
+										<div class="controls">
+											<input type="text" id="siteNameInput" placeholder="site name" required />
+										</div>
 									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label" for="siteHostName">Domain name: </label>
-									<div class="controls">
-										<input type="text" id="siteHostName" placeholder="domain name"/>
+									<div class="control-group">
+										<label class="control-label" for="siteHostName">Domain name: </label>
+										<div class="controls">
+											<input type="text" id="siteHostName" placeholder="domain name" required />
+										</div>
 									</div>
-								</div>
-								<div class="control-group">
-									<div class="controls">
-										<button type="submit" class="btn">Create</button>
+									<div class="control-group">
+										<div class="controls">
+											<button type="submit" class="btn">Create site</button>
+										</div>
 									</div>
+
+								</form>
+							</div>
+							<div>
+								<select
+									data-bind="options: siteList,
+													optionsText: 'siteName',
+													value: currentSite,
+													optionsCaption: 'Choose a site...'">
+								</select>
+							</div>
+							<div data-bind="if:currentSite">
+								Info about <span data-bind="text:currentSite().siteName"></span>:&nbsp;<a
+									target="_blank"
+									data-bind="attr:{href: 'http://'+currentSite().hostName+':9000'},text: currentSite().hostName"></a>
+							</div>
+							<hr>
+						</div>
+					</div>
+					<div class="row" id="pages">
+						<div class="col-lg-12">
+							<div class="page-header">
+								<h1>Pages</h1>
+								&nbsp;<a href="#" data-bind="click: showNewPageForm">New</a>
+							</div>
+							<div class="container">
+								<div id="newPageForm" data-bind="visible: pageFormVisible">
+									<form class="form-horizontal" data-bind="submit: createNewPage">
+										<div class="control-group">
+											<label class="control-label" for="pageUri">Page URI: </label>
+											<div class="controls">
+												<input type="text" id="pageUri" placeholder="uri" />
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label" for="pageTitle">Page title: </label>
+											<div class="controls">
+												<input type="text" id="pageTitle" placeholder="Page title" required />
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label" for="newPageParent">Parent page: </label>
+											<div class="controls">
+												<select id="newPageParent"
+													data-bind="options: pageList,
+													optionsText: function(pageObject) {
+														return pageObject.page.title+': /'+pageObject.page.uri;
+													},
+													optionsValue: function(idObject) {
+														return idObject.$oid;
+													},
+													optionsCaption: 'Choose a parent page...'">
+												</select>
+											</div>
+										</div>
+										<div class="control-group">
+											<div class="controls">
+												<button type="submit" class="btn">Create page</button>
+											</div>
+										</div>
+									</form>
 								</div>
-								
-							</form>
+								<div>
+									<select
+										data-bind="options: pageList,
+													optionsText: function(pageObject) {
+														return pageObject.page.title+': /'+pageObject.page.uri;
+													},
+													value: currentPage,
+													optionsCaption: 'Choose a page...'">
+									</select>
+								<div data-bind="if:currentPage">
+									Info about <span data-bind="text:currentPage().page.title"></span>:&nbsp;<a
+										target="_blank"
+										data-bind="attr:{href: 'http://'+currentSite().hostName+':9000/'+currentPage().page.uri},text: currentSite().hostName+'/'+currentPage().page.uri"></a>
+								</div>
+								<hr>
+								</div>
+							</div>
 						</div>
-						<div>
-							<select data-bind="options: siteList,
-												optionsText: 'siteName',
-												value: currentSite,
-												optionsCaption: 'Choose a site...'">
-							</select>
-						</div>
-						<div data-bind="if:currentSite">Info about <span data-bind="text:currentSite().siteName"></span></div>
-						<hr>
 					</div>
 				</div>
-				<section class="row-fluid" id="pages">
-					<div class="span12">
-						<div class="page-header">
-							<h1>Pages</h1>&nbsp;<a href="#">New</a>
-						</div>
-						<p>
-							<select data-bind="options: pageList,
-												optionsText: 'title',
-												value: currentPage,
-												optionsCaption: 'Choose a page...'">
-							</select>
-						</p>
-						<p data-bind="if:currentPage">Info about <span data-bind="text:currentPage().title"></span></p>
-						<hr>
-					</div>
-				</section>
-				<section class="row-fluid" id="page-widgets">
-					<div class="span12">
-						<div class="page-header">
-							<h1>Page widgets</h1>&nbsp;<a href="#">New</a>
-						</div>
-						<p>
-							<select data-bind="options: widgetList,
-												optionsText: 'id',
-												value: currentWidget,
-												optionsCaption: 'Choose a widget...'">
-							</select>
-						</p>
-						<p data-bind="if:currentWidget"><span data-bind="text:currentWidget().id"></span></p>
-						<hr>
-					</div>
-				</section>
 			</div>
 		</div>
 		<hr>
@@ -92,7 +154,14 @@
 			<p></p>
 		</footer>
 	</div>
-</div>
-}
-<script type="text/javascript" src="@routes.Assets.at("javascripts/knockout/knockout-2.2.1.js")"></script>
-<script type="text/javascript" src="@routes.Assets.at("javascripts/admin/admin.js")"></script>
+</body>
+<script type="text/javascript" src="/assets/javascripts/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="/assets/javascripts/knockout/knockout-2.2.1.js"></script>
+<script type="text/javascript" src="/assets/bootstrap/js/bootstrap-3.min.js"></script>
+<script type="text/javascript" src="/javascriptroutes"></script>
+<script type="text/javascript" src="/assets/javascripts/admin/admin.js"></script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</html>

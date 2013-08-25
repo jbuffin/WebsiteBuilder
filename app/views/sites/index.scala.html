@@ -1,9 +1,9 @@
-@(siteName: String, siteNav: List[models.pages.PageMongoWithId], pageMongo: models.pages.PageMongoWithId, isAdmin: Boolean = true)
+@(siteName: String, siteNav: List[models.pages.PageMongoWithId], pageMongo: models.pages.PageMongoWithId, isAdmin: Boolean = false)
 @import views.html.sites.widgets._
 @import models.pages._
 @import models.widgets._
 @import controllers._
-@main(pageMongo.page.title){
+@main(pageMongo.page.title, isAdmin){
 @if(isAdmin) {
 	@views.html.loggedInNavBar(siteName)
 <div id="siteId-@(pageMongo.page.siteId)"></div>
@@ -21,7 +21,7 @@
 					<div class="row" id="row@(index)">
 						@row.columns.zipWithIndex.map { case(column, index) =>
 						<div class="col-lg-@(12/row.columns.length)" id="column@(index)">
-							@views.html.sites.widgets.textWidget(column)
+							@views.html.sites.widgets.textWidget(column, isAdmin)
 						</div>
 						}
 					</div>	
