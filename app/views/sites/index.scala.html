@@ -16,11 +16,11 @@
 		</div>
 		<div class="col-lg-10">
 			<div class="container" @if(isAdmin){id="insertPoint"}>
-				@pageMongo.page.rows.zipWithIndex.map { case(row, index) =>
+				@pageMongo.page.rows.zipWithIndex.map { case(row, rowIndex) =>
 				<div class="container">
-					<div class="row" id="row@(index)">
-						@row.columns.zipWithIndex.map { case(column, index) =>
-						<div class="col-lg-@(12/row.columns.length)" id="column@(index)">
+					<div class="row" id="row@(rowIndex)">
+						@row.columns.zipWithIndex.map { case(column, columnIndex) =>
+						<div class="col-lg-@(12/row.columns.length)" id="column@(columnIndex)row@(rowIndex)">
 							@views.html.sites.widgets.textWidget(column, isAdmin)
 						</div>
 						}
@@ -32,7 +32,7 @@
 								<div class="btn-group pull-right">
 									<button type="button" class="btn btn-default btn-mini dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-edit"></span></button>
 									<ul class="dropdown-menu">
-										<li><a tabindex="-1" href="#" data-bind="text: 'Insert column',click:function(){insertWidget(@(index))}"></a></li>
+										<li><a tabindex="-1" href="#" data-bind="text: 'Insert column',click:function(){insertWidget(@(rowIndex))}"></a></li>
 										<li><a tabindex="-1" href="#" data-bind="click:insertHeader">Header (h4)</a></li>
 									</ul>
 								</div>

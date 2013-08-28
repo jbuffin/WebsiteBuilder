@@ -22,15 +22,16 @@ function PageEditorViewModel() {
 		if (self.edited()) {
 			setTimeout(function() {
 				self.pageSchema.page.rows = [];
-				$('div[id^="row"]').each(function(rowsIndex, element) {
+				$('div[id^="row"]').each(function(rowsIndex, rowElement) {
 					self.pageSchema.page.rows.push({
 						order : parseInt(rowsIndex),
 						columns : []
 					});
-					$(element).find('div[id^="column"]').each(function(columnIndex, element) {
+					
+					$(rowElement).find('div[id^="column"]').each(function(columnIndex, columnElement) {
 						self.pageSchema.page.rows[rowsIndex].columns.push({
 							order : parseInt(columnIndex),
-							columnHtml : $(element).find('.textWidget').find('.textWidgetTextBox').html()
+							columnHtml : $(columnElement).find('.textWidget').find('.textWidgetTextBox').html()
 						});
 					});
 				});
@@ -58,13 +59,16 @@ function PageEditorViewModel() {
 		if (self.edited()) {
 			var insertPoint = $('#insertPoint');
 			insertPoint.html('');
-			self.pageSchema.page.rows.forEach(function(row, rowIndex) {
+			for(var rowIndex = 0; rowIndex < self.pageSchema.page.rows.length; ++rowIndex) {
+				var row = self.pageSchema.page.rows[rowIndex];
 				self.addRow();
-				row.columns.forEach(function(column, columnIndex) {
+				for(var columnIndex = 0; columnIndex < row.columns.length; ++columnIndex) {
+					var column = row.columns[columnIndex];
 					self.insertWidget(rowIndex);
-					$('#column'+columnIndex).find('.textWidget').find('.textWidgetTextBox').html(column.columnHtml);
-				});
-			});
+					var columnElem = $('#column'+columnIndex+'row'+rowIndex).find('.textWidget').find('.textWidgetTextBox').html(column.columnHtml);
+					columnElem.html(column.columnHtml);
+				}
+			}
 		}
 		self.edited(false);
 		self.toggleEditing();
@@ -86,7 +90,7 @@ function PageEditorViewModel() {
 				+ Math.floor(12 / (cols.length + 1)) + '">'
 				+ widgetHtml.textWidget + '</div>');
 		ko.applyBindings(self, document.getElementById('newTextWidget'));
-		$('#newTextWidget').attr('id', 'column'+cols.length);
+		$('#newTextWidget').attr('id', 'column'+cols.length+'row'+rowNum);
 		self.bindTextBoxes();
 		self.edited(true);
 	};
@@ -109,7 +113,6 @@ function PageEditorViewModel() {
 						+ '</ul></div></div></div></div>' + '</div>');
 		ko.applyBindings(self, document.getElementById('newRow'));
 		$('#newRow').removeAttr('id');
-		
 		self.edited(true);
 	};
 
