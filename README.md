@@ -13,33 +13,33 @@ will be easily downloaded and installed on Heroku or other PaaS hosting solution
 ###The router
 At the core of the WebsiteBuilder is the routing engine. The router takes a request and determines what site you are 
 trying to reach. It searches its database to find that site and, if found, finds the page from the uri that you are 
-trying to reach. If the page exists, the router determines the page type and assembles the page layout and passes everything off
+trying to reach. If the page exists, the router assembles the page layout and passes everything off
 to the page view, which builds the page up and presents it to the user.
 ###Editing pages
 Pages are edited directly on the page. The site admin navigates to the page while logged in and can directly edit everything 
-on the page. I use `contenteditable` sections to allow the text to be edited and a bar at the top calling Javascript
-to add other elements to the page. For now, the app is always in edit mode and the admin bar is always across the top. When the editer is done being 
-programmed, the admin log in is the next item in the roadmap and then, the page editing will only be available to a logged-in
-user.
+on the page. I use `contenteditable` sections to allow the text to be edited and a bar at the top to add other elements to the page. The default username/password for the admin user is admin/admin and the default account is set up on first-run. Users can login by navigating to /login.
 
 ##How to get started
 ###Dependencies
 You will need:
-- postgresql database
+- postgresql database (This will be phased out)
+- MongoDB
 - The Play Framework 2.10
 - jdk6 or later
 
 ###Steps to get up and running
 After you have the dependencies installed, you'll be ready to get started.
-####Create a database
+####Create a database in Postgresql
 Open your database admin tool (I like pgAdmin III). Create a database and give it a name (I called mine _postgres_. Remember this name for later). Add a login 
 role and grant all on the new database you created. That's it, the tables will be automatically built up the first time you run the app.
+####Create database in MongoDB
+Open a terminal (Linux) or cmd (Windows) and type `mongo`. Create a database and remember the database name for later. I use "websitebuilder" as the db name.
 ####Configure the app
 There are two configurations that need to be edited. They are both contained in [conf/application.conf](conf/application.conf). 
 The first is the secret key. You need to edit the line that has `application.secret="somesecretkey"`. You'll want to change it because it is 
 what the crypto functions will use to hash passwords and such so edit yours. The second is the `db.default.url`. edit the url part to have your username and password
 that you set up in the _Create a database_ step. The url is in the form `postgres://username:password@servername:portnum/databasename`. For development, the database is 
-probably `localhost` with the default port number of 5432. I use postgres for my username, password and database name.
+probably `localhost` with the default port number of 5432. I use postgres for my username, password and database name. You'll need to add a new line that reads `mongodb.uri="mongodb://localhost:27017/websitebuilder"`. 
 ####Run the app
 Open a terminal window (command window in Windows) and go to the root of the project and type `play run`. Open the admin site in a web browser: http://localhost:9000/admin-static 
 and add a site and a page.
