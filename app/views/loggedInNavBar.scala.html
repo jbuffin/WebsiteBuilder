@@ -21,6 +21,11 @@
 				<li data-bind="visible:editing">
 					<a href="#" data-bind="click:addRow"><span class="glyphicon glyphicon-plus"></span> Insert Row</a>
 				</li>
+				<!-- ko foreach:editorCommands -->
+				<li data-bind="visible:$parent.editing">
+					<a href="#" data-bind="click:exec"><span data-bind="css:icon"></span></a>
+				</li>
+				<!-- /ko -->
 			</ul>
 			<p class="navbar-text pull-right"><a href="@routes.LoginController.logout" class="navbar-link">Log Out</a></p>
 		</div>

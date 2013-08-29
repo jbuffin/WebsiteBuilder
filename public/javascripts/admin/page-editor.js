@@ -16,6 +16,23 @@ function PageEditorViewModel() {
 					});
 		});
 	};
+	
+	self.editorCommands = ko.observableArray([
+		{
+			'name' : 'bold',
+			'icon' : 'glyphicon glyphicon-bold',
+			'exec' : function() {
+				document.execCommand('bold', false, null);
+			}
+		}, {
+			'name' : 'link',
+			'icon' : 'glyphicon glyphicon-link',
+			'exec' : function() {
+				var href = prompt('Url for link', '');
+				document.execCommand('createLink', false, href);
+			}
+		}
+	]);
 
 	self.savePage = function() {
 		self.toggleEditing();
@@ -175,6 +192,50 @@ function pasteHtmlAtCaret(html) {
 		// IE < 9
 		document.selection.createRange().pasteHTML(html);
 	}
+}
+
+var EditorCommands = {
+	'bold' : function() {
+		document.execCommand('bold', false, null);
+	}
+}
+
+function getSelectionHtml() {
+    var html = "";
+    if (typeof window.getSelection != "undefined") {
+        var sel = window.getSelection();
+        if (sel.rangeCount) {
+            var container = document.createElement("div");
+            for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+                container.appendChild(sel.getRangeAt(i).cloneContents());
+            }
+            html = container.innerHTML;
+        }
+    } else if (typeof document.selection != "undefined") {
+        if (document.selection.type == "Text") {
+            html = document.selection.createRange().htmlText;
+        }
+    }
+    return html;
+}
+
+function replaceSelectionWithHtml(html) {
+    var range, html;
+    if (window.getSelection && window.getSelection().getRangeAt) {
+        range = window.getSelection().getRangeAt(0);
+        range.deleteContents();
+        var div = document.createElement("div");
+        div.innerHTML = html;
+        var frag = document.createDocumentFragment(), child;
+        while ( (child = div.firstChild) ) {
+            frag.appendChild(child);
+        }
+        range.insertNode(frag);
+    } else if (document.selection && document.selection.createRange) {
+        range = document.selection.createRange();
+        html = (node.nodeType == 3) ? node.data : node.outerHTML;
+        range.pasteHTML(html);
+    }
 }
 
 if (!Array.prototype.indexOf) {
