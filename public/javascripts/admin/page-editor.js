@@ -273,11 +273,6 @@ function PageEditorViewModel() {
 		self.toggleEditing();
 	}
 
-	self.insertHeader = function() {
-		pasteHtmlAtCaret('<h4 id="newHeader">Header Text</h4>');
-		self.edited(true);
-	};
-
 	self.insertWidget = function(rowNum) {
 		var loc = 'row' + rowNum;
 		var cols = $('#' + loc).find('div[class^="col-lg-"]');
@@ -303,13 +298,10 @@ function PageEditorViewModel() {
 						+ rows.length
 						+ '"></div>'
 						+ '<div data-bind="if:editing"><div class="row"><div class="col-lg-12"><div class="btn-group pull-right">'
-						+ '<button type="button" class="btn btn-default btn-mini dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-edit"></span></button>'
-						+ '<ul class="dropdown-menu">'
-						+ '<li><a tabindex="-1" href="#" data-bind="text:\'Insert column\',click:function(){insertWidget('
-						+ rows.length
-						+ ')}"></a></li>'
-						+ '<li><a tabindex="-1" href="#" data-bind="click:insertHeader">Header (h4)</a></li>'
-						+ '</ul></div></div></div></div>' + '</div>');
+						+ '<button type="button" class="btn btn-default btn-mini" data-bind="click:function(){insertWidget('+rows.length+')}">'
+						+ '<span class="glyphicon glyphicon-plus"></span>'
+						+ '</button>'
+						+ '</div></div></div></div></div>');
 		ko.applyBindings(self, document.getElementById('newRow'));
 		$('#newRow').removeAttr('id');
 		self.edited(true);
@@ -343,81 +335,6 @@ var widgetHtml = {
 
 function insertHtmlAtLoc(loc, html) {
 	$('#' + loc).append(html);
-}
-
-function pasteHtmlAtCaret(html) {
-	var sel, range;
-	if (window.getSelection) {
-		// IE9 and non-IE
-		sel = window.getSelection();
-		if (sel.getRangeAt && sel.rangeCount) {
-			range = sel.getRangeAt(0);
-			range.deleteContents();
-			var el = document.createElement("div");
-			el.innerHTML = html;
-			var frag = document.createDocumentFragment(), node, lastNode;
-			while ((node = el.firstChild)) {
-				lastNode = frag.appendChild(node);
-			}
-			range.insertNode(frag);
-
-			// Preserve the selection
-			if (lastNode) {
-				range = range.cloneRange();
-				range.setStartAfter(lastNode);
-				range.collapse(true);
-				sel.removeAllRanges();
-				sel.addRange(range);
-			}
-		}
-	} else if (document.selection && document.selection.type != "Control") {
-		// IE < 9
-		document.selection.createRange().pasteHTML(html);
-	}
-}
-
-var EditorCommands = {
-	'bold' : function() {
-		document.execCommand('bold', false, null);
-	}
-}
-
-function getSelectionHtml() {
-    var html = "";
-    if (typeof window.getSelection != "undefined") {
-        var sel = window.getSelection();
-        if (sel.rangeCount) {
-            var container = document.createElement("div");
-            for (var i = 0, len = sel.rangeCount; i < len; ++i) {
-                container.appendChild(sel.getRangeAt(i).cloneContents());
-            }
-            html = container.innerHTML;
-        }
-    } else if (typeof document.selection != "undefined") {
-        if (document.selection.type == "Text") {
-            html = document.selection.createRange().htmlText;
-        }
-    }
-    return html;
-}
-
-function replaceSelectionWithHtml(html) {
-    var range, html;
-    if (window.getSelection && window.getSelection().getRangeAt) {
-        range = window.getSelection().getRangeAt(0);
-        range.deleteContents();
-        var div = document.createElement("div");
-        div.innerHTML = html;
-        var frag = document.createDocumentFragment(), child;
-        while ( (child = div.firstChild) ) {
-            frag.appendChild(child);
-        }
-        range.insertNode(frag);
-    } else if (document.selection && document.selection.createRange) {
-        range = document.selection.createRange();
-        html = (node.nodeType == 3) ? node.data : node.outerHTML;
-        range.pasteHTML(html);
-    }
 }
 
 if (!Array.prototype.indexOf) {
