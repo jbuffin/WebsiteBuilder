@@ -89,7 +89,7 @@ function SiteAccessor(server) {
 		});
 	};
 	self.newSite = function(formData, callback) {
-		jsRoutes.controllers.Sites.newSite().ajax({
+		jsRoutes.controllers.SitesApi.newSite().ajax({
 			data : JSON.stringify(formData),
 			contentType : 'text/json',
 			success : callback,
