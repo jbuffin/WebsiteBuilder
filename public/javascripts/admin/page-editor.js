@@ -54,7 +54,6 @@ function PageEditorViewModel() {
 			'icon' : 'glyphicon glyphicon-tint',
 			'text' : '',
 			'exec' : function() {
-				// string for the color
 				var color = prompt('color', '');
 				document.execCommand('foreColor', false, color);
 			}
@@ -63,7 +62,6 @@ function PageEditorViewModel() {
 			'icon' : 'glyphicon glyphicon-header',
 			'text' : '1',
 			'exec' : function() {
-				// formatBlock: "<h1>"
 				document.execCommand('formatBlock', false, '<h1>');
 			}
 		}, {
@@ -71,7 +69,6 @@ function PageEditorViewModel() {
 			'icon' : 'glyphicon glyphicon-header',
 			'text' : '2',
 			'exec' : function() {
-				// formatBlock: "<h2>"
 				document.execCommand('formatBlock', false, '<h2>');
 			}
 		}, {
@@ -79,7 +76,6 @@ function PageEditorViewModel() {
 			'icon' : 'glyphicon glyphicon-header',
 			'text' : '3',
 			'exec' : function() {
-				// formatBlock: "<h3>"
 				document.execCommand('formatBlock', false, '<h3>');
 			}
 		}, {
@@ -87,7 +83,6 @@ function PageEditorViewModel() {
 			'icon' : 'glyphicon glyphicon-header',
 			'text' : '4',
 			'exec' : function() {
-				// formatBlock: "<h4>"
 				document.execCommand('formatBlock', false, '<h4>');
 			}
 		}, {
@@ -95,7 +90,6 @@ function PageEditorViewModel() {
 			'icon' : 'glyphicon glyphicon-header',
 			'text' : '5',
 			'exec' : function() {
-				// formatBlock: "<h5>"
 				document.execCommand('formatBlock', false, '<h5>');
 			}
 		}, {
@@ -103,7 +97,6 @@ function PageEditorViewModel() {
 			'icon' : 'glyphicon glyphicon-header',
 			'text' : '6',
 			'exec' : function() {
-				// formatBlock: "<h6>"
 				document.execCommand('formatBlock', false, '<h6>');
 			}
 		}, {
@@ -125,7 +118,6 @@ function PageEditorViewModel() {
 			'icon' : 'glyphicon glyphicon-picture',
 			'text' : '',
 			'exec' : function() {
-				// String for the src
 				var src = prompt('location of image', '');
 				document.execCommand(this.name, false, src);
 			}
@@ -301,9 +293,15 @@ function PageEditorViewModel() {
 						+ '<button type="button" class="btn btn-default btn-mini" data-bind="click:function(){insertWidget('+rows.length+')}">'
 						+ '<span class="glyphicon glyphicon-plus"></span>'
 						+ '</button>'
+						+ '<button type="button" class="btn btn-default btn-mini" data-bind="click:function(){removeRow('+rows.length+')}"><span class="glyphicon glyphicon-minus"></span></button>'
 						+ '</div></div></div></div></div>');
 		ko.applyBindings(self, document.getElementById('newRow'));
 		$('#newRow').removeAttr('id');
+		self.edited(true);
+	};
+	
+	self.removeRow = function(rowNum) {
+		$('#row'+rowNum).parent().remove();
 		self.edited(true);
 	};
 
