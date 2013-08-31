@@ -79,7 +79,7 @@
 							<div data-bind="if:currentSite">
 								Info about <span data-bind="text:currentSite().siteName"></span>:&nbsp;<a
 									target="_blank"
-									data-bind="attr:{href: 'http://'+currentSite().hostName+':9000'},text: currentSite().hostName"></a>
+									data-bind="attr:{href: 'http://'+currentSite().hostName},text: currentSite().hostName"></a>
 							</div>
 							<hr>
 						</div>
@@ -139,7 +139,7 @@
 								<div data-bind="if:currentPage">
 									Info about <span data-bind="text:currentPage().page.title"></span>:&nbsp;<a
 										target="_blank"
-										data-bind="attr:{href: 'http://'+currentSite().hostName+':9000/'+currentPage().page.uri},text: currentSite().hostName+'/'+currentPage().page.uri"></a>
+										data-bind="attr:{href: 'http://'+currentSite().hostName+'/'+currentPage().page.uri},text: currentSite().hostName+'/'+currentPage().page.uri"></a>
 								</div>
 								<hr>
 								</div>
