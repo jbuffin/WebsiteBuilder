@@ -205,6 +205,14 @@ function PageEditorViewModel() {
 			'exec' : function() {
 				document.execCommand(this.name, false, null);
 			}
+		}, {
+			'name' : 'custom',
+			'icon' : '',
+			'text' : 'custom',
+			'exec' : function() {
+				var html = prompt('Custom HTML', '');
+				document.execCommand('insertHTML', false, html);
+			}
 		}
 	]);
 
