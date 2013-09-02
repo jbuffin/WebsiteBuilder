@@ -16,7 +16,7 @@ import models.pages.JsonFormats._
 import models.pages.PageMongo
 import models.pages.PageMongoWithId
 
-object SitesApi extends Controller with MongoController {
+object SitesApi extends Controller with MongoController with Secured {
 
 	def collection: JSONCollection = db.collection[JSONCollection]("pages")
 
@@ -28,10 +28,15 @@ object SitesApi extends Controller with MongoController {
 		}
 	}
 
-	def getAllSites = Action {
-		Ok(Json.toJson(Site.getAll map { site =>
-			Json.obj("id" -> site.siteId.toString, "siteName" -> site.siteName, "hostName" -> site.hostName)
-		}))
+	def getAllSites = IsAuthenticated { username => implicit request =>
+		Logger.debug("[SitesApi.getAllSites]: username: "+username)
+		if(username != "") {
+			Ok(Json.toJson(Site.getAll map { site =>
+				Json.obj("id" -> site.siteId.toString, "siteName" -> site.siteName, "hostName" -> site.hostName)
+			}))
+		} else {
+			notAuthorized
+		}
 	}
 
 	def newPage(siteId: Long) = Action(parse.json) { request =>
@@ -91,5 +96,7 @@ object SitesApi extends Controller with MongoController {
 			BadRequest(Json.obj("res" -> "KO") ++ Json.obj("error" -> JsError.toFlatJson(error)))
 		}
 	}
+	
+	def notAuthorized = BadRequest(Json.obj("error" -> "not authorized"))
 
 }
