@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.JsValue
 
-case class User(_id: Option[JsValue], username: String, email: Option[String], password: String)
+case class User(_id: Option[JsValue], username: String, email: Option[String], password: String, siteId: Option[Long] = None)
 
 object UserFormats {
 	import play.api.data._

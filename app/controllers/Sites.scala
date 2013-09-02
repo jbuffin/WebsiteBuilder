@@ -15,15 +15,31 @@ import reactivemongo.api.Cursor
 import scala.concurrent.Future
 import models.pages.JsonFormats._
 import play.api.data.Form
+import models.User
+import models.UserFormats.userFormat
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 
 object Sites extends Controller with MongoController with Secured {
 	def collection: JSONCollection = db.collection[JSONCollection]("pages")
+	def loginCollection: JSONCollection = db.collection[JSONCollection]("login")
 
 	def getPageFromUri(uri: String = "", editable: Boolean = false) = IsAuthenticated { username =>
 		implicit request => {
 			Logger.debug("[Sites.getPageFromUri]: request.domain: '"+request.domain+"', uri: '"+uri+"'")
 			val site = Site.getSiteByHostName(request.domain).get
-			getPageFromSiteIdAndUri(site.siteId, uri, username != "")
+			val futureUser = loginCollection.find(Json.obj("username" -> username)).one[User]
+			val isAdmin = Await.result(futureUser, Duration.Inf).map { siteAdminuser =>
+				Logger.debug("found a user: "+siteAdminuser)
+				Logger.debug(siteAdminuser.siteId.getOrElse(true).toString+" == "+site.siteId)
+				Logger.debug((siteAdminuser.siteId.getOrElse(true) == site.siteId).toString)
+				siteAdminuser.siteId.getOrElse(site.siteId) == site.siteId
+			}.getOrElse {
+				Logger.debug("no user found")
+				false
+			}
+			Logger.debug(username)
+			getPageFromSiteIdAndUri(site.siteId, uri, isAdmin)
 		}
 	}
 
