@@ -72,7 +72,7 @@ object Sites extends Controller with MongoController with Secured {
 	}
 
 	def goToPage(site: Site, navigation: List[PageMongoWithId], pageMongo: PageMongoWithId, isAdmin: Boolean) = {
-		Ok(views.html.sites.index(site.siteName, navigation, pageMongo, isAdmin))
+		Ok(views.html.sites.page(site.siteName, navigation, pageMongo, isAdmin))
 	}
 
 	def getNavigationBySiteId(siteId: Long): Future[List[PageMongoWithId]] = {

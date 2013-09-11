@@ -1,0 +1,20 @@
+@(siteName: String, siteNav: List[models.pages.PageMongoWithId], pageMongo: models.pages.PageMongoWithId, isAdmin: Boolean = false)
+@import views.html.sites.widgets._
+@import models.pages._
+@import models.widgets._
+@main(pageMongo.page.title, isAdmin){
+@if(isAdmin) {
+	@views.html.loggedInNavBar(siteName)
+<div id="siteId-@(pageMongo.page.siteId)"></div>
+<div id="pageId-@((pageMongo._id \ "$oid").as[String])"></div>
+}
+<div class="container@if(isAdmin){ roomForHeader}">
+	<div class="container" @if(isAdmin){id="insertPoint"}>
+	@rowsLoop(pageMongo.page.rows, isAdmin)
+	</div>
+	<hr>
+	<footer>
+		<p>&copy; @siteName 2013</p>
+	</footer>
+</div>
+}
