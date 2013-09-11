@@ -4,9 +4,9 @@
 @rows.zipWithIndex.map { case(row, rowIndex) =>
 <div class="container">
 	<div class="row" id="row@(rowIndex)">
-		@row.columns.get.zipWithIndex.map { case(column, columnIndex) =>
-		<div class="col-lg-@(12/row.columns.get.length)" id="column@(columnIndex)row@(rowIndex)">
-			@views.html.sites.widgets.textWidget(column, isAdmin)
+		@row.columns.zipWithIndex.map { case(column, columnIndex) =>
+		<div class="col-lg-@(12/row.columns.length)" id="column@(columnIndex)row@(rowIndex)">
+			@views.html.sites.widgets.textWidget(column.columnHtml.get, isAdmin)
 		</div>
 		}
 	</div>	
