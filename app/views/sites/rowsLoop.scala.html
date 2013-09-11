@@ -11,16 +11,7 @@
 		}
 	</div>	
 	@if(isAdmin) {
-	<div data-bind="if:editing">
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="btn-group pull-right">
-					<button type="button" class="btn btn-default btn-mini" data-bind="click:function(){insertWidget(@(rowIndex))}"><span class="glyphicon glyphicon-plus"></span></button>
-					<button type="button" class="btn btn-default btn-mini" data-bind="click:function(){removeRow(@(rowIndex))}"><span class="glyphicon glyphicon-minus"></span></button>
-				</div>
-			</div>
-		</div>
-	</div>
+		@rowEditFooter(rowIndex)
 	}
 </div>
 }
