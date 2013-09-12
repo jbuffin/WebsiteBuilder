@@ -139,7 +139,7 @@
 								<div data-bind="if:currentPage">
 									Info about <span data-bind="text:currentPage().page.title"></span>:&nbsp;<a
 										target="_blank"
-										data-bind="attr:{href: 'http://'+currentSite().hostName+'/'+currentPage().page.uri},text: currentSite().hostName+'/'+currentPage().page.uri"></a>
+										data-bind="attr:{href: '/'+currentPage().page.uri},text: currentSite().hostName+'/'+currentPage().page.uri"></a>
 								</div>
 								<hr>
 								</div>

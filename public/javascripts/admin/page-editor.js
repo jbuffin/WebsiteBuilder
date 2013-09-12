@@ -263,7 +263,7 @@ function PageEditorViewModel() {
 				self.addRow();
 				for(var columnIndex = 0; columnIndex < row.columns.length; ++columnIndex) {
 					var column = row.columns[columnIndex];
-					self.insertWidget(rowIndex);
+					self.insertWidget('#row'+rowIndex);
 					var columnElem = $('#column'+columnIndex+'row'+rowIndex).find('.textWidget').find('.textWidgetTextBox').html(column.columnHtml);
 					columnElem.html(column.columnHtml);
 				}
@@ -272,15 +272,29 @@ function PageEditorViewModel() {
 		self.edited(false);
 		self.toggleEditing();
 	}
+	
+	self.insertColumnButton = function(rowNum, theViewModel, event) {
+		var eventTarget = event.currentTarget;
+		var loc = $(eventTarget).parent().parent().parent().parent().parent().children().first();
+		self.insertWidget(loc);
+	};
 
-	self.insertWidget = function(rowNum) {
-		var loc = 'row' + rowNum;
-		var cols = $('#' + loc).find('div[class^="col-lg-"]');
+	self.insertWidget = function(loc) {
+//		console.log('[self.insertWidget] loc: '+loc);
+		var rowNum = null;
+		if(typeof loc === 'string') {
+			rowNum = loc.substr(4, loc.length);
+		}
+//		console.log('[self.insertWidget] rowNum: '+rowNum);
+		var cols = $(loc).find('div[class^="col-lg-"]');
+//		console.log('[self.insertWidget] cols: ');
+//		console.log(cols);
 		cols.each(function() {
 			$(this).removeClass('col-lg-' + 12 / cols.length).addClass(
 					'col-lg-' + Math.floor(12 / (cols.length + 1)));
+//			console.log(this);
 		});
-		insertHtmlAtLoc(loc, '<div id="newTextWidget" class="col-lg-'
+		$(loc).append('<div id="newTextWidget" class="col-lg-'
 				+ Math.floor(12 / (cols.length + 1)) + '">'
 				+ widgetHtml.textWidget + '</div>');
 		ko.applyBindings(self, document.getElementById('newTextWidget'));
@@ -291,6 +305,8 @@ function PageEditorViewModel() {
 
 	self.addRow = function() {
 		var rows = $('div[id^="row"]');
+//		console.log('[self.addRow] rows: ');
+//		console.log(rows);
 		insertHtmlAtLoc(
 				'insertPoint',
 				'<div class="container" id="newRow">'
@@ -298,7 +314,7 @@ function PageEditorViewModel() {
 						+ rows.length
 						+ '"></div>'
 						+ '<div data-bind="if:editing"><div class="row"><div class="col-lg-12"><div class="btn-group pull-right">'
-						+ '<button type="button" class="btn btn-default btn-mini" data-bind="click:function(){insertWidget('+rows.length+')}">'
+						+ '<button type="button" class="btn btn-default btn-mini" data-bind="click:function(theViewModel, theEvent){insertColumnButton('+rows.length+', theViewModel, theEvent)}">'
 						+ '<span class="glyphicon glyphicon-plus"></span>'
 						+ '</button>'
 						+ '<button type="button" class="btn btn-default btn-mini" data-bind="click:function(){removeRow('+rows.length+')}"><span class="glyphicon glyphicon-minus"></span></button>'
