@@ -41,7 +41,7 @@ what the crypto functions will use to hash passwords and such so edit yours. The
 that you set up in the _Create a database_ step. The url is in the form `postgres://username:password@servername:portnum/databasename`. For development, the database is 
 probably `localhost` with the default port number of 5432. I use postgres for my username, password and database name. You'll need to add a new line that reads `mongodb.uri="mongodb://localhost:27017/websitebuilder"`. 
 ####Run the app
-Open a terminal window (command window in Windows) and go to the root of the project and type `play run`. Open the admin site in a web browser: http://localhost:9000/admin-static 
+Open a terminal window (command window in Windows) and go to the root of the project and type `play run`. Open the admin site in a web browser: http://localhost:9000/admin-home 
 and add a site and a page.
 ####I like to edit my hosts file
 It is really useful to edit your hosts file so that you can have domains that point to your app. In Windows, I use a program called 
