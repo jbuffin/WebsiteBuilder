@@ -17,6 +17,14 @@ function PageEditorViewModel() {
 		});
 	};
 	
+	self.editing.subscribe(function(newValue) {
+		if(newValue) {
+			$('#pageBody').css({'padding-top' : '150px'});
+		} else {
+			$('#pageBody').removeAttr('style');
+		}
+	});
+	
 	self.editorCommands = ko.observableArray([
 		{
 			'name' : 'bold',
@@ -180,28 +188,28 @@ function PageEditorViewModel() {
 		}, {
 			'name' : 'strikeThrough',
 			'icon' : '',
-			'text' : 'strikethrough',
+			'text' : '<strike>S</strike>',
 			'exec' : function() {
 				document.execCommand(this.name, false, null);
 			}
 		}, {
 			'name' : 'subscript',
 			'icon' : '',
-			'text' : 'subscript',
+			'text' : 'S<sub>ub</sub>',
 			'exec' : function() {
 				document.execCommand(this.name, false, null);
 			}
 		}, {
 			'name' : 'superscript',
 			'icon' : '',
-			'text' : 'superscript',
+			'text' : 'S<sup>up</sup>',
 			'exec' : function() {
 				document.execCommand(this.name, false, null);
 			}
 		}, {
 			'name' : 'underline',
 			'icon' : '',
-			'text' : 'underline',
+			'text' : '<u>U</u>',
 			'exec' : function() {
 				document.execCommand(this.name, false, null);
 			}

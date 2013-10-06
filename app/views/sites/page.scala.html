@@ -8,7 +8,7 @@
 <div id="siteId-@(pageMongo.page.siteId)"></div>
 <div id="pageId-@((pageMongo._id \ "$oid").as[String])"></div>
 }
-<div class="container@if(isAdmin){ roomForHeader}">
+<div @if(isAdmin){id="pageBody"} class="container@if(isAdmin){ roomForHeader}">
 	<div class="container" @if(isAdmin){id="insertPoint"}>
 	@rowsLoop(pageMongo.page.rows, isAdmin)
 	</div>
