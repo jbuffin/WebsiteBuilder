@@ -5,9 +5,14 @@
 <div class="container">
 	<div class="row" id="row@(rowIndex)">
 		@row.columns.zipWithIndex.map { case(column, columnIndex) =>
-		<div class="col-lg-@(12/row.columns.length)" id="column@(columnIndex)row@(rowIndex)">
-			@views.html.sites.widgets.textWidget(column.columnHtml.get, isAdmin)
-		</div>
+			@column.rowsOption match {
+				case Some(innerRows) => {@rowsLoop(innerRows, isAdmin)}
+				case None => {
+					<div class="col-lg-@(12/row.columns.length)" id="column@(columnIndex)row@(rowIndex)">
+						@views.html.sites.widgets.textWidget(column.columnHtml.get, isAdmin)
+					</div>
+				}
+			}
 		}
 	</div>	
 	@if(isAdmin) {

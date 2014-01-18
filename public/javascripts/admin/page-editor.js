@@ -323,9 +323,9 @@ function PageEditorViewModel() {
 						+ '"></div>'
 						+ '<div data-bind="if:editing"><div class="row"><div class="col-lg-12"><div class="btn-group pull-right">'
 						+ '<button type="button" class="btn btn-default btn-mini" data-bind="click:function(theViewModel, theEvent){insertColumnButton('+rows.length+', theViewModel, theEvent)}">'
-						+ '<span class="glyphicon glyphicon-plus"></span>'
+						+ '<span class="glyphicon glyphicon-plus"></span> Insert Column'
 						+ '</button>'
-						+ '<button type="button" class="btn btn-default btn-mini" data-bind="click:function(){removeRow('+rows.length+')}"><span class="glyphicon glyphicon-minus"></span></button>'
+						+ '<button type="button" class="btn btn-default btn-mini" data-bind="click:function(){removeRow('+rows.length+')}"><span class="glyphicon glyphicon-minus"></span> Remove Row</button>'
 						+ '</div></div></div></div></div>');
 		ko.applyBindings(self, document.getElementById('newRow'));
 		$('#newRow').removeAttr('id');
