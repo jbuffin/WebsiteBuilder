@@ -22,6 +22,9 @@ POST   /api/sites/:siteId/pages/:pageId      controllers.SitesApi.updatePage(sit
 GET    /api/sites/:siteId/pages/byuri/       controllers.SitesApi.getPageByUri(siteId: Long, uri = "")
 GET    /api/sites/:siteId/pages/byuri/*uri   controllers.SitesApi.getPageByUri(siteId: Long, uri: String)
 
+# page editor templates
+GET    /api/page-editor/templates/column     controllers.SitesApi.getColumnTemplate
+
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                         controllers.Assets.at(path="/public", file)
 

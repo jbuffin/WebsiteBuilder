@@ -98,5 +98,9 @@ object SitesApi extends Controller with MongoController with Secured {
 	}
 	
 	def notAuthorized = BadRequest(Json.obj("error" -> "not authorized"))
+	
+	def getColumnTemplate = Action {
+		Ok(views.html.sites.widgets.textWidget("Begin editing here", true))
+	}
 
 }
