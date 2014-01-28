@@ -2,13 +2,13 @@
 @import views.html.sites.widgets._
 @import models.pages._
 @rows.zipWithIndex.map { case(row, rowIndex) =>
-<div class="container">
+<div class="container @if(isAdmin){rowSelector}">
 	<div class="row" id="row@(rowIndex)">
 		@row.columns.zipWithIndex.map { case(column, columnIndex) =>
 			@column.rowsOption match {
 				case Some(innerRows) => {@rowsLoop(innerRows, isAdmin)}
 				case None => {
-					<div class="col-lg-@(12/row.columns.length)" id="column@(columnIndex)row@(rowIndex)">
+					<div class="col-lg-@(12/row.columns.length) @if(isAdmin){columnSelector}" id="column@(columnIndex)row@(rowIndex)">
 						@views.html.sites.widgets.textWidget(column.columnHtml.get, isAdmin)
 					</div>
 				}

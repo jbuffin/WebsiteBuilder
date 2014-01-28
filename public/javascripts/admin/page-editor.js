@@ -225,6 +225,15 @@ function PageEditorViewModel() {
 	]);
 
 	self.savePage = function() {
+		/*
+		$('.rowSelector').each(function() {
+			console.log('===NEW ROW===')
+			$(this).find('.columnSelector').each(function() {
+				console.log('===NEW COLUMN===')
+				console.log($(this))
+			});
+		});
+		*/
 		self.toggleEditing();
 		if (self.edited()) {
 			setTimeout(function() {
@@ -311,7 +320,7 @@ function PageEditorViewModel() {
 		$.get(
 			'/api/page-editor/templates/column', 
 			function(columnTemplate){
-				$(loc).append('<div id="newTextWidget" class="col-lg-'
+				$(loc).append('<div id="newTextWidget" class="columnSelector col-lg-'
 						+ Math.floor(12 / (cols.length + 1)) + '">'
 						+ columnTemplate + '</div>');
 				ko.applyBindings(self, document.getElementById('newTextWidget'));
@@ -332,7 +341,7 @@ function PageEditorViewModel() {
 //		console.log(rows);
 		insertHtmlAtLoc(
 				'insertPoint',
-				'<div class="container" id="newRow">'
+				'<div class="container rowSelector" id="newRow">'
 						+ '<div class="row" id="row'
 						+ rows.length
 						+ '"></div>'
@@ -374,9 +383,6 @@ $(function() {
 	}
 });
 
-var widgetHtml = {
-	textWidget : '<div class="textWidget"><div class="textWidgetTextBox" data-bind="attr:{\'contenteditable\':editing()}">Type your text here</div></div>'
-};
 
 function insertHtmlAtLoc(loc, html) {
 	$('#' + loc).append(html);
