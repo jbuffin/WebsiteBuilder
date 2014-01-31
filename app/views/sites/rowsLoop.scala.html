@@ -1,5 +1,4 @@
 @(rows: List[models.pages.Row], isAdmin: Boolean)
-@import views.html.sites.widgets._
 @import models.pages._
 @rows.zipWithIndex.map { case(row, rowIndex) =>
 <div class="container @if(isAdmin){rowSelector}">
