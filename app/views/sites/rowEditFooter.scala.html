@@ -2,11 +2,11 @@
 <div data-bind="if:editing">
 	<div class="row">
 		<div class="col-lg-12">
-			<div class="btn-group pull-right">
-				<button type="button" class="btn btn-default btn-mini" data-bind="click:function(theViewModel, theEvent){insertColumnButton(@(rowIndex), theViewModel, theEvent)}">
+			<div class="btn-group btn-group-xs pull-right">
+				<button type="button" class="btn btn-default" data-bind="click:function(theViewModel, theEvent){insertColumnButton(@(rowIndex), theViewModel, theEvent)}">
 					<span class="glyphicon glyphicon-plus"></span> Insert Column
 				</button>
-				<button type="button" class="btn btn-default btn-mini" data-bind="click:function(){removeRow(@(rowIndex))}">
+				<button type="button" class="btn btn-default" data-bind="click:function(){removeRow(@(rowIndex))}">
 					<span class="glyphicon glyphicon-minus"></span> Remove Row
 				</button>
 			</div>
