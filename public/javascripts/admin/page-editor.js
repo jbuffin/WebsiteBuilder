@@ -69,7 +69,7 @@ function PageEditorViewModel() {
 			insertPoint.html('');
 			for(var rowIndex = 0; rowIndex < self.pageSchema.page.rows.length; ++rowIndex) {
 				(function(rowIndex) {
-					self.addRow();
+					self.insertRow($('#insertPoint'));
 					for(var columnIndex = 0; columnIndex < self.pageSchema.page.rows[rowIndex].columns.length; ++columnIndex) {
 						(function(rowIndex, columnIndex) {
 							self.insertWidget('#row'+rowIndex, function insertWidgetCallback(columnIndex, rowIndex) {
@@ -104,8 +104,22 @@ function PageEditorViewModel() {
 						});
 						$(loc).append('<div id="column' + cols.length + 'row' + rowNum + '" class="columnSelector col-lg-'
 								+ Math.floor(12 / (cols.length + 1)) + '">'
-								+ columnTemplate + '</div>');
+								+ columnTemplate + '</div>'
+								+ '<div id="columnEditor" data-bind="if:editing">'
+								+ '<div class="row">'
+								+ '<div class="col-lg-12">'
+								+ '<div class="btn-group btn-group-xs">'
+								+ '<button type="button" class="btn btn-default" data-bind="click:function(theViewModel, theEvent){addRow(theViewModel, theEvent)}">'
+								+ '<span class="glyphicon glyphicon-plus"></span> Insert Row'
+								+ '</button>'
+								+ '</div>'
+								+ '</div>'
+								+ '</div>'
+								+ '</div>'
+						);
 						ko.applyBindings(self, document.getElementById('column' + cols.length + 'row' + rowNum));
+						ko.applyBindings(self, document.getElementById('columnEditor'));
+						$('#columnEditor').removeAttr('id');
 						self.bindTextBoxes();
 						self.edited(true);
 						if(typeof callback === 'function') {
@@ -116,10 +130,24 @@ function PageEditorViewModel() {
 		}(loc));
 	};
 
-	self.addRow = function() {
+	self.addRow = function(vm, event) {
+		var insertPoint;
+		console.log(event.currentTarget.id);
+		if(event.currentTarget.id !== 'insertPageRowButton') {
+			console.log('closest');
+			insertPoint = $(event.currentTarget).closest('.columnButtons').prev();
+		} else {
+			console.log('page row')
+			insertPoint = $('#insertPoint')
+		}
+		console.log(insertPoint);
+		self.insertRow(insertPoint);
+	};
+	
+	self.insertRow = function(insertPoint) {
 		var rows = $('.rowSelector');
 		insertHtmlAtLoc(
-				'insertPoint',
+				insertPoint,
 				'<div class="container rowSelector" id="newRow">'
 						+ '<div class="row" id="row'
 						+ rows.length
@@ -133,7 +161,7 @@ function PageEditorViewModel() {
 		ko.applyBindings(self, document.getElementById('newRow'));
 		$('#newRow').removeAttr('id');
 		self.edited(true);
-	};
+	}
 	
 	self.removeRow = function(rowNum) {
 		$('#row'+rowNum).parent().remove();
@@ -166,7 +194,7 @@ $(function() {
 
 
 function insertHtmlAtLoc(loc, html) {
-	$('#' + loc).append(html);
+	loc.append(html);
 }
 
 if (!Array.prototype.indexOf) {
