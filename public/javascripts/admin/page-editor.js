@@ -75,7 +75,7 @@ function PageEditorViewModel() {
 							self.insertWidget('#row'+rowIndex, function insertWidgetCallback(columnIndex, rowIndex) {
 								$('#column'+columnIndex+'row'+rowIndex).find('.textWidget').find('.textWidgetTextBox').html(self.pageSchema.page.rows[rowIndex].columns[columnIndex].columnHtml);
 							});
-						}(rowIndex, columnIndex));	
+						}(rowIndex, columnIndex));
 					}
 				}(rowIndex));
 			}

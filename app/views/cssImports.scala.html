@@ -1,4 +1,7 @@
-@()
+@(isAdmin: Boolean = false)
 <link rel="stylesheet" href="@routes.Assets.at("bootstrap/css/bootstrap-3.min.css")">
 <link rel="stylesheet" href="@routes.Assets.at("bootstrap/css/bootstrap-glyphicons.css")">
 <link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
+@if(isAdmin) {
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/page-editor.css")">
+}
