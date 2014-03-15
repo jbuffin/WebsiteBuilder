@@ -9,24 +9,24 @@
 				case None => {
 					<div class="col-lg-@(12/row.columns.length) @if(isAdmin){columnSelector}" id="column@(columnIndex)row@(rowIndex)">
 						@views.html.sites.widgets.textWidget(column.columnHtml.get, isAdmin)
+						<div class="columnButtons" data-bind="if:editing">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="btn-group btn-group-xs">
+										<button type="button" class="btn btn-default" data-bind="click:function(theViewModel, theEvent){addRow(theViewModel, theEvent)}">
+											<span class="glyphicon glyphicon-plus"></span> Insert Row
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				}
 			}
-			<div class="columnButtons" data-bind="if:editing">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="btn-group btn-group-xs">
-							<button type="button" class="btn btn-default" data-bind="click:function(theViewModel, theEvent){addRow(theViewModel, theEvent)}">
-								<span class="glyphicon glyphicon-plus"></span> Insert Row
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
 		}
 	</div>
 	@if(isAdmin) {
-		@rowEditFooter(rowIndex)
+		@views.html.sites.rowEditFooter(rowIndex)
 	}
 </div>
 }
