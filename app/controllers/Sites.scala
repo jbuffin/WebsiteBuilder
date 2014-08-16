@@ -19,6 +19,7 @@ import models.User
 import models.UserFormats.userFormat
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
+import play.api.libs.concurrent.Execution.Implicits._
 
 object Sites extends Controller with MongoController with Secured {
 	def collection: JSONCollection = db.collection[JSONCollection]("pages")
@@ -76,7 +77,7 @@ object Sites extends Controller with MongoController with Secured {
 	}
 
 	def getNavigationBySiteId(siteId: Long): Future[List[PageMongoWithId]] = {
-		collection.find(Json.obj("page.siteId" -> siteId)).cursor[PageMongoWithId].toList
+		collection.find(Json.obj("page.siteId" -> siteId)).cursor[PageMongoWithId].collect[List]()
 	}
 
 }

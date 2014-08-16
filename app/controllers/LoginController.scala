@@ -13,6 +13,7 @@ import play.api.Logger
 import scala.concurrent.Await
 import play.api.libs.json.JsValue
 import scala.concurrent.duration.Duration
+import play.api.libs.concurrent.Execution.Implicits._
 
 object LoginController extends Controller with MongoController {
 	def collection: JSONCollection = db.collection[JSONCollection]("login")
@@ -37,7 +38,7 @@ object LoginController extends Controller with MongoController {
 	def login = Action { implicit request =>
 		Ok(views.html.login.login(loginForm))
 	}
-	
+
 	def logout = Action {
 		Redirect(routes.LoginController.login).withNewSession.flashing(
 			"success" -> "You've been logged out"

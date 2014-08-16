@@ -4,16 +4,17 @@ import play.api.Logger
 import play.api.mvc.RequestHeader
 import play.api.mvc.Results.BadRequest
 import controllers.LoginController
+import scala.concurrent.Future
 
 object Global extends GlobalSettings {
 
 	override def onStart(app: Application) {
-		Logger.info("ChurchSite has started")
+		Logger.info("WebsiteBuilder has started")
 		LoginController.firstStart
 	}
 
 	override def onStop(app: Application) {
-		Logger.error("ChurchSite has shut down")
+		Logger.error("WebsiteBuilder has shut down")
 	}
 
 /*	override def onHandlerNotFound(request: RequestHeader): Result = {
@@ -22,7 +23,7 @@ object Global extends GlobalSettings {
 
 	override def onBadRequest(request: RequestHeader, error: String) = {
 		Logger.error("Bad Request: "+error)
-		BadRequest("Bad Request: "+error)
+		Future.successful(BadRequest("Bad Request: "+error))
 	}
 
 }

@@ -15,6 +15,7 @@ import models._
 import models.pages.JsonFormats._
 import models.pages.PageMongo
 import models.pages.PageMongoWithId
+import play.api.libs.concurrent.Execution.Implicits._
 
 object SitesApi extends Controller with MongoController with Secured {
 
@@ -55,7 +56,7 @@ object SitesApi extends Controller with MongoController with Secured {
 	def getAllPagesBySiteId(siteId: Long) = Action {
 		Async {
 			val cursor: Cursor[JsValue] = collection.find(Json.obj("page.siteId" -> siteId)).cursor[JsValue]
-			val futurePagesList: Future[List[JsValue]] = cursor.toList
+			val futurePagesList: Future[List[JsValue]] = cursor.collect[List]()
 
 			futurePagesList.map { pages =>
 				Ok(Json.toJson(pages))
@@ -96,9 +97,9 @@ object SitesApi extends Controller with MongoController with Secured {
 			BadRequest(Json.obj("res" -> "KO") ++ Json.obj("error" -> JsError.toFlatJson(error)))
 		}
 	}
-	
+
 	def notAuthorized = BadRequest(Json.obj("error" -> "not authorized"))
-	
+
 	def getColumnTemplate = Action {
 		Ok(views.html.sites.widgets.textWidget("Begin editing here", true))
 	}
