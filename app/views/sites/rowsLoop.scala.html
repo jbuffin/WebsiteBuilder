@@ -9,6 +9,7 @@
 				case None => {
 					<div class="col-lg-@(12/row.columns.length) @if(isAdmin){columnSelector}" id="column@(columnIndex)row@(rowIndex)">
 						@views.html.sites.widgets.textWidget(column.columnHtml.get, isAdmin)
+						@if(isAdmin) {
 						<div class="columnButtons" data-bind="if:editing">
 							<div class="row">
 								<div class="col-lg-12">
@@ -20,6 +21,7 @@
 								</div>
 							</div>
 						</div>
+						}
 					</div>
 				}
 			}
