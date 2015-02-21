@@ -17,7 +17,7 @@ object Application extends Controller with Secured {
 	def adminHome = IsAuthenticated { username => implicit request =>
 		Logger.debug("[Application.adminHome]")
 		if(username != "") {
-			Ok(views.html.admin(Site.getSiteByHostName(request.domain).get.siteName))
+			Ok(views.html.admin())
 		} else {
 			Redirect(routes.LoginController.login)
 		}
