@@ -1,5 +1,9 @@
 WebsiteBuilder
-==============
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+---
+
 ##What is WebsiteBuilder
 I have been a long time user of WordPress and love it for what it is. But I wanted something that could easily be hosted in the cloud, host multiple sites, and be super easy to customize. 
 That's where this repo comes into play. It's written in Scala using the [Play Framework](http://www.playframework.com) which makes it deployable to Heroku or CloudFoundry out of the box. 
