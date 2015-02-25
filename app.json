@@ -5,5 +5,8 @@
   "keywords": ["play", "scala", "bootstrap", "cms", "wysiwyg"],
   "website": "http://www.stumpsoft.com",
   "success_url": "/admin-home",
-  "addons": ["heroku-postgresql:hobby-dev", "mongolab:sandbox"]
+  "addons": ["heroku-postgresql:hobby-dev", "mongolab:sandbox"],
+  "scripts": {
+    "postdeploy": "sbt clean compile stage"
+  }
 }
