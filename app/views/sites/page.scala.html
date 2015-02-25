@@ -1,4 +1,4 @@
-@(siteName: String, siteNav: List[models.pages.PageMongoWithId], pageMongo: models.pages.PageMongoWithId, isAdmin: Boolean = false)
+@(siteName: String, pageMongo: models.pages.PageMongoWithId, isAdmin: Boolean = false)
 @import views.html.sites.widgets._
 @import models.pages._
 @main(pageMongo.page.title, isAdmin){
