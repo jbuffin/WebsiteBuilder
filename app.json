@@ -1,0 +1,8 @@
+{
+  "name": "websitebuilder",
+  "description": "Awesome website creation tool that harnesses the power and beauty of Bootstrap written in Scala/Playframework",
+  "repository": "https://github.com/jbuffin/WebsiteBuilder",
+  "keywords": ["play", "scala", "bootstrap", "cms", "wysiwyg"],
+  "success_url": "/admin-home",
+  "addons": ["heroku-postgresql:hobby-dev", "mongolab:sandbox"]
+}
