@@ -17,7 +17,7 @@ import models.pages.PageMongo
 import models.pages.PageMongoWithId
 import play.api.libs.concurrent.Execution.Implicits._
 
-object SitesApi extends Controller with MongoController with Secured {
+object SitesApi extends Controller with MongoController {
 
 	def collection: JSONCollection = db.collection[JSONCollection]("pages")
 
@@ -29,7 +29,8 @@ object SitesApi extends Controller with MongoController with Secured {
 		}
 	}
 
-	def getAllSites = IsAuthenticated { username => implicit request =>
+	def getAllSites = Authenticated { implicit request =>
+	  val username = request.user
 		Logger.debug("[SitesApi.getAllSites]: username: "+username)
 		if(username != "") {
 			Ok(Json.toJson(Site.getAll map { site =>
@@ -40,61 +41,51 @@ object SitesApi extends Controller with MongoController with Secured {
 		}
 	}
 
-	def newPage(siteId: Long) = Action(parse.json) { request =>
+	def newPage(siteId: Long) = Action.async(parse.json) { request =>
 		request.body.validate[PageMongo].map { page =>
 			val objectId = BSONObjectID.generate
 			val pageWithId = Json.obj("_id" -> objectId, "page" -> page)
 			val futureResult = collection.insert(pageWithId)
-			Async {
-				futureResult.map(_ => Ok(Json.obj("_id" -> objectId)))
-			}
+			futureResult.map(_ => Ok(Json.obj("_id" -> objectId)))
 		}.recoverTotal { error =>
-			BadRequest(Json.obj("res" -> "KO") ++ Json.obj("error" -> JsError.toFlatJson(error)))
+			Future(BadRequest(Json.obj("res" -> "KO") ++ Json.obj("error" -> JsError.toFlatJson(error))))
 		}
 	}
 
-	def getAllPagesBySiteId(siteId: Long) = Action {
-		Async {
-			val cursor: Cursor[JsValue] = collection.find(Json.obj("page.siteId" -> siteId)).cursor[JsValue]
-			val futurePagesList: Future[List[JsValue]] = cursor.collect[List]()
+	def getAllPagesBySiteId(siteId: Long) = Action.async {
+		val cursor: Cursor[JsValue] = collection.find(Json.obj("page.siteId" -> siteId)).cursor[JsValue]
+		val futurePagesList: Future[List[JsValue]] = cursor.collect[List]()
 
-			futurePagesList.map { pages =>
-				Ok(Json.toJson(pages))
-			}
+		futurePagesList.map { pages =>
+			Ok(Json.toJson(pages))
 		}
 	}
 
-	def getPageById(siteId: Long, pageId: String) = Action {
-		Async {
-			val cursor: Cursor[JsValue] = collection.find(Json.obj("_id" -> BSONObjectID(pageId), "page.siteId" -> siteId)).cursor[JsValue]
-			val futurePage: Future[Option[JsValue]] = cursor.headOption
+	def getPageById(siteId: Long, pageId: String) = Action.async {
+		val cursor: Cursor[JsValue] = collection.find(Json.obj("_id" -> BSONObjectID(pageId), "page.siteId" -> siteId)).cursor[JsValue]
+		val futurePage: Future[Option[JsValue]] = cursor.headOption
 
-			futurePage.map { page =>
-				Ok(Json.toJson(page))
-			}
+		futurePage.map { page =>
+			Ok(Json.toJson(page))
 		}
 	}
 
-	def getPageByUri(siteId: Long, uri: String) = Action {
-		Async {
-			val cursor: Cursor[JsValue] = collection.find(Json.obj("page.uri" -> uri, "page.siteId" -> siteId)).cursor[JsValue]
-			val futurePage: Future[Option[JsValue]] = cursor.headOption
+	def getPageByUri(siteId: Long, uri: String) = Action.async {
+		val cursor: Cursor[JsValue] = collection.find(Json.obj("page.uri" -> uri, "page.siteId" -> siteId)).cursor[JsValue]
+		val futurePage: Future[Option[JsValue]] = cursor.headOption
 
-			futurePage.map { page =>
-				Ok(Json.toJson(page))
-			}
+		futurePage.map { page =>
+			Ok(Json.toJson(page))
 		}
 	}
 
-	def updatePage(siteId: Long, pageId: String) = Action(parse.json) { request =>
+	def updatePage(siteId: Long, pageId: String) = Action.async(parse.json) { request =>
 		request.body.validate[PageMongo].map { page =>
 			val pageWithId = Json.obj("_id" -> BSONObjectID(pageId), "page" -> page)
 			val futureResult = collection.save(pageWithId)
-			Async {
-				futureResult.map(_ => Ok(Json.obj("res" -> "Ok")))
-			}
+			futureResult.map(_ => Ok(Json.obj("res" -> "Ok")))
 		}.recoverTotal { error =>
-			BadRequest(Json.obj("res" -> "KO") ++ Json.obj("error" -> JsError.toFlatJson(error)))
+			Future(BadRequest(Json.obj("res" -> "KO") ++ Json.obj("error" -> JsError.toFlatJson(error))))
 		}
 	}
 

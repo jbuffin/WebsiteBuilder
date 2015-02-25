@@ -7,14 +7,15 @@ import controllers._
 
 import models._
 
-object Application extends Controller with Secured {
+object Application extends Controller {
 
 	def indexWithNoSiteFound = Action { implicit request =>
 		Logger.debug("[Application.indexWithNoSite]: request.domain: '"+request.domain+"'")
 		Ok(views.html.notFound(request.domain))
 	}
 
-	def adminHome = IsAuthenticated { username => implicit request =>
+	def adminHome = Authenticated { implicit request =>
+	    val username = request.user
 		Logger.debug("[Application.adminHome]")
 		if(username != "") {
 			Ok(views.html.admin())

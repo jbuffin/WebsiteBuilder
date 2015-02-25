@@ -7,6 +7,8 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.json.Json
 import play.api.mvc._
+import play.api.mvc.Security.AuthenticatedBuilder
+import play.api.mvc.Security._
 import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.api.Logger
@@ -67,14 +69,4 @@ object LoginController extends Controller with MongoController {
 
 }
 
-trait Secured {
-
-	private def username(request: RequestHeader) = request.session.get("username").orElse(Option(""))
-
-	private def onUnauthorized(request: RequestHeader) = Results.Redirect(routes.LoginController.login)
-
-	def IsAuthenticated(f: => String => Request[AnyContent] => Result) = Security.Authenticated(username, onUnauthorized) { user =>
-		Action(request => f(user)(request))
-	}
-
-}
+object Authenticated extends AuthenticatedBuilder(req => req.session.get("username").orElse(Option("")))
