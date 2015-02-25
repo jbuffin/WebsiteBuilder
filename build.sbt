@@ -1,4 +1,4 @@
-name := """WebsiteBuilder"""
+name := """websitebuilder"""
 
 version := "1.0.1-Beta"
 

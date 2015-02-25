@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/WebsiteBuilder -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=${DATABASE_URL} -Dmongodb.uri=${MONGOLAB_URI}
+web: target/universal/stage/bin/websitebuilder -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=${DATABASE_URL} -Dmongodb.uri=${MONGOLAB_URI}
