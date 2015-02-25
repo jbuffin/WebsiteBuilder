@@ -4,5 +4,5 @@
   "repository": "https://github.com/jbuffin/WebsiteBuilder",
   "keywords": ["play", "scala", "bootstrap", "cms", "wysiwyg"],
   "success_url": "/admin-home",
-  "addons": ["heroku-postgresql:hobby-dev", "mongolab:sandbox"],
+  "addons": ["heroku-postgresql:hobby-dev", "mongolab:sandbox"]
 }
