@@ -1,3 +1,7 @@
+# NOT MAINTAINED
+
+This project is no longer maintained by the author. 
+
 WebsiteBuilder
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
